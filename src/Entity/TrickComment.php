@@ -23,6 +23,14 @@ class TrickComment
     #[ORM\Column]
     private ?int $author = null;
 
+    #[ORM\Column]
+    private ?int $trickId = null;
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTimeImmutable();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -60,6 +68,18 @@ class TrickComment
     public function setAuthor(int $author): static
     {
         $this->author = $author;
+
+        return $this;
+    }
+
+    public function getTrickId(): ?int
+    {
+        return $this->trickId;
+    }
+
+    public function setTrickId(int $trickId): static
+    {
+        $this->trickId = $trickId;
 
         return $this;
     }

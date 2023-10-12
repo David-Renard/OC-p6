@@ -10,19 +10,26 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use function Symfony\Component\Clock\now;
 
-#[Route('/trick')]
 class TrickController extends AbstractController
 {
+    #[Route('/', 'homepage')]
+    public function show(EntityManagerInterface $entityManager): Response
+    {
+        $tricks = $entityManager->getRepository(Trick::class)->findAll();
+
+        return $this->render('trick/index.html.twig', ['tricks' => $tricks]);
+    }
+
     #[Route('/create-trick', name: 'create_trick')]
     public function createTrick(EntityManagerInterface $entityManager, ValidatorInterface $validator): Response
     {
         $trick = new Trick();
         $createAt = now();
-        $trick->setName('Nose-Roll 180');
-        $trick->setSlug('nose-roll-180');
+        $trick->setName('Switch Cork 540 Tail Grab');
+        $trick->setSlug('switch-cork-540-tail-grab');
         $trick->setCreatedAt($createAt);
         $trick->setUpdatedAt($createAt);
-        $trick->setDescription('Amorce un virage sur les orteils ou les talons, et une fois que tu es sur la carre, soulève le talon de ta planche, en gardant la spatule au sol. Ensuite, fais pivoter la planche pour atterrir en Switch.');
+        $trick->setDescription("Nam et velit eget lacus blandit volutpat in et ante.");
 
         $errors = $validator->validate($trick);
         if (count($errors) > 0) {
@@ -34,7 +41,7 @@ class TrickController extends AbstractController
     }
 
     #[Route('/show/{slug}', name: 'show')]
-    public function show(Trick $trick): Response
+    public function showTrick(Trick $trick): Response
     {
         return $this->render('trick/index.html.twig',['trick' => $trick]);
     }
