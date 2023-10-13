@@ -7,6 +7,7 @@
 
 // any CSS you import will output into a single css file (app.scss in this case)
 import './styles/app.scss';
+import './styles/own_style.css';
 
 // You can specify which plugins you need
 import { Tooltip, Toast, Popover} from './bootstrap';

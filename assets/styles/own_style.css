@@ -1,0 +1,55 @@
+body {
+    font-family: "Century Gothic";
+}
+
+.hidden-sm {
+    display: none;
+}
+
+.homepage_screen {
+    position: relative;
+    width: 100%;
+}
+
+.homepage_img {
+    overflow: hidden;
+    width: 100%;
+    max-height: 550px;
+    background: linear-gradient(50deg, #C8C6CC, #EDB51A);
+}
+
+.homepage_img-img {
+    width: 100%;
+    opacity: 0.4;
+}
+
+.homepage_text_img {
+    position: absolute;
+    top: 60%;
+    margin: auto;
+    z-index: 2;
+}
+
+.arrow-top {
+    position: relative;
+    top: -40px;
+}
+
+.card-action {
+    height: 38px;
+}
+
+@media screen and (width <= 991px) {
+    .hidden-xs {
+        display: none;
+    }
+
+    .hidden-sm {
+        display: inline;
+    }
+
+    .homepage_text_img {
+        top: 40%;
+        font-size: 1.5rem;
+    }
+}
