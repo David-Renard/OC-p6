@@ -23,10 +23,10 @@ class Trick
     private ?string $slug = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $created_at = null;
+    private \DateTimeImmutable $created_at;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $updated_at = null;
+    private \DateTimeImmutable $updated_at;
 
     public function __construct()
     {

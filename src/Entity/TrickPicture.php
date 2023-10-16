@@ -19,6 +19,9 @@ class TrickPicture
     #[ORM\Column]
     private ?bool $main = null;
 
+    #[ORM\Column]
+    private ?int $trickId = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -44,6 +47,18 @@ class TrickPicture
     public function setMain(bool $main): static
     {
         $this->main = $main;
+
+        return $this;
+    }
+
+    public function getTrickId(): ?int
+    {
+        return $this->trickId;
+    }
+
+    public function setTrickId(int $trickId): static
+    {
+        $this->trickId = $trickId;
 
         return $this;
     }

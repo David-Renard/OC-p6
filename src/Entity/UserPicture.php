@@ -16,6 +16,9 @@ class UserPicture
     #[ORM\Column(length: 255)]
     private ?string $filename = null;
 
+    #[ORM\Column]
+    private ?int $userId = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -29,6 +32,18 @@ class UserPicture
     public function setFilename(string $filename): static
     {
         $this->filename = $filename;
+
+        return $this;
+    }
+
+    public function getUserId(): ?int
+    {
+        return $this->userId;
+    }
+
+    public function setUserId(int $userId): static
+    {
+        $this->userId = $userId;
 
         return $this;
     }

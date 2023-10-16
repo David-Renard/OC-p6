@@ -16,6 +16,9 @@ class TrickCategory
     #[ORM\Column(length: 20)]
     private ?string $name = null;
 
+    #[ORM\Column]
+    private ?int $trickId = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -29,6 +32,18 @@ class TrickCategory
     public function setName(string $name): static
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getTrickId(): ?int
+    {
+        return $this->trickId;
+    }
+
+    public function setTrickId(int $trickId): static
+    {
+        $this->trickId = $trickId;
 
         return $this;
     }
