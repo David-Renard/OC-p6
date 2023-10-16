@@ -18,7 +18,7 @@ class TrickComment
     private ?string $content = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
+    private \DateTimeImmutable $createdAt;
 
     #[ORM\Column]
     private ?int $author = null;
