@@ -16,11 +16,8 @@ class TrickPicture
     #[ORM\Column(length: 255)]
     private ?string $filename = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?bool $main = null;
-
-    #[ORM\Column]
-    private ?int $trickId = null;
 
     public function getId(): ?int
     {
@@ -44,21 +41,9 @@ class TrickPicture
         return $this->main;
     }
 
-    public function setMain(bool $main): static
+    public function setMain(?bool $main): static
     {
         $this->main = $main;
-
-        return $this;
-    }
-
-    public function getTrickId(): ?int
-    {
-        return $this->trickId;
-    }
-
-    public function setTrickId(int $trickId): static
-    {
-        $this->trickId = $trickId;
 
         return $this;
     }
