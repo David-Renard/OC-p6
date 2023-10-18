@@ -13,11 +13,8 @@ class TrickVideo
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 2087)]
+    #[ORM\Column(length: 255)]
     private ?string $url = null;
-
-    #[ORM\Column]
-    private ?int $trickId = null;
 
     public function getId(): ?int
     {
@@ -32,18 +29,6 @@ class TrickVideo
     public function setUrl(string $url): static
     {
         $this->url = $url;
-
-        return $this;
-    }
-
-    public function getTrickId(): ?int
-    {
-        return $this->trickId;
-    }
-
-    public function setTrickId(int $trickId): static
-    {
-        $this->trickId = $trickId;
 
         return $this;
     }
