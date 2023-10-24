@@ -14,5 +14,4 @@ import { Tooltip, Toast, Popover} from './bootstrap';
 
 // start the Stimulus application
 import './bootstrap.js';
-
-console.log('Hello it"s me')
+import './custom';

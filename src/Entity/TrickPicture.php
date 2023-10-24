@@ -8,30 +8,37 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: TrickPictureRepository::class)]
 class TrickPicture
 {
+    #[ORM\Column(length: 255)]
+    private ?string $url = null;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $filename = null;
-
     #[ORM\Column(nullable: true)]
     private ?bool $main = null;
+
+    #[ORM\ManyToOne(inversedBy: 'pictures')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Trick $trick = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $name = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getFilename(): ?string
+    public function getUrl(): ?string
     {
-        return $this->filename;
+        return $this->url;
     }
 
-    public function setFilename(string $filename): static
+    public function setUrl(string $url): static
     {
-        $this->filename = $filename;
+        $this->url = $url;
 
         return $this;
     }
@@ -44,6 +51,30 @@ class TrickPicture
     public function setMain(?bool $main): static
     {
         $this->main = $main;
+
+        return $this;
+    }
+
+    public function getTrick(): ?Trick
+    {
+        return $this->trick;
+    }
+
+    public function setTrick(?Trick $trick): static
+    {
+        $this->trick = $trick;
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): static
+    {
+        $this->name = $name;
 
         return $this;
     }

@@ -14,21 +14,51 @@ class UserPicture
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $filename = null;
+    private ?string $url = null;
+
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    private ?User $userInfo = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $name = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getFilename(): ?string
+    public function getUrl(): ?string
     {
-        return $this->filename;
+        return $this->url;
     }
 
-    public function setFilename(string $filename): static
+    public function setUrl(string $url): static
     {
-        $this->filename = $filename;
+        $this->url = $url;
+
+        return $this;
+    }
+
+    public function getUserInfo(): ?User
+    {
+        return $this->userInfo;
+    }
+
+    public function setUserInfo(?User $userInfo): static
+    {
+        $this->userInfo = $userInfo;
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): static
+    {
+        $this->name = $name;
 
         return $this;
     }

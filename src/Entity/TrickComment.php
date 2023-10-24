@@ -20,6 +20,12 @@ class TrickComment
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
+    #[ORM\ManyToOne(inversedBy: 'comments')]
+    private ?Trick $trick = null;
+
+    #[ORM\ManyToOne(inversedBy: 'comments')]
+    private ?User $commentAuthor = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -45,6 +51,30 @@ class TrickComment
     public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getTrick(): ?Trick
+    {
+        return $this->trick;
+    }
+
+    public function setTrick(?Trick $trick): static
+    {
+        $this->trick = $trick;
+
+        return $this;
+    }
+
+    public function getCommentAuthor(): ?User
+    {
+        return $this->commentAuthor;
+    }
+
+    public function setCommentAuthor(?User $commentAuthor): static
+    {
+        $this->commentAuthor = $commentAuthor;
 
         return $this;
     }
