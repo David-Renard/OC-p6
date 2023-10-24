@@ -39,6 +39,37 @@ body {
     height: 38px;
 }
 
+.card-images-top {
+    background: content-box;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    object-position: center top;
+    border-radius: 5px;
+}
+
+.content-card-images {
+    height: 170px;
+    width: 95%;
+}
+
+.modal-dialog, .from-right .modal-dialog {
+    position: fixed;
+    margin: auto;
+    width: 250px;
+    height: 100%;
+    transform: translateX(250px);
+}
+
+.from-right .modal-content {
+    height: 100%;
+    overflow-y: auto;
+}
+
+.from-right.fade .modal-dialog {
+    transition: opacity 0.3s linear, right 0.3s ease-out;
+}
+
 @media screen and (width <= 991px) {
     .hidden-xs {
         display: none;
