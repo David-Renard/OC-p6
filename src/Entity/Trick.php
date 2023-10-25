@@ -5,7 +5,6 @@ namespace App\Entity;
 use App\Repository\TrickRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
 
@@ -39,13 +38,14 @@ class Trick
     private Collection $video;
 
     #[ORM\ManyToOne(targetEntity: TrickCategory::class, inversedBy: 'tricks')]
-    private ?TrickCategory $category;
+    #[ORM\JoinColumn(nullable: false)]
+    private ?TrickCategory $category = null;
 
-    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: TrickComment::class)]
-    private Collection $comments;
+    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: TrickComment::class, cascade: ['persist'])]
+    private ?Collection $comments = null;
 
-    #[ORM\ManyToOne(cascade: ['persist'],inversedBy: 'tricks')]
-    #[ORM\JoinColumn(nullable: true)]
+    #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'tricks')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?User $author = null;
 
     public function __construct()

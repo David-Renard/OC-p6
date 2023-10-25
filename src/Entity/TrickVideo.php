@@ -13,10 +13,11 @@ class TrickVideo
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column]
     private ?string $url = null;
 
     #[ORM\ManyToOne(inversedBy: 'video')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Trick $trick = null;
 
     public function getId(): ?int
