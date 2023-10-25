@@ -3,11 +3,12 @@
 namespace App\Entity;
 
 use App\Repository\TrickCategoryRepository;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: TrickCategoryRepository::class)]
+#[UniqueEntity('name')]
 class TrickCategory
 {
     #[ORM\Id]
@@ -15,7 +16,7 @@ class TrickCategory
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, unique: true)]
     private string $name;
 
     #[ORM\OneToMany(mappedBy: 'category', targetEntity: Trick::class)]
