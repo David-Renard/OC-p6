@@ -1,4 +1,7 @@
-<nav class="navbar navbar-expand-md navbar-light sticky-top bg-dark-subtle px-4">
+<nav
+        class="navbar navbar-expand-md navbar-light sticky-top bg-dark-subtle px-4"
+        {{ is_granted('ROLE_PREVIOUS_ADMIN') ? 'style="background-color: red !important"' }}
+>
     <div class="container-fluid">
         <a class="navbar-brand d-flex flex-row align-items-center align-items-sm-end" href="/index.php">
             <img src="/build/images/logo_s.svg" alt="logo" width="25" height="auto" class="hidden-sm">
@@ -16,16 +19,38 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/index.php?action=posts">Tricks</a>
                 </li>
+                {% if is_granted('IS_AUTHENTICATED_REMEMBERED') == false %}
                 <li class="nav-item">
-{#                        {%  if session.user %}#}
-{#                        <div class="nav-link fst-italic text-primary">{{ session.user.firstname ~ ' ' ~ session.user.name }}</div>#}
-                </li>
-                <a class="nav-link" href="/index.php?action=logout">Sign in</a>
+                        <a class="nav-link" href="{{ path('app_login', relative = true) }}"><i class="bi bi-person-up"></i></a>
                 </li>
                 <li class="nav-item">
-{#                        {% else %}#}
-                    <a class="nav-link" href="/index.php?action=login">Sign up</a>
+                    <a class="nav-link" href="/login"><i class="bi bi-window-plus"></i></a>
                 </li>
+                {% else %}
+                <div class="dropdown">
+                    <button class="dropdown-toggle btn" type="button" id="user-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="{{ app.user.url }}" alt="{{ app.user.name }}">
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="{{ path('edit_profile') }}" class="disabled dropdown-item">Éditer mon profil</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('app_logout') }}" class="dropdown-item">Me déconnecter</a>
+                        </li>
+                        {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
+                        <li>
+                            <a href="{{ path('app_hompage', {
+                                '_switch_user': '_exit'
+                            }) }}" class="dropdown-item">Revenir à moi!</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+                <li class="nav-item">
+                    <a href="{{ path('app_logout') }}" class="nav-link"><i class="bi bi-box-arrow-right"></i></a>
+                </li>
+                {% endif %}
             </ul>
         </div>
     </div>
