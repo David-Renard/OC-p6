@@ -20,7 +20,7 @@
                 <div class="row my-3">
                     <div class="col-12 col-sm-8 offset-sm-2">
                         <label for="inputEmail" class="form-label">Email</label>
-                        <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
+                        <input type="email" value="{{ last_username }}" name="_inputEmail" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
                     </div>
                 </div>
                 <div class="row my-3">
@@ -32,6 +32,15 @@
                 <div class="row my-3">
                     <div class="col-12 col-sm-8 offset-sm-2">
                         <a href="{# {{ path('forgotten_password') }} #}">Mot de passe oublié</a>
+                    </div>
+                </div>
+                <div class="row my-3">
+                    <div class="col-12 col-sm-8 offset-sm-2">
+                        <div class="form-check mb-3">
+                            <label>
+                                <input type="checkbox" name="_remember_me" class="form-check-input">Se souvenir de moi
+                            </label>
+                        </div>
                     </div>
                 </div>
 

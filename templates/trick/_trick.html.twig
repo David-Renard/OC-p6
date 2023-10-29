@@ -1,7 +1,9 @@
 <div class="card shadow h-100">
     <div class="content-card-images m-auto mt-1 shadow border-black">
         {% if trick.getMainPicture() %}
+        <a href="show/{{ trick.slug }}" title="détail de {{ trick.name }}">
             <img src="{{ asset(trick.getMainPicture().url) }}" class="card-images-top" alt="{{ trick.getMainPicture().name }}"/>
+        </a>
         {% endif %}
     </div>
 
@@ -9,6 +11,7 @@
         <div class="d-flex justify-content-between align-items-center card-action">
             <p class="card-title w-50"><a href="show/{{ trick.slug }}" title="détail de {{ trick.name }}" class="text-decoration-none nav-link">{{ trick.name }}</a></p>
             <div class="d-flex justify-content-end w-50">
+            {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                 <a href="" class="btn btn-primary me-1"><i class="bi bi-pencil-fill" title="Modifier {{ trick.name }}"></i></a>
                 <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ trick.id }}"><i class="bi bi-trash3-fill" title="Supprimer {{ trick.name }}"></i></button>
 
@@ -30,6 +33,7 @@
                         </div>
                     </div>
                 </div>
+            {% endif %}
             </div>
         </div>
     </div>
