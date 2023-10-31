@@ -16,11 +16,11 @@ class UserPicture
     #[ORM\Column(length: 255)]
     private ?string $url = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    private ?User $userInfo = null;
-
     #[ORM\Column(length: 255)]
     private ?string $name = null;
+
+    #[ORM\OneToOne(mappedBy: 'userPicture', cascade: ['persist', 'remove'])]
+    private ?User $userInfo = null;
 
     public function getId(): ?int
     {
@@ -39,18 +39,6 @@ class UserPicture
         return $this;
     }
 
-    public function getUserInfo(): ?User
-    {
-        return $this->userInfo;
-    }
-
-    public function setUserInfo(?User $userInfo): static
-    {
-        $this->userInfo = $userInfo;
-
-        return $this;
-    }
-
     public function getName(): ?string
     {
         return $this->name;
@@ -59,6 +47,28 @@ class UserPicture
     public function setName(string $name): static
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getUserInfo(): ?User
+    {
+        return $this->userInfo;
+    }
+
+    public function setUserInfo(?User $userInfo): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($userInfo === null && $this->userInfo !== null) {
+            $this->userInfo->setUserPicture(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($userInfo !== null && $userInfo->getUserPicture() !== $this) {
+            $userInfo->setUserPicture($this);
+        }
+
+        $this->userInfo = $userInfo;
 
         return $this;
     }

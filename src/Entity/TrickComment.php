@@ -25,7 +25,7 @@ class TrickComment
 
     #[ORM\ManyToOne(inversedBy: 'comments')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $commentAuthor = null;
+    private ?User $user = null;
 
     public function getId(): ?int
     {
@@ -68,14 +68,14 @@ class TrickComment
         return $this;
     }
 
-    public function getCommentAuthor(): ?User
+    public function getUser(): ?User
     {
-        return $this->commentAuthor;
+        return $this->user;
     }
 
-    public function setCommentAuthor(?User $commentAuthor): static
+    public function setUser(?User $user): static
     {
-        $this->commentAuthor = $commentAuthor;
+        $this->user = $user;
 
         return $this;
     }

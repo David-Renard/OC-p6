@@ -36,7 +36,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Trick::class)]
     private Collection $tricks;
 
-    #[ORM\OneToMany(mappedBy: 'commentAuthor', targetEntity: TrickComment::class)]
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: TrickComment::class)]
     private Collection $comments;
 
     #[ORM\Column(length: 255)]
@@ -45,7 +45,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $plainPassword = null;
 
     #[ORM\Column(type: 'boolean')]
-    private $isVerified = false;
+    private bool $isVerified = false;
+
+    #[ORM\OneToOne(inversedBy: 'userInfo', cascade: ['persist', 'remove'])]
+    private ?UserPicture $userPicture = null;
 
     /**
      * @return string|null
@@ -181,7 +184,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if (!$this->comments->contains($comment)) {
             $this->comments->add($comment);
-            $comment->setCommentAuthor($this);
+            $comment->setUser($this);
         }
 
         return $this;
@@ -191,8 +194,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->comments->removeElement($comment)) {
             // set the owning side to null (unless already changed)
-            if ($comment->getCommentAuthor() === $this) {
-                $comment->setCommentAuthor(null);
+            if ($comment->getUser() === $this) {
+                $comment->setUser(null);
             }
         }
 
@@ -219,6 +222,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsVerified(bool $isVerified): static
     {
         $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    public function getUserPicture(): ?UserPicture
+    {
+        return $this->userPicture;
+    }
+
+    public function setUserPicture(?UserPicture $userPicture): static
+    {
+        $this->userPicture = $userPicture;
 
         return $this;
     }
