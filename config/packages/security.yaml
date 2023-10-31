@@ -32,12 +32,14 @@ security:
                 target: homepage
 
             # enable the switch_user authenticator : allow a user to walk over the app like another user
-            switch_user: true
+#            switch_user: true
+#            login_throttling: true
 
-#            entry_point: form_login
-#            form_login:
-#                login_path: app_login
-#                check_path: app_login
+            entry_point: form_login
+            form_login:
+                login_path: app_login
+                check_path: app_login
+                enable_csrf: true
 #                username_parameter: email
 #                password_parameter: password
 

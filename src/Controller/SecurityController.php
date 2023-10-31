@@ -23,17 +23,16 @@ class SecurityController extends AbstractController
     ): Response
     {
          if ($user) {
-             return $this->redirectToRoute('target_path');
+             return $this->redirectToRoute('homepage');
          }
 
-         $this->saveTargetPath($request->getSession(), 'main', $this->generateUrl('homepage'));
+//         $this->saveTargetPath($request->getSession(), 'main', $this->generateUrl('homepage'));
 
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
 
-//dd($lastUsername);
         return $this->render('security/login.html.twig', [
             'last_username' => $lastUsername,
             'error'         => $error,

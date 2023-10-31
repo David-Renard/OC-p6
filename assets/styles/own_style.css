@@ -30,8 +30,15 @@ body {
     z-index: 2;
 }
 
-.arrow-top {
+.inside {
     position: relative;
+}
+
+.positive {
+    top: 40px;
+}
+
+.negative {
     top: -40px;
 }
 

@@ -11,6 +11,7 @@ use App\Entity\UserPicture;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\String\Slugger\AsciiSlugger;
 use function Symfony\Component\Clock\now;
 
 class AppFixtures extends Fixture
@@ -59,6 +60,8 @@ class AppFixtures extends Fixture
             }
             $user->setRoles($roles);
             $user->setUsername($userAsArray['username']);
+            $user->setIsVerified(true);
+            $user->setUserPicture($avatar);
             $avatar->setUserInfo($user);
 
             $manager->persist($avatar);
@@ -105,7 +108,7 @@ class AppFixtures extends Fixture
             $now = new \DateTimeImmutable("now");
             $randomTime = rand(0,50);
             $comment->setContent($content);
-            $comment->setCommentAuthor($users[random_int(0,27)]);
+            $comment->setUser($users[random_int(0,27)]);
             $comment->setCreatedAt($now->sub(new \DateInterval("P{$randomTime}D")));
             $listComment[] = $comment;
         }
@@ -122,14 +125,17 @@ class AppFixtures extends Fixture
         $manager->flush();
 
         // fixture tricks
-        $listTricksSlug = ["switch-rodeo-720-japan","switch-cork-540-tail-grab","misty-900-mute","switch-misty-1080-mute","switch-360-stalefish","switch-cork-1080-mute","cork-180-seat-belt","switch-rodeo-180-indy","switch-cork-180-seat-belt","cork-720-indy","switch-720-japan","720-stalefish","1080-seat-belt","switch-900-indy","switch-900-mute","misty-720-tail-grab","900-stalefish","switch-cork-540-mute","misty-180-sad",];
+//        $listTricksSlug = ["switch-rodeo-720-japan","switch-cork-540-tail-grab","misty-900-mute","switch-misty-1080-mute","switch-360-stalefish","switch-cork-1080-mute","cork-180-seat-belt","switch-rodeo-180-indy","switch-cork-180-seat-belt","cork-720-indy","switch-720-japan","720-stalefish","1080-seat-belt","switch-900-indy","switch-900-mute","misty-720-tail-grab","900-stalefish","switch-cork-540-mute","misty-180-sad",];
 
         for ($i=0; $i<count($listTricksName); $i++) {
             $trick = new Trick();
             $randomAuthor = random_int(1,10);
 
             $trick->setName($listTricksName[$i]);
-            $trick->setSlug($listTricksSlug[$i]);
+
+            $slugger = new AsciiSlugger();
+            $slug = $slugger->slug($listTricksName[$i]);
+            $trick->setSlug($slug);
             $trick->setDescription($loremDescription[random_int(0,64)] . $loremDescription[random_int(0,64)] . $loremDescription[random_int(0,64)]);
             $trick->setAuthor($users[$randomAuthor]);
             foreach ($categories as $category) {

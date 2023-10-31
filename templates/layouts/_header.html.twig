@@ -24,17 +24,17 @@
                         <a class="nav-link" href="{{ path('app_login', relative = true) }}"><i class="bi bi-person-up"></i></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/login"><i class="bi bi-window-plus"></i></a>
+                    <a class="nav-link" href=" {{ path('app_register', relative = true) }}"><i class="bi bi-window-plus"></i></a>
                 </li>
                 {% else %}
                 <div class="dropdown">
                     <button class="dropdown-toggle btn" type="button" id="user-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="{{ app.user.url }}" alt="{{ app.user.name }}">
+                        <img src="{{ asset(app.user.avatar.url) }}" width="30" height="30" alt="{{ app.user.avatar.name }}" class="rounded-circle shadow border border-primary">
                     </button>
                     <ul class="dropdown-menu">
-                        <li>
-                            <a href="{{ path('edit_profile') }}" class="disabled dropdown-item">Éditer mon profil</a>
-                        </li>
+{#                        <li>#}
+{#                            <a href="{{ path('edit_profile') }}" class="disabled dropdown-item">Éditer mon profil</a>#}
+{#                        </li>#}
                         <li>
                             <a href="{{ path('app_logout') }}" class="dropdown-item">Me déconnecter</a>
                         </li>

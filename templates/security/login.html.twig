@@ -3,7 +3,7 @@
 {% block title %}Log in!{% endblock %}
 
 {% block body %}
-    <form method="post" class="container text-center my-3">
+    <form action="{{ path('app_login') }}" method="post" class="container text-center my-3">
         {% if error %}
             <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
         {% endif %}
@@ -14,19 +14,19 @@
             </div>
         {% endif %}
 
-            <h1 class="h3 mb-3 font-weight-normal">Login</h1>
+        <h1 class="h3 mb-3 font-weight-normal">Login</h1>
         <div class="col-8 offset-sm-2">
             <div class="container border p-5">
                 <div class="row my-3">
                     <div class="col-12 col-sm-8 offset-sm-2">
-                        <label for="inputEmail" class="form-label">Email</label>
-                        <input type="email" value="{{ last_username }}" name="_inputEmail" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" value="{{ last_username }}" name="email" id="email" class="form-control" autocomplete="email" required autofocus>
                     </div>
                 </div>
                 <div class="row my-3">
                     <div class="col-12 col-sm-8 offset-sm-2">
-                <label for="inputPassword" class="form-label">Password</label>
-                <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" name="password" id="password" class="form-control" autocomplete="current-password" required>
                     </div>
                 </div>
                 <div class="row my-3">
@@ -47,6 +47,7 @@
                 <input type="hidden" name="_csrf_token"
                        value="{{ csrf_token('authenticate') }}"
                 >
+{#                <input type="hidden" name="_target_path" value="/account">#}
 
                 <button class="btn btn-lg btn-primary my-3" type="submit">
                     Login
