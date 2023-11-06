@@ -1,6 +1,6 @@
 security:
     # option to tell "invalid email" to user
-#    hide_user_not_found: false
+    hide_user_not_found: false
 
     # set up the role hierarchy, here, this means : if you have ROLE_COMMERCIAL you automatically also have ROLE_MARKET
 #    role_hierarchy:
@@ -35,19 +35,23 @@ security:
 #            switch_user: true
 #            login_throttling: true
 
-            entry_point: form_login
-            form_login:
-                login_path: app_login
-                check_path: app_login
-                enable_csrf: true
+# ------------- début - partie décommentée dans ma version précédente
+#            entry_point: form_login
+#            form_login:
+#                login_path: app_login
+#                check_path: app_login
+#                enable_csrf: true
+# ------------- fin - partie décommentée dans ma version précédente
 #                username_parameter: email
 #                password_parameter: password
 
-            remember_me:
-                secret: '%kernel.secret%'
-                lifetime: 604800
-                path: /
+            # ------------- début - partie décommentée dans ma version précédente
+#            remember_me:
+#                secret: '%kernel.secret%'
+#                lifetime: 604800
+#                path: /
 #                always_remember_me: true
+            # ------------- fin - partie décommentée dans ma version précédente
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall

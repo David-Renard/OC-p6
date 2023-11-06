@@ -3,28 +3,32 @@
 {% block title %}{{ trick.name }}{% endblock %}
 
 {% block body %}
-    <div class="container homepage_screen border border-primary">
-        <div class="container-fluid text-end text-primary me-4 inside positive border border-primary bg-light-subtle">
-            <a href="" class="btn btn-primary me-1"><i class="bi bi-pencil-fill" title="Modifier le trick"></i></a>
-            <a href="" class="btn btn-danger"><i class="bi bi-trash3-fill" title="Supprimer le trick"></i></a>
-        </div>
-        <div class="mt-2">
-            {% for picture in trick.pictures %}
-                {% if picture.main %}
-                    <img src="{{ asset(picture.url) }}" alt="{{ picture.name }}" class="homepage_img-img"/>
-                {% endif %}
-            {% endfor %}
-        </div>
-        <div class="homepage_text_img text-center text-primary m-auto w-100">
-            <div class="container">
-                <div class="row">
-                    <div class="col-9 offset-1 col-md-6 offset-md-5">
-                        {{ trick.name }}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    {% for picture in trick.getPictures() %}
+
+    <img src="{{ picture.url }}"/>
+    {% endfor %}
+{#    <div class="container homepage_screen border border-primary">#}
+{#        <div class="container-fluid text-end text-primary me-4 inside positive border border-primary bg-light-subtle">#}
+{#            <a href="" class="btn btn-primary me-1"><i class="bi bi-pencil-fill" title="Modifier le trick"></i></a>#}
+{#            <a href="" class="btn btn-danger"><i class="bi bi-trash3-fill" title="Supprimer le trick"></i></a>#}
+{#        </div>#}
+{#        <div class="mt-2">#}
+{#            {% for picture in trick.pictures %}#}
+{#                {% if picture.main %}#}
+{#                    <img src="{{ asset(picture.url) }}" alt="{{ picture.name }}" class="homepage_img-img"/>#}
+{#                {% endif %}#}
+{#            {% endfor %}#}
+{#        </div>#}
+{#        <div class="homepage_text_img text-center text-primary m-auto w-100">#}
+{#            <div class="container">#}
+{#                <div class="row">#}
+{#                    <div class="col-9 offset-1 col-md-6 offset-md-5">#}
+{#                        {{ trick.name }}#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
 
 {#    <div class="container">#}
 {#    {% for picture in trick.pictures %}#}
@@ -43,5 +47,4 @@
 {#            </div>#}
 {#        </div>#}
 {#    </div>#}
-    </div>
 {% endblock %}

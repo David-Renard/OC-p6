@@ -3,54 +3,53 @@
 {% block title %}Bienvenue{% endblock %}
 
 {% block body %}
-    <div class="homepage_screen">
-        <div class="homepage_img">
-            <img src="/build/images/freestyle.jpeg" alt="freestyle" class="homepage_img-img"/>
-        </div>
-        <div class="homepage_text_img text-center text-primary m-auto w-100">
-            <div class="container">
-                <div class="row">
-                    <div class="col-9 offset-1 col-md-6 offset-md-5">
-                        <h1 class="fs-4 text-start fw-bold"><span class="fs-1 fw-bolder">S</span>now<span class="fs-2 fw-bolder">T</span>ricks : la référence du snow...</h1>
-                        <h2 class="fs-6 text-end fw-bold">...et la plus grande communauté francophone</h2>
-                    </div>
+<div class="homepage_screen">
+    <div class="homepage_img">
+        <img src="{{ asset('build/images/freestyle.jpeg') }}" alt="freestyle" class="homepage_img-img"/>
+    </div>
+    <div class="homepage_text_img text-center text-primary m-auto w-100">
+        <div class="homepage_bloc_text position_text_300 container-fluid d-flex flex-column justify-content-between">
+            <div class="row">
+                <div class="col-9 offset-1 col-md-4 offset-md-6">
+                    <h1 class="fs-4 text-start fw-bold"><span class="fs-1 fw-bolder">S</span>now<span class="fs-2 fw-bolder">T</span>ricks : la référence du snow...</h1>
+                    <h2 class="fs-6 text-end fw-bold">...et la plus grande communauté francophone</h2>
+                </div>
+            </div>
+            <div class="row px-4">
+                <div class="col-1 offset-11">
+                    <a href="{{ path('homepage') }}#trick-container"><i class="bi bi-arrow-down-square-fill fs-3"></i></a>
                 </div>
             </div>
         </div>
-        <div class="container-fluid text-end text-primary inside negative me-4">
-                <a href="/index.php#trick-container"><i class="bi bi-arrow-down-square-fill fs-3"></i></a>
+        <div id="trick-container">
+            <h3 class="text-center text-primary pt-4">Viens voir ici l'ensemble de nos tricks !</h3>
+            <div class="container-fluid gy-4 pt-5">
+                {% for trick in tricks %}
+                {% if loop.index % 5 == 1 %}
+                <div class="row gy-4 pb-2">
+                    <div class="col-12 col-sm-6 offset-sm-3 col-lg-2 offset-lg-1">
+                {% else %}
+                    <div class="col-12 col-sm-6 offset-sm-3 col-lg-2 offset-lg-0">
+                {% endif %}
+                {% include 'trick/_trick.html.twig' %}
+                    </div>
+                {% if loop.index % 5 == 0 %}
+                </div>
+                {% endif %}
+                {% endfor %}
+                    <div class="row p-4">
+                        <div class="col-8 offset-2 text-center z-3">
+                            {% if page is defined %}
+                            <a href="{{ path('homepage', {page: page + 1}) }}#trick-container" class="btn btn-primary">Voir plus de tricks</a>
+                            {% endif %}
+                        </div>
+                        <div class="col-1 offset-1 text-primary z-3">
+                            <a href="{{ path('homepage', {page: page}) }}#trick-container"><i class="bi bi-arrow-up-square-fill fs-3"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    <section id="trick-container" class="pt-5">
-        <h3 class="text-center text-primary">Viens voir ici l'ensemble de nos tricks !</h3>
-        <div class="container-fluid gy-4 pt-5">
-            {% for trick in tricks %}
-                {% if loop.index % 5 == 1 %}
-                    <div class="row gy-4 pb-2">
-                        <div class="col-12 col-sm-6 offset-sm-3 col-lg-2 offset-lg-1">
-                    {% else %}
-                        <div class="col-12 col-sm-6 offset-sm-3 col-lg-2 offset-lg-0">
-                {% endif %}
-                    {% include 'trick/_trick.html.twig' %}
-                        </div>
-                {% if loop.index % 5 == 0 %}
-                    </div>
-                {% endif %}
-            {% endfor %}
-            <div class="row mt-5">
-                <div class="col-6 offset-3 text-center">
-                    {% if number is defined %}
-                        <a href="/show_more/{{ number + 15 }}#trick-container" class="btn btn-primary">Voir plus de tricks</a>
-                    {% else %}
-                        <a href="/show_more/15#trick-container" class="btn btn-primary">Voir plus de tricks</a>
-                    {% endif %}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-1 offset-11 container-fluid text-end text-primary inside negative me-4">
-                    <a href="/index.php#trick-container"><i class="bi bi-arrow-up-square-fill fs-3"></i></a>
-                </div>
-            </div>
-        </div>
-    </section>
+</div>
 {% endblock %}

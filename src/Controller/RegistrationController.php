@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\UserPicture;
 use App\Form\RegistrationFormType;
 use App\Security\AppCustomAuthenticator;
 use App\Security\EmailVerifier;
@@ -42,10 +43,14 @@ class RegistrationController extends AbstractController
                     $form->get('plainPassword')->getData()
                 )
             );
-//            default username
-            $user->setUsername("dasuza");
+            // assign default picture to this user
+            $userPicture = new UserPicture();
+            $userPicture->setUrl("/build/images/default-user-icon.jpg");
+            $userPicture->setName("default avatar");
+            $user->setUserPicture($userPicture);
 
             $entityManager->persist($user);
+            $entityManager->persist($userPicture);
             $entityManager->flush();
 
             // generate a signed url and email it to the user
@@ -63,6 +68,9 @@ class RegistrationController extends AbstractController
 //                $authenticator,
 //                $request
 //            );
+            $this->addFlash('success', "Inscription réussie, mais valide l'email avant de pouvoir ride avec nous!");
+
+            return $this->redirectToRoute('homepage');
         }
 
         return $this->render('registration/register.html.twig', [
