@@ -10,23 +10,15 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class TrickController extends AbstractController
 {
-    #[Route('/', 'homepage')]
-    public function show(TrickRepository $trickRepository): Response
+    #[Route('/{page}',name: 'homepage', requirements: ['page' => '\d+'])]
+    public function show(TrickRepository $trickRepository, ?int $page = 1): Response
     {
-        $tricks = $trickRepository->findBy(array(), ['createdAt' => 'DESC'], 15);
+        $tricks = $trickRepository->findBy(array(), ['createdAt' => 'DESC'], 15 * $page);
 
-        return $this->render('trick/index.html.twig', ['tricks' => $tricks]);
+        return $this->render('trick/index.html.twig', ['tricks' => $tricks, 'page' => $page]);
     }
 
-    #[Route('/show_more/{number}', name: 'show_more', requirements: ['number' => '\d+'])]
-    public function showMore(TrickRepository $trickRepository, int $number = 0): Response
-    {
-        $tricks = $trickRepository->findBy(array(), ['createdAt' => 'DESC'], $number + 15);
-
-        return $this->render('trick/index.html.twig', ['tricks' => $tricks, 'number' => $number]);
-    }
-
-    #[Route('show/{slug}', name: 'see_trick')]
+    #[Route('/show/{slug}', name: 'show_trick')]
     public function showOne(TrickRepository $trickRepository, string $slug): Response
     {
         $trick = $trickRepository->findOneBy([

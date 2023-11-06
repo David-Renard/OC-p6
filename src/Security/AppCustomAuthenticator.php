@@ -33,13 +33,11 @@ class AppCustomAuthenticator extends AbstractLoginFormAuthenticator
 
         $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $email);
 
-//        dd($request);
         return new Passport(
             new UserBadge($email),
             new PasswordCredentials($request->request->get('password', '')),
             [
                 new CsrfTokenBadge('authenticate', $request->request->get('_csrf_token')),
-                new RememberMeBadge(),
             ]
         );
     }
