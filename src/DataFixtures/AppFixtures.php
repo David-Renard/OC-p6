@@ -11,16 +11,12 @@ use App\Entity\UserPicture;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\String\Slugger\AsciiSlugger;
-use function Symfony\Component\Clock\now;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class AppFixtures extends Fixture
 {
-    private UserPasswordHasherInterface $passwordHasher;
-
-    public function __construct(UserPasswordHasherInterface $passwordHasher)
+    public function __construct(private readonly UserPasswordHasherInterface $passwordHasher, private readonly SluggerInterface $slugger)
     {
-        $this->passwordHasher = $passwordHasher;
     }
 
     public function load(ObjectManager $manager): void
@@ -133,9 +129,10 @@ class AppFixtures extends Fixture
 
             $trick->setName($listTricksName[$i]);
 
-            $slugger = new AsciiSlugger();
-            $slug = $slugger->slug($listTricksName[$i]);
+//            $slugger = new AsciiSlugger();
+            $slug = $this->slugger->slug($listTricksName[$i]);
             $trick->setSlug($slug);
+
             $trick->setDescription($loremDescription[random_int(0,64)] . $loremDescription[random_int(0,64)] . $loremDescription[random_int(0,64)]);
             $trick->setAuthor($users[$randomAuthor]);
             foreach ($categories as $category) {

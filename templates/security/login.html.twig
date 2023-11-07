@@ -3,12 +3,12 @@
 {% block title %}Connecte-toi !{% endblock %}
 
 {% block body %}
-<div class="homepage_screen login">
-    <div class="homepage_img">
-        <img src="{{ asset('build/images/freestyle.jpeg') }}" alt="freestyle" class="homepage_img-img"/>
-    </div>
-    <div class="container">
-        <form action="{{ path('app_login') }}" method="post" class="py-3 bg-light-subtle rounded-2 homepage_bloc_text position_text_50 text-center text-primary my-sm-5">
+{#<div class="homepage_screen login">#}
+{#    <div class="homepage_img">#}
+{#        <img src="{{ asset('build/images/freestyle.jpeg') }}" alt="freestyle" class="homepage_img-img"/>#}
+{#    </div>#}
+    <div class="container register text-center text-primary pt-3 bg-secondary-subtle rounded-2 text-center text-primary my-3 my-sm-5">
+        <form action="{{ path('app_login') }}" method="post" class="py-3">
             {% if error %}
                 <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
             {% endif %}
@@ -28,13 +28,13 @@
                         <div class="row my-3">
                             <div class="col-12 col-sm-8 offset-sm-2">
                                 <label for="inputEmail" class="form-label">Email</label>
-                                <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
+                                <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control w-50" autocomplete="email" required autofocus>
                             </div>
                         </div>
                         <div class="row my-3">
                             <div class="col-12 col-sm-8 offset-sm-2">
                                 <label for="inputPassword" class="form-label">Password</label>
-                                <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+                                <input type="password" name="password" id="inputPassword" class="form-control w-50" autocomplete="current-password" required>
                             </div>
                         </div>
                         <div class="row my-3">
@@ -65,5 +65,5 @@
             </div>
         </form>
     </div>
-</div>
+{#</div>#}
 {% endblock %}

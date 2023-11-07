@@ -3,40 +3,34 @@
 {% block title %}Inscris-toi !{% endblock %}
 
 {% block body %}
-<div class="homepage_screen login">
-    <div class="homepage_img registration">
-        <img src="{{ asset('build/images/freestyle.jpeg') }}" alt="freestyle" class="homepage_img-img"/>
+{% for flash_error in app.flashes('verify_email_error') %}
+<div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+{% endfor %}
+<div class="container register text-center text-primary pt-3 bg-secondary-subtle rounded-2 text-center text-primary my-3 my-sm-5">
+    <div class="row xs-vw-90">
+        <h1 class="col-10 offset-1 h3 font-weight-normal py-sm-3">S'inscrire et participer à la vie de la communauté :</h1>
     </div>
-{#    <div class="container">#}
-    {% for flash_error in app.flashes('verify_email_error') %}
-        <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
-    {% endfor %}
-        <div class="container register text-center text-primary py-3 bg-light-subtle rounded-2 homepage_bloc_text position_text_50 text-center text-primary my-sm-5">
-            <div class="row xs-vw-90">
-                <h1 class="col-10 offset-1 h3 font-weight-normal py-sm-3">S'inscrire et participer à la vie de la communauté :</h1>
+    <div class="row xs-vw-90">
+        <div class="col-10 offset-1 col-sm-8 offset-sm-2 border border-primary-subtle">
+            {{ form_errors(registrationForm) }}
+            {{ form_start(registrationForm) }}
+            <div class="my-3 d-flex justify-content-around">
+                {{ form_row(registrationForm.email) }}
             </div>
-            <div class="row xs-vw-90">
-                <div class="col-10 offset-1 col-sm-8 offset-sm-2 border border-primary-subtle">
-                    {{ form_errors(registrationForm) }}
-                    {{ form_start(registrationForm) }}
-                    <div class="my-3 d-flex justify-content-around">
-                        {{ form_row(registrationForm.email) }}
-                    </div>
-                                <div class="my-3 d-flex justify-content-around">
-                                    {{ form_row(registrationForm.username) }}
-                                </div>
-                    <div class="my-3 d-flex justify-content-around">
-                        {{ form_row(registrationForm.plainPassword) }}
-                    </div>
-                    <div class="my-3 d-flex justify-content-around">
-                        {{ form_row(registrationForm.agreeTerms) }}
-                    </div>
-                    <div class="my-3">
-                        <button type="submit" class="btn btn-primary">S'inscrire</button>
-                    </div>
-                    {{ form_end(registrationForm) }}
-                </div>
+            <div class="my-3 d-flex justify-content-around">
+                {{ form_row(registrationForm.username) }}
             </div>
+            <div class="my-3 d-flex justify-content-around">
+                {{ form_row(registrationForm.plainPassword) }}
+            </div>
+            <div class="my-3 d-flex justify-content-around">
+                {{ form_row(registrationForm.agreeTerms) }}
+            </div>
+            <div class="my-3">
+                <button type="submit" class="btn btn-primary">S'inscrire</button>
+            </div>
+            {{ form_end(registrationForm) }}
         </div>
-{#    </div>#}
+    </div>
+</div>
 {% endblock %}

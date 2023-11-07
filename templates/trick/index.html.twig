@@ -39,7 +39,7 @@
                 {% endfor %}
                     <div class="row p-4">
                         <div class="col-8 offset-2 text-center z-3">
-                            {% if page is defined %}
+                            {% if page is defined and count/15 > page %}
                             <a href="{{ path('homepage', {page: page + 1}) }}#trick-container" class="btn btn-primary">Voir plus de tricks</a>
                             {% endif %}
                         </div>
