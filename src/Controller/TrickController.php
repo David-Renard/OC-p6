@@ -14,8 +14,9 @@ class TrickController extends AbstractController
     public function show(TrickRepository $trickRepository, ?int $page = 1): Response
     {
         $tricks = $trickRepository->findBy(array(), ['createdAt' => 'DESC'], 15 * $page);
+        $count  = count($trickRepository->findAll());
 
-        return $this->render('trick/index.html.twig', ['tricks' => $tricks, 'page' => $page]);
+        return $this->render('trick/index.html.twig', ['tricks' => $tricks, 'page' => $page, 'count' => $count]);
     }
 
     #[Route('/show/{slug}', name: 'show_trick')]

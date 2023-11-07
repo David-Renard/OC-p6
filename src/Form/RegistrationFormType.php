@@ -23,7 +23,7 @@ class RegistrationFormType extends AbstractType
                 'constraints' => [
                     new NotBlank([
                         'message' => "Veuillez-saisir un email."
-                    ])
+                    ]),
                 ]
             ])
             ->add('username', TextType::class, [
@@ -36,7 +36,6 @@ class RegistrationFormType extends AbstractType
                         'min'     => 3,
                         'max'     => 30,
                         'minMessage' => "Votre login doit contenir au moins 3 caractères.",
-                        'maxMessage' => "Votre login doit contenir au plus 30 caractères."
                     ])
                 ]
             ])

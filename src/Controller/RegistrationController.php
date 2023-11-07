@@ -35,6 +35,11 @@ class RegistrationController extends AbstractController
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
+        // if a user exists he's here redirected to homepage
+        if ($this->getUser()) {
+            return $this->redirectToRoute('homepage');
+        }
+
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password
             $user->setPassword(
