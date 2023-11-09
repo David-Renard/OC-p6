@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Constraints\Email;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 //#[ORM\DiscriminatorColumn(name : 'email')]
-#[UniqueEntity('email')]
+#[UniqueEntity('email',message: "Un compte avec cette adresse mail existe déjà.")]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -23,7 +23,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
-    #[Email(message: "La saisie ne correspond pas à une adresse mail.")]
+    #[Email(message: "Ceci ne correspond pas à une adresse mail.")]
     private ?string $email = null;
 
     #[ORM\Column]
