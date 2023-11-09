@@ -24,6 +24,9 @@
                     <a class="nav-link" href=" {{ path('app_register', relative = true) }}" title="s'inscrire"><i class="bi bi-window-plus fs-4"></i></a>
                 </li>
                 {% else %}
+                <li class="nav-item">
+                    <a href="{{ path('new_trick') }}" class="nav-link" title="créer un trick"><i class="bi bi-clipboard-plus fs-4"></i></a>
+                </li>
                     <li>
                         <div class="dropdown pt-1">
                             <button class="dropdown-toggle btn" type="button" id="user-dropdown" data-bs-toggle="dropdown" aria-expanded="false">

@@ -15,6 +15,8 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 
 class AppFixtures extends Fixture
 {
+
+
     public function __construct(private readonly UserPasswordHasherInterface $passwordHasher, private readonly SluggerInterface $slugger)
     {
     }
@@ -121,15 +123,12 @@ class AppFixtures extends Fixture
         $manager->flush();
 
         // fixture tricks
-//        $listTricksSlug = ["switch-rodeo-720-japan","switch-cork-540-tail-grab","misty-900-mute","switch-misty-1080-mute","switch-360-stalefish","switch-cork-1080-mute","cork-180-seat-belt","switch-rodeo-180-indy","switch-cork-180-seat-belt","cork-720-indy","switch-720-japan","720-stalefish","1080-seat-belt","switch-900-indy","switch-900-mute","misty-720-tail-grab","900-stalefish","switch-cork-540-mute","misty-180-sad",];
-
         for ($i=0; $i<count($listTricksName); $i++) {
             $trick = new Trick();
             $randomAuthor = random_int(1,10);
 
             $trick->setName($listTricksName[$i]);
 
-//            $slugger = new AsciiSlugger();
             $slug = $this->slugger->slug($listTricksName[$i]);
             $trick->setSlug($slug);
 

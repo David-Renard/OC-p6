@@ -1,11 +1,7 @@
-<h1>Hi! Please confirm your email!</h1>
+<h1>Hello {{ email.toName }}! Confirme ton adresse mail!</h1>
 
 <p>
-    Please confirm your email address by clicking the following link: <br><br>
-    <a href="{{ signedUrl|raw }}">Confirm my Email</a>.
-    This link will expire in {{ expiresAtMessageKey|trans(expiresAtMessageData, 'VerifyEmailBundle') }}.
-</p>
-
-<p>
-    Cheers!
+    Confirme ton adresse mail pour valider ton inscription sur le site communautaire SnowTricks en cliquant sur ce lien : <br><br>
+    <a href="{{ absolute_url(path('verify_user')) }}">Confirmer mon email</a>.
+    Ce lien a une durée de vie et expire {{ expiration_date|date(F jS) }}.
 </p>

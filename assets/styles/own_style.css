@@ -84,23 +84,6 @@ body {
     width: 95%;
 }
 
-.modal-dialog, .from-right .modal-dialog {
-    position: fixed;
-    margin: auto;
-    width: 250px;
-    height: 100vh;
-    transform: translateX(250px);
-}
-
-.from-right .modal-content {
-    height: 100%;
-    overflow-y: auto;
-}
-
-.from-right.fade .modal-dialog {
-    transition: opacity 0.3s linear, right 0.3s ease-out;
-}
-
 nav {
     height: 10vh;
 }

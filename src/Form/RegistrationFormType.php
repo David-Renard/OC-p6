@@ -30,11 +30,11 @@ class RegistrationFormType extends AbstractType
                 'label'       => "Nom d'utilisateur",
                 'constraints' => [
                     new NotBlank([
-                        'message' => "Veuillez-saisir un login."
+                        'message' => "Veuillez-saisir un nom d'utilisateur."
                     ]),
                     new Length([
-                        'min'     => 3,
-                        'max'     => 30,
+                        'min'        => 3,
+                        'max'        => 30,
                         'minMessage' => "Votre login doit contenir au moins 3 caractères.",
                     ])
                 ]
