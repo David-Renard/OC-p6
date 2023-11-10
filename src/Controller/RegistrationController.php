@@ -6,22 +6,19 @@ use App\Entity\User;
 use App\Entity\UserPicture;
 use App\Form\RegistrationFormType;
 use App\Repository\UserRepository;
-use App\Security\AppCustomAuthenticator;
+use App\Service\SendMail;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class RegistrationController extends AbstractController
 {
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, MailerInterface $mailer, EntityManagerInterface $entityManager): Response
+    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, SendMail $mail, EntityManagerInterface $entityManager): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -51,17 +48,16 @@ class RegistrationController extends AbstractController
             $entityManager->flush();
 
             // generate and send email verification
-            $email = (new TemplatedEmail())
-                ->from('support@snowtricks.com')
-                ->to($user->getEmail())
-                ->subject('Validation de ton compte SnowTricks')
-                ->htmlTemplate('registration/confirmation_email.html.twig')
-                ->context([
+            $mail->send(
+                'support@snowtricks.com',
+                $user->getUserIdentifier(),
+                'Validation de compte SnowTricks',
+                'confirmation-email',
+                [
                     'expiration_date' => new \DateTime('+3 days'),
                     'user'        => $user,
-                ]);
-
-            $mailer->send($email);
+                ]
+            );
 
             $this->addFlash('success', "Inscription réussie, mais valide l'email avant de pouvoir ride avec nous!");
 

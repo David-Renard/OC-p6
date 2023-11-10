@@ -30,6 +30,8 @@ security:
                 path: app_logout
                 # where to redirect after logout
                 target: homepage
+#            access_token:
+#                token_handler: App\Security\AccessTokenHandler
 
             # enable the switch_user authenticator : allow a user to walk over the app like another user
 #            switch_user: true

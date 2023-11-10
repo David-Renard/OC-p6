@@ -7,12 +7,11 @@ use App\Form\ForgottenPasswordFormType;
 use App\Form\ResetPasswordFormType;
 use App\Repository\UserRepository;
 use App\Security\AppCustomAuthenticator;
+use App\Service\SendMail;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
@@ -20,7 +19,7 @@ use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 class PasswordController extends AbstractController
 {
     #[Route('/forgot-password', name: 'app_forgot_password')]
-    public function resetPassword(Request $request, UserRepository $userRepository, MailerInterface $mailer): Response
+    public function resetPassword(Request $request, UserRepository $userRepository, SendMail $mail): Response
     {
         $form = $this->createForm(ForgottenPasswordFormType::class);
         $form->handleRequest($request);
@@ -39,18 +38,16 @@ class PasswordController extends AbstractController
                 $this->addFlash('error', "Aucun compte avec cette adresse mail n'existe sur SnowTricks, veuillez réessayer :");
             } else {
                 // send a email
-                $email = (new TemplatedEmail())
-                    ->from('support@snowtricks.com')
-                    ->to($identifier)
-                    ->subject('Réinitialisation mot de passe SnowTricks')
-                    ->htmlTemplate('password/reset-password_email.html.twig')
-                    ->context([
+                $mail->send(
+                    'support@snowtricks.com',
+                    $identifier,
+                    'Réinitialisation - mot de passe SnowTricks',
+                    'reset-password',
+                    [
                         'expiration_date' => new \DateTime('+3 days'),
                         'user'            => $user,
-                    ]);
-
-//                dd($email);
-                $mailer->send($email);
+                    ]
+                );
 
                 // redirect the user to homepage if the form is valid and he's an instance of User::class
                 $this->addFlash('success' , "Un email vous a été envoyé afin de réinitialiser votre mot de passe.");
