@@ -20,7 +20,7 @@
         {% include ('layouts/_header.html.twig') %}
 
         {% for message in app.flashes('success') %}
-            <div class="alert alert-success mb-0 text-center text-primary fw-bold z-3">
+            <div class="alert alert-success mb-0 rounded-0 text-center text-primary fw-bold z-3">
                 {{ message }}
             </div>
         {% endfor %}

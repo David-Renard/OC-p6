@@ -26,8 +26,6 @@ class SecurityController extends AbstractController
              return $this->redirectToRoute('homepage');
          }
 
-//         $this->saveTargetPath($request->getSession(), 'main', $this->generateUrl('homepage'));
-
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
         // last username entered by the user

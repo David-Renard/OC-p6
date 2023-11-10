@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Réinitialisation du mot de passe{% endblock %}
+
+{% block body %}
+<div class="container register text-center text-primary pt-3 bg-secondary-subtle rounded-2 text-center text-primary my-3 my-sm-5">
+    <div class="row h3">
+        <div class="col my-3">
+            <h1 class="h3">Mot de passe oublié ?</h1>
+            <h2 class="h6 w-sm-50 fst-italic m-auto mb-5">Saisissez ici votre email d'inscription, nous vous enverrons un mail de réinitialisation de mot de passe.</h2>
+        </div>
+    </div>
+
+    <div class="row xs-vw-90">
+        <div class="col-10 offset-1 col-sm-8 offset-sm-2 border border-primary-subtle">
+            {{ form_errors(forgottenPasswordForm) }}
+            {% for message in app.flashes('error') %}
+                <div class="alert alert-error bg-danger-subtle mb-0 rounded-0 text-center text-danger fw-bold z-3">
+                    {{ message }}
+                </div>
+            {% endfor %}
+            {{ form_start(forgottenPasswordForm) }}
+            <div class="my-3 d-flex justify-content-around">
+                {{ form_row(forgottenPasswordForm.email) }}
+            </div>
+            <div class="my-3 d-flex justify-content-around">
+                {{ form_row(forgottenPasswordForm.forgottenPassword) }}
+            </div>
+            {{ form_end(forgottenPasswordForm) }}
+        </div>
+    </div>
+</div>
+{% endblock %}
