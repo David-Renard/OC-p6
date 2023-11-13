@@ -23,7 +23,7 @@
         </p>
 
         <p style="margin: 30px; ">
-            <a href="{{ absolute_url(path('verify_user', {'identifier': user.userIdentifier})) }}" style="
+            <a href="{{ absolute_url(path('verify_user', {'identifier': user.userIdentifier, 'token': token})) }}" style="
             {#<a href="{{ absolute_url(path('verify_user', {'identifier': user.identifier, 'token': token})) }}" style="#}
                 text-decoration: none; color: #EDB51A; padding: 10px; background-color: #002262; text-transform: uppercase;
                 border-radius: 5px; font-size: 15px; font-weight: bold;">Valider mon compte</a>
