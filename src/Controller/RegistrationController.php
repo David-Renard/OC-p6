@@ -2,10 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\Token;
 use App\Entity\User;
 use App\Entity\UserPicture;
 use App\Form\RegistrationFormType;
+use App\Repository\TokenRepository;
 use App\Repository\UserRepository;
+use App\Security\AccessTokenHandler;
 use App\Service\SendMail;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,8 +20,12 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class RegistrationController extends AbstractController
 {
+    public function __construct(private EntityManagerInterface $manager)
+    {
+    }
+
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, SendMail $mail, EntityManagerInterface $entityManager): Response
+    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, SendMail $mail): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -43,9 +50,24 @@ class RegistrationController extends AbstractController
             $userPicture->setName("default avatar");
             $user->setUserPicture($userPicture);
 
-            $entityManager->persist($user);
-            $entityManager->persist($userPicture);
-            $entityManager->flush();
+            $this->manager->persist($user);
+            $this->manager->persist($userPicture);
+            $this->manager->flush();
+
+            // create a token to link it to the mail
+            $token  = bin2hex(random_bytes(32));
+            $status = "active";
+            $type   = "registration";
+
+            // persist this token & flush it in DB
+            $accesToken = new Token();
+            $accesToken->setValue($token);
+            $accesToken->setUserInfo($user);
+            $accesToken->setStatus($status);
+            $accesToken->setType($type);
+
+            $this->manager->persist($accesToken);
+            $this->manager->flush();
 
             // generate and send email verification
             $mail->send(
@@ -56,6 +78,7 @@ class RegistrationController extends AbstractController
                 [
                     'expiration_date' => new \DateTime('+3 days'),
                     'user'        => $user,
+                    'token'       => $token,
                 ]
             );
 
@@ -69,23 +92,40 @@ class RegistrationController extends AbstractController
         ]);
     }
 
-    #[Route('/verify-user/{identifier}', name: 'verify_user')]
-    public function verifyUser(EntityManagerInterface $manager, UserRepository $userRepository, string $identifier): Response
+    #[Route('/verify-user/{token}/{identifier}', name: 'verify_user')]
+    public function verifyUser(
+        UserRepository $userRepository,
+        AccessTokenHandler $accesToken,
+        TokenRepository $tokenRepository,
+        string $identifier,
+        string $token,
+    ): Response
     {
-//        if ($token is valid and right in time)
         $user = $userRepository->findOneByIdentifier($identifier);
-        // verifying this user is an instance of User::class and still isVerified is false
-        if ($user instanceof User && $user->isVerified() === false) {
-            $user->setIsVerified(true);
+        $type = "registration";
+        // check Token validity
+        if ($accesToken->isValid($token, $user, $type)) {
+            // verifying this user is an instance of User::class and still isVerified is false
+            if ($user instanceof User && $user->isVerified() === false) {
+                $user->setIsVerified(true);
 
-            $manager->flush($user);
-            $this->addFlash('success', "Votre compte a bien été vérifié, vous êtes désormais totalement inscrit.");
+                $this->manager->flush($user);
+                $updatedToken = $tokenRepository->findOneByValue($token);
+                $updatedToken->setStatus("disabled");
+                $this->manager->flush($updatedToken);
 
-            return $this->redirectToRoute("homepage");
-        } else {
-            $this->addFlash('error', "Le compte a déjà été vérifié ou un problème se pose dans la vérification.");
+                $this->addFlash('success', "Votre compte a bien été vérifié, vous êtes désormais totalement inscrit.");
 
-            return $this->redirectToRoute("app_register");
+                return $this->redirectToRoute("homepage");
+            } else {
+                $this->addFlash('error', "Le compte a déjà été vérifié ou un problème se pose dans la vérification.");
+
+                return $this->redirectToRoute("app_register");
+            }
         }
+        // if token isn't valid, redirect to registration page
+        $this->addFlash('error', "Un problème est survenu dans la vérification du token.");
+
+        return $this->redirectToRoute("app_register");
     }
 }
