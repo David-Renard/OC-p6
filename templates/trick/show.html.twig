@@ -7,111 +7,127 @@
 
 {#    <img src="{{ picture.url }}"/>#}
 {#    {% endfor %}#}
-<div class="homepage_screen login">
-    <div class="homepage_img registration">
-        <img src="{{ asset('build/images/freestyle.jpeg') }}" alt="freestyle" class="homepage_img-img"/>
-    </div>
-    <div class="position-absolute position_trick">
-        <div class="container text-center border border-black p-2">
-            <div class="row">
-                <div class="col">
-                    <div class="main-picture m-auto position-relative">
-                        {# display main picture if there is one #}
-                        {% if trick.getMainPicture() %}
-                            <img src="{{ asset(trick.getMainPicture().url) }}" class="card-images-top img-thumbnail" alt="{{ trick.getMainPicture().name }}"/>
-                            {# display default picture if there is no pictures #}
-                        {% elseif trick.getPictures() is empty %}
-                            <div class="card-images-top position-relative">
-                                <img src="{{ asset('build/images/freestyle.jpeg') }}" class="card-images-top img-thumbnail default_picture-picture" alt="image par défaut"/>
-                                <p class="position-absolute no-pictures-text text-primary h4 fw-bold">Il n'y a pas d'image sur ce trick, ajoutes-en une!</p>
-                            </div>
-                            {# display 1st picture ordered by id if there is no main picture #}
-                        {% elseif trick.getMainPicture() is empty %}
-                            <img src="{{ asset(trick.getPictures()|first.url) }}" class="card-images-top img-thumbnail" alt="{{ trick.getPictures()|first.name }}"/>
-                        {% endif %}
-                        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-                            <div class="action position-absolute top-0 end-0 p-2 m-1 border border-primary">
-                                <a href="" class="btn btn-primary me-1"><i class="bi bi-pencil-fill" title="Modifier {{ trick.name }}"></i></a>
-                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ trick.id }}"><i class="bi bi-trash3-fill" title="Supprimer {{ trick.name }}"></i></button>
-                                {# modal window to delete the trick #}
-                                <div class="modal fade from-right" id="deleteModal{{ trick.id }}" tabindex="-1" aria-labelledby="deleteModal" aria-hidden="true" data-bs-backdrop="static">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="deleteModal">Supprimer {{ trick.name }}</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                Êtes-vous sûr de vouloir supprimer {{ trick.name }}?
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Non</button>
-                                                <button type="button" class="btn btn-warning">Oui</button>
-                                            </div>
+    <div class="container text-center border border-primary rounded-2 my-4 p-2">
+        <div class="row">
+            <div class="col">
+                <div class="main-picture m-auto position-relative">
+                    {# display main picture if there is one #}
+                    {% if trick.getMainPicture() %}
+                        <img src="{{ asset(trick.getMainPicture().url) }}" class="img-thumbnail" alt="{{ trick.getMainPicture().name }}"/>
+                        {# display default picture if there is no pictures #}
+                    {% elseif trick.getPictures() is empty %}
+                        <div class="position-relative">
+                            <img src="{{ asset('build/images/freestyle.jpeg') }}" class="img-thumbnail default_picture-picture" alt="image par défaut"/>
+                            <p class="position-absolute no-pictures-text bg-secondary-subtle rounded-2 w-75 m-auto opacity-75 text-primary h4 fw-bold">Il n'y a pas d'image sur ce trick, ajoutes-en une!</p>
+                        </div>
+                        {# display 1st picture ordered by id if there is no main picture #}
+                    {% elseif trick.getMainPicture() is empty %}
+                        <img src="{{ asset(trick.getPictures()|first.url) }}" class="img-thumbnail" alt="{{ trick.getPictures()|first.name }}"/>
+                    {% endif %}
+                    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                        <div class="action position-absolute top-0 end-0 p-2 m-1 border border-primary">
+                            <a href="" class="btn btn-primary me-1"><i class="bi bi-pencil-fill" title="Modifier {{ trick.name }}"></i></a>
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ trick.id }}"><i class="bi bi-trash3-fill" title="Supprimer {{ trick.name }}"></i></button>
+                            {# modal window to delete the trick #}
+                            <div class="modal fade from-right" id="deleteModal{{ trick.id }}" tabindex="-1" aria-labelledby="deleteModal" aria-hidden="true" data-bs-backdrop="static">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="deleteModal">Supprimer {{ trick.name }}</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Êtes-vous sûr de vouloir supprimer {{ trick.name }}?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Non</button>
+                                            <button type="button" class="btn btn-warning">Oui</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        {% endif %}
-                    </div>
-                    <h1 class="position-relative negative m-auto p-2 bg-secondary-subtle rounded-2 w-25 opacity-75 fw-bold h3 text-primary">
-                        {{ trick.name }}
-                    </h1>
+                        </div>
+                    {% endif %}
                 </div>
+                <h1 class="position-relative negative m-auto p-2 bg-secondary-subtle rounded-2 w-25 opacity-75 fw-bold h3 text-primary">
+                    {{ trick.name }}
+                </h1>
             </div>
-            <div class="row">
-                {% if trick.getPictures is not empty %}
-                <div class="col border border-primary">
+        </div>
+        <div class="row">
+            {% if trick.getPictures is not empty %}
+            <div class="col border border-primary">
 {#                    this col displays photos#}
-                    <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#seeBefore" aria-expanded="false" aria-controls="seeBefore"><i class="bi bi-chevron-compact-left"></i></button>
-                    <div class="row">
-                        <div class="col visible-photos">
+                <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#seeBefore" aria-expanded="false" aria-controls="seeBefore"><i class="bi bi-chevron-compact-left"></i></button>
+                <div class="row">
+                    <div class="col visible-photos">
 
-                        </div>
-                        <div class="col">
-                            <div class="collapse seeBefore" id="seeBefore">
-                                Some placeholder content for the second collapse component of this multi-collapse example. This panel is hidden by default but revealed when the user activates the relevant trigger.
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="collapse seeAfter" id="seeAfter">
-                                Some placeholder content for the second collapse component of this multi-collapse example. This panel is hidden by default but revealed when the user activates the relevant trigger.
-                            </div>
+                    </div>
+                    <div class="col">
+                        <div class="collapse seeBefore" id="seeBefore">
+                            Some placeholder content for the second collapse component of this multi-collapse example. This panel is hidden by default but revealed when the user activates the relevant trigger.
                         </div>
                     </div>
-                    <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#seeAfter" aria-expanded="false" aria-controls="seeAfter"><i class="bi bi-chevron-compact-right"></i></button>
+                    <div class="col">
+                        <div class="collapse seeAfter" id="seeAfter">
+                            Some placeholder content for the second collapse component of this multi-collapse example. This panel is hidden by default but revealed when the user activates the relevant trigger.
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#seeAfter" aria-expanded="false" aria-controls="seeAfter"><i class="bi bi-chevron-compact-right"></i></button>
+            </div>
+            {% endif %}
+{#                this col displays videos#}
+            <div class="col">
+                videos si présentes
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-10 offset-1 my-3 py-2 m-auto">
+                {{ trick.description }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="container">
+                <hr>
+                <div class="row m-auto my-5">
+                    <div class="col mx-3 py-2 fst-italic border border-primary shadow">Créé le {{ trick.createdAt|date("d/m/Y \\à H\\hi") }}</div>
+                    <div class="col mx-3 py-2 border border-primary shadow">Par <span class="fw-bold">
+                            <img src="{{ asset(trick.author.userPicture.url) }}" width="25" height="25"
+                                 class="rounded-circle shadow border border-primary" alt="{{ trick.author.userPicture.name }}">
+                            {{ trick.author.username }}</span>
+                    </div>
+                    {% if trick.updatedAt != null %}
+                        <div class="col mx-3 fst-italic py-2 border border-primary shadow">Modifié le {{ trick.updatedAt|date("d/m/Y \\à H\\hi") }}</div>
+                    {% endif %}
+                    <div class="col mx-3 py-2 btn btn-primary shadow">{{ trick.category.name }}</div>
+                </div>
+                {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                <hr>
+                <div class="row">
+                    <div class="col col-sm-8 offset-sm-2">
+                        {{ form_errors(commentForm) }}
+                        {{ form_start(commentForm) }}
+                        <div class="my-3 d-flex justify-content-around">
+                            {{ form_row(commentForm.content) }}
+                        </div>
+                        <div class="my-2 m-auto w-50 d-flex justify-content-around">
+                            {{ form_row(commentForm.submit) }}
+                        </div>
+                        {{ form_end(commentForm) }}
+                    </div>
                 </div>
                 {% endif %}
-{#                this col displays videos#}
-                <div class="col">
-                    videos si présentes
+                <hr>
+                {% for comment in comments.data %}
+                <div class="row">
+                    {{ loop.index }}
+                    {{ comment.content }}
+                    {{ comment.id }}
                 </div>
-            </div>
-            <div class="row">
-                <div class="col">
-                    trick description
-                </div>
-            </div>
-            <div class="row">
-                <div class="container">
-                    <hr>
-                    <div class="row">
-                        <div class="col">date de création</div>
-                        <div class="col">goupe</div>
-                        <div class="col">date de modif</div>
-                        <div class="col">auteur?</div>
-                    </div>
-                    <hr>
-                    <div class="row">
-                        formulaire de commentaire si utilisateur connecté
-                    </div>
-                    <hr>
-                    <div class="row">
-                        commentaires
-                    </div>
-                </div>
+                {% endfor %}
+                {% include "layouts/_pagination.html.twig" %}
             </div>
         </div>
     </div>
-</div>
 {% endblock %}

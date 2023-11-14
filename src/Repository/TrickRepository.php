@@ -36,6 +36,7 @@ class TrickRepository extends ServiceEntityRepository
         return $query->getResult();
     }
 
+
 //    public function findOneBySomeField($value): ?Trick
 //    {
 //        return $this->createQueryBuilder('t')
