@@ -17,36 +17,29 @@
             </div>
             <div class="row px-4">
                 <div class="col-1 offset-11">
-                    <a href="{{ path('homepage') }}#trick-container"><i class="bi bi-arrow-down-square-fill fs-3"></i></a>
+                    <a href="{{ path('homepage', {page: page}) }}#trick-container"><i class="bi bi-arrow-down-square-fill fs-3"></i></a>
                 </div>
             </div>
         </div>
         <div id="trick-container">
-            <h3 class="text-center text-primary pt-4">Viens voir ici l'ensemble de nos tricks !</h3>
-            <div class="container-fluid gy-4 pt-5">
-                {% for trick in tricks %}
-                {% if loop.index % 5 == 1 %}
-                <div class="row gy-4 pb-2">
-                    <div class="col-12 col-sm-6 offset-sm-3 col-lg-2 offset-lg-1">
-                {% else %}
-                    <div class="col-12 col-sm-6 offset-sm-3 col-lg-2 offset-lg-0">
-                {% endif %}
-                {% include 'trick/_trick.html.twig' %}
+            <h3 class="text-center text-primary">Viens voir ici l'ensemble de nos tricks !</h3>
+            <div class="container-fluid gy-4">
+                <div class="row row-cols-1 row-cols-lg-5 p-4">
+                    {% for trick in tricks %}
+                    <div class="col-12 col-sm-6 offset-sm-3 col-md-2 offset-md-0 pt-4">
+                        {% include 'trick/_trick.html.twig' %}
                     </div>
-                {% if loop.index % 5 == 0 %}
+                    {% endfor %}
                 </div>
-                {% endif %}
-                {% endfor %}
-                    <div class="row p-4">
-                        <div class="col-8 offset-2 text-center z-3">
-                            {% if page is defined and count/15 > page %}
-                            <a href="{{ path('homepage', {page: page + 1}) }}#trick-container" class="btn btn-primary">Voir plus de tricks</a>
-                            {% endif %}
-                        </div>
-                        <div class="col-1 offset-1 text-primary z-3">
-                            <a href="{{ path('homepage', {page: page}) }}#trick-container"><i class="bi bi-arrow-up-square-fill fs-3"></i></a>
-                        </div>
-                    </div>
+            </div>
+            <div class="row p-4 w-100">
+                <div class="col-8 offset-2 text-center z-3">
+                    {% if page is defined and count/15 > page %}
+                        <a href="{{ path('homepage', {page: page + 1}) }}#trick-container" class="btn btn-primary">Voir plus de tricks</a>
+                    {% endif %}
+                </div>
+                <div class="col-1 offset-1 text-primary z-3">
+                    <a href="{{ path('homepage', {page: page}) }}#trick-container"><i class="bi bi-arrow-up-square-fill fs-3"></i></a>
                 </div>
             </div>
         </div>

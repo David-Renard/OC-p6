@@ -1,0 +1,12 @@
+{% if comments.pages > 1 %}
+    <nav>
+        <ul class="pagination">
+            <li class="page-item">
+                <a href="{{ path("show_trick", {slug : trick.slug, page : comments.page - 1}) }}" class="page-link {{ (comments.page == 1) ? "disabled" : "" }}">&lt;</a>
+            </li>
+            <li class="page-item">
+                <a href="{{ path("show_trick", {slug : trick.slug, page : comments.page + 1}) }}" class="page-link {{ (comments.page == comments.pages) ? "disabled" : "" }}">&gt;</a>
+            </li>
+        </ul>
+    </nav>
+{% endif %}

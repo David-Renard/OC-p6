@@ -29,7 +29,7 @@ class Trick
     private \DateTimeImmutable $createdAt;
 
     #[ORM\Column(nullable: true)]
-    private \DateTimeImmutable $updatedAt;
+    private ?\DateTimeImmutable $updatedAt;
 
     #[ORM\OneToMany(mappedBy: 'trick', targetEntity: TrickPicture::class, cascade: ['persist'])]
     private Collection $pictures;
@@ -52,9 +52,9 @@ class Trick
     {
         $this->createdAt = new \DateTimeImmutable();
 
-        $this->pictures = new ArrayCollection();
-        $this->video = new ArrayCollection();
-        $this->comments = new ArrayCollection();
+        $this->pictures  = new ArrayCollection();
+        $this->video     = new ArrayCollection();
+        $this->comments  = new ArrayCollection();
     }
 
     public function getId(): ?int
