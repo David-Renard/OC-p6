@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\TrickCommentRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: TrickCommentRepository::class)]
 class TrickComment
@@ -14,6 +15,7 @@ class TrickComment
     private ?int $id = null;
 
     #[ORM\Column(type: 'text')]
+    #[Assert\NotBlank(message: "Vous ne pouvez pas envoyer un message vide!")]
     private ?string $content = null;
 
     #[ORM\Column]

@@ -21,7 +21,10 @@
                 {{ form_row(registrationForm.username) }}
             </div>
             <div class="my-3 d-flex justify-content-around">
-                {{ form_row(registrationForm.plainPassword) }}
+                {{ form_row(registrationForm.plainPassword.first) }}
+            </div>
+            <div class="my-3 d-flex justify-content-around">
+                {{ form_row(registrationForm.plainPassword.second) }}
             </div>
             <div class="my-3 d-flex justify-content-around">
                 {{ form_row(registrationForm.agreeTerms) }}

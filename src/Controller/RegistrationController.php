@@ -27,14 +27,14 @@ class RegistrationController extends AbstractController
     #[Route('/register', name: 'app_register')]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, SendMail $mail): Response
     {
-        $user = new User();
-        $form = $this->createForm(RegistrationFormType::class, $user);
-        $form->handleRequest($request);
-
         // if a user exists he's here redirected to homepage
         if ($this->getUser()) {
             return $this->redirectToRoute('homepage');
         }
+
+        $user = new User();
+        $form = $this->createForm(RegistrationFormType::class, $user);
+        $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password
@@ -56,7 +56,7 @@ class RegistrationController extends AbstractController
 
             // create a token to link it to the mail
             $token  = bin2hex(random_bytes(32));
-            $status = "active";
+            $status = "waiting";
             $type   = "registration";
 
             // persist this token & flush it in DB
@@ -111,7 +111,7 @@ class RegistrationController extends AbstractController
 
                 $this->manager->flush($user);
                 $updatedToken = $tokenRepository->findOneByValue($token);
-                $updatedToken->setStatus("disabled");
+                $updatedToken->setStatus("confirmed");
                 $this->manager->flush($updatedToken);
 
                 $this->addFlash('success', "Votre compte a bien été vérifié, vous êtes désormais totalement inscrit.");
