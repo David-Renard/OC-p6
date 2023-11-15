@@ -14,7 +14,13 @@
                 {{ form_errors(resetPasswordForm) }}
                 {{ form_start(resetPasswordForm) }}
                 <div class="my-3 d-flex justify-content-around">
-                    {{ form_row(resetPasswordForm.plainPassword) }}
+                    {{ form_row(resetPasswordForm.email) }}
+                </div>
+                <div class="my-3 d-flex justify-content-around">
+                    {{ form_row(resetPasswordForm.plainPassword.first) }}
+                </div>
+                <div class="my-3 d-flex justify-content-around">
+                    {{ form_row(resetPasswordForm.plainPassword.second) }}
                 </div>
                 <div class="my-3 d-flex justify-content-around">
                     {{ form_row(resetPasswordForm.resetPassword) }}

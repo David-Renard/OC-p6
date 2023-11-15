@@ -8,17 +8,14 @@ use App\Form\ForgottenPasswordFormType;
 use App\Form\ResetPasswordFormType;
 use App\Repository\TokenRepository;
 use App\Repository\UserRepository;
-use App\Security\AccessTokenHandler;
-use App\Security\AppCustomAuthenticator;
 use App\Service\SendMail;
+use App\Service\Token as TokenService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
-use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 
 class PasswordController extends AbstractController
 {
@@ -28,13 +25,13 @@ class PasswordController extends AbstractController
     #[Route('/forgot-password', name: 'app_forgot_password')]
     public function resetPassword(Request $request, UserRepository $userRepository, SendMail $mail): Response
     {
-        $form = $this->createForm(ForgottenPasswordFormType::class);
-        $form->handleRequest($request);
-
         // if a user exists he's here redirected to homepage
         if ($this->getUser()) {
             return $this->redirectToRoute('homepage');
         }
+
+        $form = $this->createForm(ForgottenPasswordFormType::class);
+        $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $identifier = $form->get('email')->getData();
@@ -43,10 +40,12 @@ class PasswordController extends AbstractController
             // let's see if this user is an instance of User::class to send an email
             if (!($user instanceof User)) {
                 $this->addFlash('error', "Aucun compte avec cette adresse mail n'existe sur SnowTricks, veuillez réessayer :");
+            } elseif (!$user->isVerified()) {
+                $this->addFlash('error', "Vous devez valider votre compte avant de pouvoir réaliser cette action.");
             } else {
                 // create a token
                 $token  = bin2hex(random_bytes(32));
-                $status = "active";
+                $status = "waiting";
                 $type   = "forgot-password";
 
                 // persist this token & flush it in DB
@@ -85,28 +84,35 @@ class PasswordController extends AbstractController
     }
 
 
-    #[Route('/reset-password/{token}/{identifier}', name: 'reset_password')]
+    #[Route('/reset-password/{tokenString}', name: 'reset_password')]
     public function newPassword(
         Request $request,
         UserRepository $userRepository,
         TokenRepository $tokenRepository,
         UserPasswordHasherInterface $userPasswordHasher,
-        AppCustomAuthenticator $customAuthenticator,
-        UserAuthenticatorInterface $userAuthenticator,
-        AccessTokenHandler $accessToken,
-        string $identifier,
-        string $token,
+        TokenService $tokenGroup,
+        string $tokenString,
     ): Response
     {
-        $user = $userRepository->findOneByIdentifier($identifier);
-        $type = "forgot-password";
-        // check Token validity
-        if ($accessToken->isValid($token, $user, $type)) {
-            $form = $this->createForm(ResetPasswordFormType::class, $user);
-            $form->handleRequest($request);
+        $token = $tokenRepository->findOneByValue($tokenString);
+        $type  = "forgot-password";
+        $user  = $token->getUserInfo();
 
-            if ($form->isSubmitted() && $form->isValid()) {
-                // get the new plainPassword and encode it before persist in DB
+        $form = $this->createForm(ResetPasswordFormType::class, $user);
+        $form->handleRequest($request);
+
+        if (!$tokenGroup->isAwaiting($tokenString)) {
+            $this->addFlash('error', "Le token a déjà été utilisé, vous pouvez refaire une demande de changement de mot de passe.");
+
+            return $this->redirectToRoute("app_forgot_password");
+        }
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // get the new plainPassword and encode it before persist in DB if token is valid
+            $identifier = $form->get('email')->getData();
+            $user       = $userRepository->findOneByIdentifier($identifier);
+
+            if ($tokenGroup->isValid($tokenString, $user, $type)) {
                 $user->setPassword(
                     $userPasswordHasher->hashPassword(
                         $user,
@@ -117,19 +123,19 @@ class PasswordController extends AbstractController
                 $this->manager->flush($user);
                 $this->addFlash('success', "Votre mot de passe a été modifié avec succès.");
 
-                $updatedToken = $tokenRepository->findOneByValue($token);
-                $updatedToken->setStatus("disabled");
+                $updatedToken = $token->setStatus("confirmed");
                 $this->manager->flush($updatedToken);
-                // return $this->redirectToRoute('homepage');
-                return $userAuthenticator->authenticateUser($user, $customAuthenticator, $request);
+
+                return $this->redirectToRoute('homepage');
             }
-            return $this->render('password/reset.html.twig', [
-               'resetPasswordForm' => $form->createView(),
-               'user'              => $user,
-            ]);
+            // if we are here, token is not valid
+            $this->addFlash('error', "Le token renseigné est invalide. Vous pouvez refaire une demande de changement de mot de passe.");
+
+            return $this->redirectToRoute("app_forgot_password");
         }
-        // if we are here token is not valid
-        $this->addFlash('error', "Le token renseigné est invalide. Vous pouvez refaire une demande de changement de mot de passe.");
-        return $this->redirectToRoute("app_forgot_password");
+        return $this->render('password/reset.html.twig', [
+            'resetPasswordForm' => $form->createView(),
+            'user'              => $user,
+        ]);
     }
 }

@@ -28,14 +28,15 @@ class TrickController extends AbstractController
         return $this->render('trick/index.html.twig', ['tricks' => $tricks, 'page' => $page, 'count' => $count]);
     }
 
-    #[Route('/show/{slug}/{page}/{limit}', name: 'show_trick', requirements: ['page' => '\d+', 'limit' => '\d+'])]
+    #[Route('/show/{slug}/{page}', name: 'show_trick', requirements: ['page' => '\d+'])]
     public function showOne(Request $request, TrickCommentRepository $trickCommentRepository, TrickRepository $trickRepository, string $slug, ?int $page = 1, ?int $limit = 5): Response
     {
         $trick = $trickRepository->findOneBy([
            'slug' => $slug,
         ]);
+        $count = count($trick->getComments());
 
-        $comments = $trickCommentRepository->findCommentsPaginated($slug, $page, $limit);
+        $comments = $trickCommentRepository->findCommentsPaginated($slug, $page);
 
         $comment = new TrickComment();
         $form = $this->createForm(CommentFormType::class, $comment);
@@ -58,6 +59,7 @@ class TrickController extends AbstractController
             'trick'       => $trick,
             'commentForm' => $form->createView(),
             'comments'    => $comments,
+            'count'       => $count,
             ]);
     }
 

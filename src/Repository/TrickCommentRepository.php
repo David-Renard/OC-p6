@@ -17,6 +17,8 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class TrickCommentRepository extends ServiceEntityRepository
 {
+    private const LIMIT = 5;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, TrickComment::class);
@@ -38,12 +40,8 @@ class TrickCommentRepository extends ServiceEntityRepository
 //    }
 
 
-    public function findCommentsPaginated(string $slug, int $page, int $limit = 5): array
+    public function findCommentsPaginated(string $slug, int $page): array
     {
-        if ($limit < 1) {
-            $limit = 5;
-        }
-
         $comments = [];
 
         $query = $this->createQueryBuilder('c')
@@ -51,8 +49,7 @@ class TrickCommentRepository extends ServiceEntityRepository
             ->andWhere("t.slug = :slug")
             ->setParameter('slug', $slug)
             ->orderBy('c.createdAt', 'DESC')
-            ->setMaxResults($limit)
-            ->setFirstResult($limit * ($page - 1));
+            ->setMaxResults($page * self::LIMIT);
 
         $paginator = new Paginator($query);
         $data      = $paginator->getQuery()->getResult();
@@ -62,13 +59,12 @@ class TrickCommentRepository extends ServiceEntityRepository
         }
 
         // set nbPages
-        $pages = ceil($paginator->count() / $limit);
+        $pages = ceil($paginator->count() / self::LIMIT);
 
         // set comments array
         $comments['data']  = $data;
         $comments['pages'] = $pages;
         $comments['page']  = $page;
-        $comments['limit'] = $limit;
 
         return $comments;
     }

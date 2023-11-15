@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Constraints\Email;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -24,6 +25,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 180, unique: true)]
     #[Email(message: "Ceci ne correspond pas à une adresse mail.")]
+    #[Assert\NotBlank(message: "Veuillez saisir un email.")]
     private ?string $email = null;
 
     #[ORM\Column]
@@ -41,9 +43,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: TrickComment::class)]
     private Collection $comments;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 50)]
+    #[Assert\NotBlank(message: "Veuillez saisir un login.")]
+    #[Assert\Length(
+        min: 6,
+        minMessage: "Votre login doit avoir au moins {{ limit }} caractères.",
+        max: 50,
+        maxMessage: "Votre login doit avoir au plus {{ limit }} caractères.",
+    )]
     private ?string $username = null;
 
+    #[Assert\NotBlank(message: "Veuillez saisir un mot de passe.")]
+    #[Assert\PasswordStrength([
+        "minScore" => Assert\PasswordStrength::STRENGTH_WEAK,
+        "message"  => "Votre mot de passe est trop simple. Pour votre sécurité, changez-le."
+    ])]
+    #[Assert\Length(
+        min: 6,
+        minMessage: "Votre mot de passe doit avoir au moins {{ limit }} caractères.",
+        max: 50,
+        maxMessage: "Votre mot de passe doit avoir au plus {{ limit }} caractères.",
+    )]
     private ?string $plainPassword = null;
 
     #[ORM\Column(type: 'boolean')]

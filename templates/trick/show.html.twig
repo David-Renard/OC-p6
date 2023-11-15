@@ -25,7 +25,7 @@
                         <img src="{{ asset(trick.getPictures()|first.url) }}" class="img-thumbnail" alt="{{ trick.getPictures()|first.name }}"/>
                     {% endif %}
                     {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-                        <div class="action position-absolute top-0 end-0 p-2 m-1 border border-primary">
+                        <div class="action position-absolute top-0 end-0 p-1 m-3 bg-light rounded-2">
                             <a href="" class="btn btn-primary me-1"><i class="bi bi-pencil-fill" title="Modifier {{ trick.name }}"></i></a>
                             <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ trick.id }}"><i class="bi bi-trash3-fill" title="Supprimer {{ trick.name }}"></i></button>
                             {# modal window to delete the trick #}
@@ -56,7 +56,7 @@
         </div>
         <div class="row">
             {% if trick.getPictures is not empty %}
-            <div class="col border border-primary">
+            <div class="col">
 {#                    this col displays photos#}
                 <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#seeBefore" aria-expanded="false" aria-controls="seeBefore"><i class="bi bi-chevron-compact-left"></i></button>
                 <div class="row">
@@ -90,17 +90,17 @@
         <div class="row">
             <div class="container">
                 <hr>
-                <div class="row m-auto my-5">
+                <div class="row m-auto my-5 gy-2 align-items-center">
                     <div class="col mx-3 py-2 fst-italic border border-primary shadow">Créé le {{ trick.createdAt|date("d/m/Y \\à H\\hi") }}</div>
+                    {% if trick.updatedAt != null %}
+                        <div class="col mx-3 fst-italic py-2 border border-primary shadow">Modifié le {{ trick.updatedAt|date("d/m/Y \\à H\\hi") }}</div>
+                    {% endif %}
                     <div class="col mx-3 py-2 border border-primary shadow">Par <span class="fw-bold">
                             <img src="{{ asset(trick.author.userPicture.url) }}" width="25" height="25"
                                  class="rounded-circle shadow border border-primary" alt="{{ trick.author.userPicture.name }}">
                             {{ trick.author.username }}</span>
                     </div>
-                    {% if trick.updatedAt != null %}
-                        <div class="col mx-3 fst-italic py-2 border border-primary shadow">Modifié le {{ trick.updatedAt|date("d/m/Y \\à H\\hi") }}</div>
-                    {% endif %}
-                    <div class="col mx-3 py-2 btn btn-primary shadow">{{ trick.category.name }}</div>
+                    <div class="col mx-3 py-2 btn btn-info shadow">{{ trick.category.name }}</div>
                 </div>
                 {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                 <hr>
@@ -108,10 +108,8 @@
                     <div class="col col-sm-8 offset-sm-2">
                         {{ form_errors(commentForm) }}
                         {{ form_start(commentForm) }}
-                        <div class="my-3 d-flex justify-content-around">
+                        <div class="my-3 d-flex flex-column flex-sm-row justify-content-around align-items-center">
                             {{ form_row(commentForm.content) }}
-                        </div>
-                        <div class="my-2 m-auto w-50 d-flex justify-content-around">
                             {{ form_row(commentForm.submit) }}
                         </div>
                         {{ form_end(commentForm) }}
@@ -119,14 +117,31 @@
                 </div>
                 {% endif %}
                 <hr>
-                {% for comment in comments.data %}
-                <div class="row">
-                    {{ loop.index }}
-                    {{ comment.content }}
-                    {{ comment.id }}
-                </div>
-                {% endfor %}
-                {% include "layouts/_pagination.html.twig" %}
+                <section class="comments" id="comments">
+                    <div class="container text-start text-primary">
+                        {% if count > 0 %}
+                        <div class="row py-3">
+                            <div class="col-sm-10 offset-sm-1 fw-bolder h5">
+                                Commentaires : {{ count }}
+                            </div>
+                        </div>
+                        {% else %}
+                            <div class="row py-3">
+                                <div class="col-sm-10 offset-sm-1 fw-bolder h5">
+                                    Il n'y a pas encore de commentaire sur ce trick, sois le premier à en ajouter un!
+                                </div>
+                            </div>
+                        {% endif %}
+                        <div class="row">
+                            <div class="col-sm-10 offset-sm-1 bg-light rounded-2 shadow">
+                                {% for comment in comments.data %}
+                                    {% include "layouts/_comment.html.twig" %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    {% include "layouts/_pagination.html.twig" %}
+                </section>
             </div>
         </div>
     </div>

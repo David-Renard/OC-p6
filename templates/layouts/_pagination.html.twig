@@ -1,12 +1,12 @@
 {% if comments.pages > 1 %}
-    <nav>
-        <ul class="pagination">
-            <li class="page-item">
-                <a href="{{ path("show_trick", {slug : trick.slug, page : comments.page - 1}) }}" class="page-link {{ (comments.page == 1) ? "disabled" : "" }}">&lt;</a>
-            </li>
-            <li class="page-item">
-                <a href="{{ path("show_trick", {slug : trick.slug, page : comments.page + 1}) }}" class="page-link {{ (comments.page == comments.pages) ? "disabled" : "" }}">&gt;</a>
-            </li>
-        </ul>
-    </nav>
+<ul class="pagination">
+    {% if comments.page < comments.pages %}
+    <li class="page-item m-auto w-100 mt-3">
+        <a href="{{ path("show_trick", {slug : trick.slug, page : comments.page + 1}) }}#comments" class="btn btn-primary">Voir plus de commentaires</a>
+    </li>
+    {% endif %}
+</ul>
+{% if comments.page > 1 %}
+<a href="{{ path("show_trick", {slug : trick.slug, page : 1}) }}#comments" class="btn btn-light">Voir moins de commentaires</a>
+{% endif %}
 {% endif %}
