@@ -7,16 +7,14 @@ use App\Entity\User;
 use App\Entity\UserPicture;
 use App\Form\RegistrationFormType;
 use App\Repository\TokenRepository;
-use App\Repository\UserRepository;
-use App\Security\AccessTokenHandler;
 use App\Service\SendMail;
+use App\Service\TokenService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class RegistrationController extends AbstractController
 {
@@ -92,26 +90,32 @@ class RegistrationController extends AbstractController
         ]);
     }
 
-    #[Route('/verify-user/{token}/{identifier}', name: 'verify_user')]
+    #[Route('/verify-user/{tokenString}', name: 'verify_user')]
     public function verifyUser(
-        UserRepository $userRepository,
-        AccessTokenHandler $accesToken,
         TokenRepository $tokenRepository,
-        string $identifier,
-        string $token,
+        TokenService $tokenService,
+        string $tokenString,
     ): Response
     {
-        $user = $userRepository->findOneByIdentifier($identifier);
+        if (!$tokenService->isAwaiting($tokenString)) {
+            $this->addFlash('error', "Le token a déjà été utilisé, vous pouvez dès maintenant vous connecter.");
+
+            return $this->redirectToRoute("app_login");
+        }
+
+        $token = $tokenRepository->findOneByValue($tokenString);
+
         $type = "registration";
+        $user = $token->getUserInfo();
+
         // check Token validity
-        if ($accesToken->isValid($token, $user, $type)) {
+        if ($tokenService->isValid($tokenString, $user, $type)) {
             // verifying this user is an instance of User::class and still isVerified is false
             if ($user instanceof User && $user->isVerified() === false) {
                 $user->setIsVerified(true);
-
                 $this->manager->flush($user);
-                $updatedToken = $tokenRepository->findOneByValue($token);
-                $updatedToken->setStatus("confirmed");
+
+                $updatedToken = $token->setStatus("confirmed");
                 $this->manager->flush($updatedToken);
 
                 $this->addFlash('success', "Votre compte a bien été vérifié, vous êtes désormais totalement inscrit.");

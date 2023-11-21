@@ -1,0 +1,101 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifie un trick{% endblock %}
+
+{% block body %}
+<div class="container py-2 my-4 text-center text-primary border border-primary">
+    <div class="row">
+        <div class="col">
+            <div class="main-picture m-auto position-relative">
+                {# display main picture if there is one #}
+                {% if trick.getMainPicture() %}
+                    <img src="{{ asset(trick.getMainPicture().url) }}" class="img-thumbnail" alt="{{ trick.getMainPicture().name }}"/>
+                <div class="action position-absolute top-0 end-0 p-1 m-3 bg-light rounded-2">
+                {% else %}
+                    <p class="h4 mb-4">Cette figure n'a pour le moment pas d'image principale, tu peux en ajouter une ici :</p>
+                <div class="action p-1 m-3 rounded-2">
+                {% endif %}
+                    <a href="" class="btn btn-primary me-1"><i class="bi bi-pencil-fill" title="Modifier {{ trick.name }}"></i></a>
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ trick.id }}"><i class="bi bi-trash3-fill" title="Supprimer {{ trick.name }}"></i></button>
+                    {# modal window to delete the trick #}
+                    <div class="modal fade from-right" id="deleteModal{{ trick.id }}" tabindex="-1" aria-labelledby="deleteModal" aria-hidden="true" data-bs-backdrop="static">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="deleteModal">Supprimer {{ trick.name }}</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Êtes-vous sûr de vouloir supprimer {{ trick.name }}?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Non</button>
+                                    <button type="button" class="btn btn-warning">Oui</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% if trick.getMainPicture() %}
+            <h1 class="position-relative negative m-auto p-2 bg-secondary-subtle rounded-2 w-25 opacity-75 fw-bold h3 text-primary">
+                {{ trick.name }}
+            </h1>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="container text-center text-primary bg-secondary-subtle rounded-2 pt-4">
+        <div class="row">
+            <h1 class="h3">Ici, tu peux modifier cette figure</h1>
+            <h2 class="h5">(nom, description, catégorie, médias...)</h2>
+        </div>
+        <div class="row xs-vw-90 my-3">
+            <div class="col-10 offset-1 col-sm-8 offset-sm-2 mb-3 border border-primary">
+                {{ form_errors(editTrickForm) }}
+                {{ form_start(editTrickForm) }}
+                <div class="mt-3 d-flex justify-content-around">
+                    {{ form_row(editTrickForm.name) }}
+                </div>
+                <div class="mt-3 d-flex justify-content-around">
+                    {{ form_row(editTrickForm.description) }}
+                </div>
+                <div class="mt-3 d-flex flex-column flex-sm-row justify-content-around align-items-center">
+                    <div>
+                        {{ form_row(editTrickForm.category) }}
+                    </div>
+                    <div>
+                        {{ form_row(editTrickForm.newCategoryName) }}
+                    </div>
+                </div>
+                <div class="mt-3 d-flex justify-content-around">
+                    {{ form_row(editTrickForm.author) }}
+                </div>
+                <div class="d-flex m-auto align-items-baseline justify-content-center">
+                    {{ form_end(editTrickForm) }}
+                    <a href="{{ path('delete_trick', {'slug' : trick.slug}) }}" title="supprimer" class="ms-3 d-inline-block btn btn-danger">Supprimer</a>
+                </div>
+            </div>
+        </div>
+
+        {% if trick.getPictures is not empty or trick.getVideo is not empty %}
+            <div class="row d-flex flex-wrap justify-content-center">
+                {% for picture in trick.getPictures %}
+                    <img src="{{ asset(picture.url) }}" alt="{{ picture.name }}" class="detail-box-media mx-2 py-2 img-thumbnail shadow rounded-2">
+                    <div class="action position-absolute top-0 end-0 p-1 m-3 bg-light rounded-2">
+
+                    </div>
+                {% endfor %}
+                <div class="d-block">
+                    {% for video in trick.getPictures %}
+                        <iframe  class="detail-box-media mx-2 py-2 img-thumbnail shadow rounded-2" src="https://www.youtube.com/embed/s7bgzDDZdyk" title="Is Zeb Powell The Most Creative Snowboarder In The World?" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+                        <iframe  class="detail-box-media mx-2 py-2 img-thumbnail shadow rounded-2" src="https://www.youtube.com/embed/mlaJm6rUMdM" title="Quick &amp; Easy Snowboard Trick - Frontside Shifty" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    {% endfor %}
+                </div>
+
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

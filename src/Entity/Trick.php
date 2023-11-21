@@ -6,9 +6,11 @@ use App\Repository\TrickRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\PersistentCollection;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: TrickRepository::class)]
+#[UniqueEntity('name', message: "Une figure avec ce nom existe déjà.")]
 class Trick
 {
     #[ORM\Id]
@@ -31,17 +33,25 @@ class Trick
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updatedAt;
 
-    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: TrickPicture::class, cascade: ['persist'])]
+    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: TrickPicture::class, cascade: ['persist', 'remove'])]
     private Collection $pictures;
 
-    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: TrickVideo::class, cascade: ['persist'])]
+    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: TrickVideo::class, cascade: ['persist', 'remove'])]
     private Collection $video;
 
     #[ORM\ManyToOne(targetEntity: TrickCategory::class, inversedBy: 'tricks')]
     #[ORM\JoinColumn(nullable: false)]
     private ?TrickCategory $category = null;
 
-    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: TrickComment::class, cascade: ['persist'])]
+    #[Assert\Length(
+        min: 3,
+        minMessage: "Le nom catégorie doit avoir au moins {{ limit }} caractères.",
+        max: 30,
+        maxMessage: "Le nom catégorie doit avoir au plus {{ limit }} caractères.",
+    )]
+    private string $newCategoryName;
+
+    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: TrickComment::class, cascade: ['persist', 'remove'])]
     private ?Collection $comments = null;
 
     #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'tricks')]
@@ -60,6 +70,18 @@ class Trick
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getNewCategoryName(): ?string
+    {
+        return $this->newCategoryName;
+    }
+
+    public function setNewCategoryName(string $newCategoryName): static
+    {
+        $this->newCategoryName = $newCategoryName;
+
+        return $this;
     }
 
     public function getName(): ?string

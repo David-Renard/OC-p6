@@ -9,7 +9,7 @@ use App\Form\ResetPasswordFormType;
 use App\Repository\TokenRepository;
 use App\Repository\UserRepository;
 use App\Service\SendMail;
-use App\Service\Token as TokenService;
+use App\Service\TokenService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,6 +30,9 @@ class PasswordController extends AbstractController
             return $this->redirectToRoute('homepage');
         }
 
+        // problème ici, ça fonctionne quand je ne mets pas une adresse mail mais du text mais je n'ai plus l'user (login + mdp) avec 'data_class' => User::class dans le resolver du formType
+//        $user = new User();
+//        $form = $this->createForm(ForgottenPasswordFormType::class, $user);
         $form = $this->createForm(ForgottenPasswordFormType::class);
         $form->handleRequest($request);
 
@@ -94,18 +97,19 @@ class PasswordController extends AbstractController
         string $tokenString,
     ): Response
     {
-        $token = $tokenRepository->findOneByValue($tokenString);
-        $type  = "forgot-password";
-        $user  = $token->getUserInfo();
-
-        $form = $this->createForm(ResetPasswordFormType::class, $user);
-        $form->handleRequest($request);
-
         if (!$tokenGroup->isAwaiting($tokenString)) {
             $this->addFlash('error', "Le token a déjà été utilisé, vous pouvez refaire une demande de changement de mot de passe.");
 
             return $this->redirectToRoute("app_forgot_password");
         }
+
+        $token = $tokenRepository->findOneByValue($tokenString);
+
+        $type  = "forgot-password";
+        $user  = $token->getUserInfo();
+
+        $form = $this->createForm(ResetPasswordFormType::class, $user);
+        $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             // get the new plainPassword and encode it before persist in DB if token is valid

@@ -123,6 +123,17 @@ footer {
     margin: auto;
 }
 
+.detail-box-media {
+    width: 300px;
+    height: 200px;
+    object-fit: cover;
+    margin-bottom: 15px;
+}
+
+.form-label-extended {
+    width: 400px;
+}
+
 @media screen and (width <= 991px) {
     .hidden-xs {
         display: none;
@@ -179,5 +190,9 @@ footer {
 
     .position_trick {
         top: 15vh;
+    }
+
+    .form-label-extended {
+        width: 100%;
     }
 }

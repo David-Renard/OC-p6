@@ -3,10 +3,6 @@
 {% block title %}{{ trick.name }}{% endblock %}
 
 {% block body %}
-{#    {% for picture in trick.getPictures() %}#}
-
-{#    <img src="{{ picture.url }}"/>#}
-{#    {% endfor %}#}
     <div class="container text-center border border-primary rounded-2 my-4 p-2">
         <div class="row">
             <div class="col">
@@ -26,7 +22,7 @@
                     {% endif %}
                     {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                         <div class="action position-absolute top-0 end-0 p-1 m-3 bg-light rounded-2">
-                            <a href="" class="btn btn-primary me-1"><i class="bi bi-pencil-fill" title="Modifier {{ trick.name }}"></i></a>
+                            <a href="{{ path('edit_trick', {'slug' : trick.slug}) }}" class="btn btn-primary me-1"><i class="bi bi-pencil-fill" title="Modifier {{ trick.name }}"></i></a>
                             <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ trick.id }}"><i class="bi bi-trash3-fill" title="Supprimer {{ trick.name }}"></i></button>
                             {# modal window to delete the trick #}
                             <div class="modal fade from-right" id="deleteModal{{ trick.id }}" tabindex="-1" aria-labelledby="deleteModal" aria-hidden="true" data-bs-backdrop="static">
@@ -54,34 +50,20 @@
                 </h1>
             </div>
         </div>
-        <div class="row">
-            {% if trick.getPictures is not empty %}
-            <div class="col">
-{#                    this col displays photos#}
-                <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#seeBefore" aria-expanded="false" aria-controls="seeBefore"><i class="bi bi-chevron-compact-left"></i></button>
-                <div class="row">
-                    <div class="col visible-photos">
+        {% if trick.getPictures is not empty or trick.getVideo is not empty %}
+        <div class="row d-flex flex-wrap justify-content-center">
+            {% for picture in trick.getPictures %}
+                <img src="{{ asset(picture.url) }}" alt="{{ picture.name }}" class="detail-box-media mx-2 py-2 img-thumbnail shadow rounded-2">
+            {% endfor %}
+                <div class="d-block">
+            {% for video in trick.getPictures %}
+                    <iframe  class="detail-box-media mx-2 py-2 img-thumbnail shadow rounded-2" src="https://www.youtube.com/embed/s7bgzDDZdyk" title="Is Zeb Powell The Most Creative Snowboarder In The World?" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
-                    </div>
-                    <div class="col">
-                        <div class="collapse seeBefore" id="seeBefore">
-                            Some placeholder content for the second collapse component of this multi-collapse example. This panel is hidden by default but revealed when the user activates the relevant trigger.
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="collapse seeAfter" id="seeAfter">
-                            Some placeholder content for the second collapse component of this multi-collapse example. This panel is hidden by default but revealed when the user activates the relevant trigger.
-                        </div>
-                    </div>
+                    <iframe  class="detail-box-media mx-2 py-2 img-thumbnail shadow rounded-2" src="https://www.youtube.com/embed/mlaJm6rUMdM" title="Quick &amp; Easy Snowboard Trick - Frontside Shifty" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            {% endfor %}
                 </div>
-                <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#seeAfter" aria-expanded="false" aria-controls="seeAfter"><i class="bi bi-chevron-compact-right"></i></button>
-            </div>
-            {% endif %}
-{#                this col displays videos#}
-            <div class="col">
-                videos si présentes
-            </div>
         </div>
+        {% endif %}
         <div class="row">
             <div class="col-10 offset-1 my-3 py-2 m-auto">
                 {{ trick.description }}
@@ -117,30 +99,34 @@
                 </div>
                 {% endif %}
                 <hr>
-                <section class="comments" id="comments">
+                <section class="comments rounded-2 py-3 bg-primary" id="comments">
                     <div class="container text-start text-primary">
                         {% if count > 0 %}
                         <div class="row py-3">
-                            <div class="col-sm-10 offset-sm-1 fw-bolder h5">
+                            <div class="col-sm-10 offset-sm-1 text-light fw-bolder h5">
                                 Commentaires : {{ count }}
                             </div>
                         </div>
                         {% else %}
                             <div class="row py-3">
-                                <div class="col-sm-10 offset-sm-1 fw-bolder h5">
+                                <div class="col-sm-10 text-light offset-sm-1 fw-bolder h5">
                                     Il n'y a pas encore de commentaire sur ce trick, sois le premier à en ajouter un!
                                 </div>
                             </div>
                         {% endif %}
                         <div class="row">
                             <div class="col-sm-10 offset-sm-1 bg-light rounded-2 shadow">
-                                {% for comment in comments.data %}
-                                    {% include "layouts/_comment.html.twig" %}
-                                {% endfor %}
+                                {% if comments.data is defined %}
+                                    {% for comment in comments.data %}
+                                        {% include "layouts/_comment.html.twig" %}
+                                    {% endfor %}
+                                {% endif %}
                             </div>
                         </div>
                     </div>
-                    {% include "layouts/_pagination.html.twig" %}
+                    {% if comments.data is defined %}
+                        {% include "layouts/_pagination.html.twig" %}
+                    {% endif %}
                 </section>
             </div>
         </div>
