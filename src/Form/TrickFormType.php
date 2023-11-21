@@ -18,45 +18,57 @@ class TrickFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name', TextType::class, [
+            ->add(
+                'name', TextType::class, [
                 'label' => 'Nom de la figure',
                 'attr'  => [
                     'class' => 'form-label-extended'
                 ]
-            ])
-            ->add('description', TextareaType::class, [
+            ]
+            )
+            ->add(
+                'description', TextareaType::class, [
                 'attr' => [
                     'rows' => 5,
                     'cols' => 70,
                 ],
-            ])
-            ->add('category', EntityType::class, [
+            ]
+            )
+            ->add(
+                'category', EntityType::class, [
                 'class'        => TrickCategory::class,
                 'label'        => 'Catégorie',
                 'choice_label' => 'name',
                 'expanded'     => false,
                 'multiple'     => false,
-            ])
-            ->add('newCategoryName', TextType::class, [
-                'label' => "Nouvelle catégorie",
-//                'mapped' => false,
+            ]
+            )
+            ->add(
+                'newCategoryName', TextType::class, [
+                'label'    => "Nouvelle catégorie",
                 'required' => false,
-            ])
-            ->add('author', CheckboxType::class, [
+            ]
+            )
+            ->add(
+                'author', CheckboxType::class, [
                 'label'    => "M'attribuer cette figure",
                 'mapped'   => false,
                 'required' => false,
-            ])
-            ->add('submit', SubmitType::class, [
+            ]
+            )
+            ->add(
+                'submit', SubmitType::class, [
                 'label' => "Valider"
-            ])
-            ;
+            ]
+            );
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults([
+        $resolver->setDefaults(
+            [
             'data_class' => Trick::class,
-        ]);
+            ]
+        );
     }
 }

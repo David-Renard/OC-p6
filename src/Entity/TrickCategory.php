@@ -7,7 +7,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: TrickCategoryRepository::class)]
 #[UniqueEntity('name', message: "Cette catégorie existe déjà.")]
@@ -20,14 +19,6 @@ class TrickCategory
 
     #[ORM\Column(length: 30, unique: true)]
     private string $name;
-
-    #[Assert\Length(
-        min: 3,
-        minMessage: "Le nom catégorie doit avoir au moins {{ limit }} caractères.",
-        max: 30,
-        maxMessage: "Le nom catégorie doit avoir au plus {{ limit }} caractères.",
-    )]
-    private string $newName;
 
     #[ORM\OneToMany(mappedBy: 'category', targetEntity: Trick::class)]
     private Collection|null $tricks = null;
@@ -52,18 +43,6 @@ class TrickCategory
         $this->name = $name;
 
         return $this;
-    }
-
-    public function setNewName(string $newName): static
-    {
-        $this->newName = $newName;
-
-        return $this;
-    }
-
-    public function getNewName(): ?string
-    {
-        return $this->newName;
     }
 
     /**

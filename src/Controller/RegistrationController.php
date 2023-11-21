@@ -25,7 +25,7 @@ class RegistrationController extends AbstractController
     #[Route('/register', name: 'app_register')]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, SendMail $mail): Response
     {
-        // if a user exists he's here redirected to homepage
+        // If a user exists he's here redirected to homepage
         if ($this->getUser()) {
             return $this->redirectToRoute('homepage');
         }
@@ -35,14 +35,14 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // encode the plain password
+            // Encode the plain password
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
                     $user,
                     $form->get('plainPassword')->getData()
                 )
             );
-            // assign default picture to this user
+            // Assign default picture to this user
             $userPicture = new UserPicture();
             $userPicture->setUrl("/build/images/default-user-icon.jpg");
             $userPicture->setName("default avatar");
@@ -52,22 +52,22 @@ class RegistrationController extends AbstractController
             $this->manager->persist($userPicture);
             $this->manager->flush();
 
-            // create a token to link it to the mail
+            // Create a token to link it to the mail
             $token  = bin2hex(random_bytes(32));
             $status = "waiting";
             $type   = "registration";
 
-            // persist this token & flush it in DB
-            $accesToken = new Token();
-            $accesToken->setValue($token);
-            $accesToken->setUserInfo($user);
-            $accesToken->setStatus($status);
-            $accesToken->setType($type);
+            // Persist this token & flush it in DB
+            $accessToken = new Token();
+            $accessToken->setValue($token);
+            $accessToken->setUserInfo($user);
+            $accessToken->setStatus($status);
+            $accessToken->setType($type);
 
-            $this->manager->persist($accesToken);
+            $this->manager->persist($accessToken);
             $this->manager->flush();
 
-            // generate and send email verification
+            // Generate and send email verification
             $mail->send(
                 'support@snowtricks.com',
                 $user->getUserIdentifier(),
@@ -108,9 +108,9 @@ class RegistrationController extends AbstractController
         $type = "registration";
         $user = $token->getUserInfo();
 
-        // check Token validity
+        // Check Token validity
         if ($tokenService->isValid($tokenString, $user, $type)) {
-            // verifying this user is an instance of User::class and still isVerified is false
+            // Verifying this user is an instance of User::class and still isVerified is false
             if ($user instanceof User && $user->isVerified() === false) {
                 $user->setIsVerified(true);
                 $this->manager->flush($user);
@@ -127,7 +127,7 @@ class RegistrationController extends AbstractController
                 return $this->redirectToRoute("app_register");
             }
         }
-        // if token isn't valid, redirect to registration page
+        // If token isn't valid, redirect to registration page
         $this->addFlash('error', "Un problème est survenu dans la vérification du token.");
 
         return $this->redirectToRoute("app_register");

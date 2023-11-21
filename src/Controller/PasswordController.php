@@ -25,14 +25,12 @@ class PasswordController extends AbstractController
     #[Route('/forgot-password', name: 'app_forgot_password')]
     public function resetPassword(Request $request, UserRepository $userRepository, SendMail $mail): Response
     {
-        // if a user exists he's here redirected to homepage
+        // If a user exists he's here redirected to homepage
         if ($this->getUser()) {
             return $this->redirectToRoute('homepage');
         }
 
-        // problème ici, ça fonctionne quand je ne mets pas une adresse mail mais du text mais je n'ai plus l'user (login + mdp) avec 'data_class' => User::class dans le resolver du formType
-//        $user = new User();
-//        $form = $this->createForm(ForgottenPasswordFormType::class, $user);
+        // Problème ici, ça fonctionne quand je ne mets pas une adresse mail mais du text mais je n'ai plus l'user (login + mdp) avec 'data_class' => User::class dans le resolver du formType
         $form = $this->createForm(ForgottenPasswordFormType::class);
         $form->handleRequest($request);
 
@@ -40,18 +38,18 @@ class PasswordController extends AbstractController
             $identifier = $form->get('email')->getData();
             $user = $userRepository->findOneByIdentifier($identifier);
 
-            // let's see if this user is an instance of User::class to send an email
+            // Let's see if this user is an instance of User::class to send an email
             if (!($user instanceof User)) {
                 $this->addFlash('error', "Aucun compte avec cette adresse mail n'existe sur SnowTricks, veuillez réessayer :");
             } elseif (!$user->isVerified()) {
                 $this->addFlash('error', "Vous devez valider votre compte avant de pouvoir réaliser cette action.");
             } else {
-                // create a token
+                // Create a token
                 $token  = bin2hex(random_bytes(32));
                 $status = "waiting";
                 $type   = "forgot-password";
 
-                // persist this token & flush it in DB
+                // Persist this token & flush it in DB
                 $accessToken = new Token();
                 $accessToken->setValue($token);
                 $accessToken->setUserInfo($user);
@@ -61,7 +59,7 @@ class PasswordController extends AbstractController
                 $this->manager->persist($accessToken);
                 $this->manager->flush();
 
-                // send a email
+                // Send a email
                 $mail->send(
                     'support@snowtricks.com',
                     $identifier,
@@ -74,7 +72,7 @@ class PasswordController extends AbstractController
                     ]
                 );
 
-                // redirect the user to homepage if the form is valid and he's an instance of User::class
+                // Redirect the user to homepage if the form is valid and he's an instance of User::class
                 $this->addFlash('success' , "Un email vous a été envoyé afin de réinitialiser votre mot de passe.");
 
                 return $this->redirectToRoute('homepage');
@@ -112,7 +110,7 @@ class PasswordController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // get the new plainPassword and encode it before persist in DB if token is valid
+            // Get the new plainPassword and encode it before persist in DB if token is valid
             $identifier = $form->get('email')->getData();
             $user       = $userRepository->findOneByIdentifier($identifier);
 
@@ -132,7 +130,7 @@ class PasswordController extends AbstractController
 
                 return $this->redirectToRoute('homepage');
             }
-            // if we are here, token is not valid
+            // If we are here, token is not valid
             $this->addFlash('error', "Le token renseigné est invalide. Vous pouvez refaire une demande de changement de mot de passe.");
 
             return $this->redirectToRoute("app_forgot_password");

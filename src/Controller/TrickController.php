@@ -3,11 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Trick;
-use App\Entity\TrickCategory;
 use App\Entity\TrickComment;
 use App\Form\CommentFormType;
 use App\Form\TrickFormType;
-use App\Repository\TrickCategoryRepository;
 use App\Repository\TrickCommentRepository;
 use App\Repository\TrickRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -20,6 +18,8 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 
 class TrickController extends AbstractController
 {
+
+
     public function __construct(private readonly EntityManagerInterface $manager, private readonly SluggerInterface $slugger)
     {
     }
@@ -34,7 +34,7 @@ class TrickController extends AbstractController
     }
 
     #[Route('/show/{slug}/{page}', name: 'show_trick', requirements: ['page' => '\d+'])]
-    public function showOne(Request $request, TrickCommentRepository $trickCommentRepository, TrickRepository $trickRepository, string $slug, ?int $page = 1, ?int $limit = 5): Response
+    public function showOne(Request $request, TrickCommentRepository $trickCommentRepository, TrickRepository $trickRepository, string $slug, ?int $page = 1): Response
     {
         $trick = $trickRepository->findOneBy([
            'slug' => $slug,
@@ -48,7 +48,7 @@ class TrickController extends AbstractController
         $form->handleRequest($request);
 
         if ($this->getUser() && $form->isSubmitted() && $form->isValid()) {
-            // create a new comment instance and bind it to the user and to the trick
+            // Create a new comment instance and bind it to the user and to the trick
             $comment->setUser($this->getUser());
             $comment->setTrick($trick);
 
@@ -69,8 +69,8 @@ class TrickController extends AbstractController
     }
 
     #[Route('/new', name: 'new_trick')]
-    #[IsGranted('IS_AUTHENTICATED_REMEMBERED')] // same thing than $this->denyAccessUnlessGranted('ROLE_USER');
-    public function new(Request $request, TrickRepository $trickRepository, TrickCategoryRepository $categoryRepository): Response
+    #[IsGranted('IS_AUTHENTICATED_REMEMBERED')]
+    public function new(Request $request): Response
     {
         $trick = new Trick();
         $form = $this->createForm(TrickFormType::class, $trick);
@@ -81,27 +81,26 @@ class TrickController extends AbstractController
             $trick->setName($newName);
             $trick->setSlug($this->slugger->slug($newName));
 
-            // assign or create a new category for this trick
-            $newCategoryName = $form->get('newCategoryName')->getData();
-            $this->assignCategory($trick, $newCategoryName, $categoryRepository);
-
-            // set author
+            // Set author
             $trick->setAuthor($this->getUser());
 
             $this->manager->persist($trick);
             $this->manager->flush();
 
-            $this->addFlash('success', $trick->getName() . " a bien été créée.");
+            $this->addFlash('success', $trick->getName()." a bien été créée.");
+
+            return $this->redirectToRoute('show_trick', ['slug' => $trick->getSlug()]);
         }
 
-        return $this->render('trick/add-trick.html.twig', [
+        return $this->render(
+            'trick/add-trick.html.twig', [
             'addTrickForm' => $form->createView(),
         ]);
     }
 
     #[Route('/edit/{slug}', name: 'edit_trick')]
-    #[IsGranted('IS_AUTHENTICATED_REMEMBERED')] // same thing than $this->denyAccessUnlessGranted('ROLE_USER');
-    public function edit(Request $request, TrickRepository $trickRepository, TrickCategoryRepository $categoryRepository, string $slug): Response
+    #[IsGranted('IS_AUTHENTICATED_REMEMBERED')] // Same thing than $this->denyAccessUnlessGranted('ROLE_USER');
+    public function edit(Request $request, TrickRepository $trickRepository, string $slug): Response
     {
         $trick = $trickRepository->findOneBy([
             'slug' => $slug,
@@ -116,12 +115,7 @@ class TrickController extends AbstractController
             $trick->setSlug($this->slugger->slug($newName));
             $trick->setUpdatedAt(new \DateTimeImmutable());
 
-
-            $newCategoryName = $form->get('newCategoryName')->getData();
-            // use private function to handle the category of the trick
-            $this->assignCategory($trick, $newCategoryName, $categoryRepository);
-
-            // change trick's author if the user checked the author's box
+            // Change trick's author if the user checked the author's box
             if ($form->get('author')->getData()) {
                 $trick->setAuthor($this->getUser());
             }
@@ -132,7 +126,8 @@ class TrickController extends AbstractController
             return $this->redirectToRoute("show_trick", ['slug' => $trick->getSlug()]);
         }
 
-        return $this->render('trick/edit-trick.html.twig', [
+        return $this->render(
+            'trick/edit-trick.html.twig', [
             'editTrickForm'   => $form->createView(),
             'trick'           => $trick,
         ]);
@@ -148,24 +143,5 @@ class TrickController extends AbstractController
 
         $this->addFlash('success', "La figure a bien été supprimée.");
         return $this->redirectToRoute('homepage');
-    }
-
-    // persist the category if the user entered a new one and assign this category to the trick if it exists
-    private function assignCategory(Trick $trick, string $newCategoryName, TrickCategoryRepository $categoryRepository): void
-    {
-        $formalizedNewCategoryName = ucwords($newCategoryName);
-        $categoryAsArray           = $categoryRepository->findBy(['name' => $formalizedNewCategoryName]);
-
-        if (empty($categoryAsArray)) {
-            $category = new TrickCategory();
-            $category->setName($formalizedNewCategoryName);
-            $this->manager->persist($category);
-            $this->manager->flush();
-
-            $trick->setCategory($category);
-        } else {
-            $this->addFlash("info", "La catégorieque vous vouliez créer existe déjà.");
-            $trick->setCategory($categoryAsArray[0]);
-        }
     }
 }
