@@ -15,22 +15,26 @@ class ForgottenPasswordFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('email', EmailType::class, [
+            ->add(
+                'email', EmailType::class, [
                 'label'       => "Email",
                 'constraints' => [
                     new Email(message: "Ceci n'est pas une adresse mail valide."),
-                ]
-            ])
-            ->add('forgottenPassword', SubmitType::class, [
+                    ]
+                ])
+            ->add(
+                'forgottenPassword', SubmitType::class, [
                 'label' => 'Réinitialiser mon mot de passe'
-            ]);
+            ]
+        );
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults([
-//            'data_class' => User::class,
+        $resolver->setDefaults(
+            [
             'data_class' => null,
-        ]);
+            ]
+        );
     }
 }

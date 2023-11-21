@@ -19,9 +19,21 @@ class Trick
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Veuillez renseigner le nom de la figure.")]
+    #[Assert\Length(
+        min: 6,
+        minMessage: "Le nom de la figure doit avoir au moins {{ limit }} caractères.",
+        max: 50,
+        maxMessage: "Le nom de la figure doit avoir au plus {{ limit }} caractères.",
+    )]
     private ?string $name = null;
 
     #[ORM\Column(type: "text")]
+    #[Assert\NotBlank(message: "Veuillez renseigner la description de votre figure.")]
+    #[Assert\Length(
+        min: 20,
+        minMessage: "La description de la figure doit avoir au moins {{ limit }} caractères.",
+    )]
     private ?string $description = null;
 
     #[ORM\Column(length: 255)]
@@ -43,14 +55,6 @@ class Trick
     #[ORM\JoinColumn(nullable: false)]
     private ?TrickCategory $category = null;
 
-    #[Assert\Length(
-        min: 3,
-        minMessage: "Le nom catégorie doit avoir au moins {{ limit }} caractères.",
-        max: 30,
-        maxMessage: "Le nom catégorie doit avoir au plus {{ limit }} caractères.",
-    )]
-    private string $newCategoryName;
-
     #[ORM\OneToMany(mappedBy: 'trick', targetEntity: TrickComment::class, cascade: ['persist', 'remove'])]
     private ?Collection $comments = null;
 
@@ -70,18 +74,6 @@ class Trick
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getNewCategoryName(): ?string
-    {
-        return $this->newCategoryName;
-    }
-
-    public function setNewCategoryName(string $newCategoryName): static
-    {
-        $this->newCategoryName = $newCategoryName;
-
-        return $this;
     }
 
     public function getName(): ?string
