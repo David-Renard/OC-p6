@@ -22,7 +22,7 @@ class TokenRepository extends ServiceEntityRepository
     }
 
 //    /**
-//     * @return Token[] Returns an array of Token objects
+//     * @return TokenService[] Returns an array of TokenService objects
 //     */
 //    public function findByExampleField($value): array
 //    {

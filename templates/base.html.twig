@@ -24,6 +24,16 @@
                 {{ message }}
             </div>
         {% endfor %}
+        {% for message in app.flashes('info') %}
+            <div class="alert alert-info mb-0 rounded-0 text-center text-primary fw-bold z-3">
+                {{ message }}
+            </div>
+        {% endfor %}
+        {% for message in app.flashes('error') %}
+            <div class="alert alert-danger mb-0 rounded-0 text-center text-primary fw-bold z-3">
+                {{ message }}
+            </div>
+        {% endfor %}
 
         {% block body %}{% endblock %}
         {% include ('layouts/_footer.html.twig') %}

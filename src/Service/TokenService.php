@@ -5,7 +5,7 @@ namespace App\Service;
 use App\Entity\User;
 use App\Repository\TokenRepository;
 
-class Token
+class TokenService
 {
     public function __construct(
         private TokenRepository $tokenRepository,
