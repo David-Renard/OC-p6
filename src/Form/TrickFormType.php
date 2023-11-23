@@ -7,11 +7,14 @@ use App\Entity\TrickCategory;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\All;
+use Symfony\Component\Validator\Constraints\File;
 
 class TrickFormType extends AbstractType
 {
@@ -44,23 +47,40 @@ class TrickFormType extends AbstractType
             ]
             )
             ->add(
-                'newCategoryName', TextType::class, [
-                'label'    => "Nouvelle catégorie",
-                'required' => false,
-            ]
-            )
-            ->add(
                 'author', CheckboxType::class, [
                 'label'    => "M'attribuer cette figure",
                 'mapped'   => false,
                 'required' => false,
             ]
             )
+            ->add('attachment', FileType::class, [
+                'mapped' => false,
+                'required' => false,
+                'multiple' => true,
+                'label' => "Ajouter une ou plusieurs image(s)",
+                'constraints' => [
+                    new All([
+                        'constraints' =>
+                            new File([
+                                'maxSize' => '5Mi',
+                                'maxSizeMessage' => "Le fichier {{ file }} est trop grand ({{ size }}{{ suffix }}). {{ limit }}{{ suffix }} maximum autorisé.",
+                                'extensions' => [
+                                    'jpeg',
+                                    'jpg',
+                                    'png',
+                                ],
+                                'extensionsMessage' => 'Format {{ extensions }} uniquement',
+                            ]),
+                        ],
+                    )
+                ],
+            ])
             ->add(
                 'submit', SubmitType::class, [
                 'label' => "Valider"
             ]
-            );
+            )
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
