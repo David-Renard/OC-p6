@@ -134,6 +134,11 @@ footer {
     width: 400px;
 }
 
+.videos.list-videos {
+    list-style: none;
+    width: 50%;
+}
+
 @media screen and (width <= 991px) {
     .hidden-xs {
         display: none;
@@ -194,5 +199,9 @@ footer {
 
     .form-label-extended {
         width: 100%;
+    }
+
+    .videos.list-videos {
+        list-style: none;
     }
 }

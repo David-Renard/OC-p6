@@ -1,6 +1,7 @@
 const addVideoFormDeleteLink = (item) => {
     const removeFormButton = document.createElement('button');
     removeFormButton.innerText = 'Supprimer cette vidéo';
+    removeFormButton.className = "btn btn-light text-danger m-auto w-100";
 
     item.append(removeFormButton);
 
