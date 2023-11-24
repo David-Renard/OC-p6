@@ -5,8 +5,8 @@
         <meta name="viewport" content="width=device.width, initial-scale=1">
         <title>{% block title %}SnowTricks{% endblock %}</title>
 
-        <link rel="stylesheet" href="{{ asset('styles/app.scss') }}">
-        <link rel="stylesheet" href="{{ asset('styles/own_style.css') }}">
+{#        <link rel="stylesheet" href="{{ asset('styles/app.scss') }}">#}
+{#        <link rel="stylesheet" href="{{ asset('styles/own_style.css') }}">#}
 
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
@@ -14,6 +14,7 @@
 
         {% block javascripts %}
             {{ encore_entry_script_tags('app') }}
+            <script src="{{ asset('embededcollectionform.js') }}"></script>
         {% endblock %}
     </head>
     <body>

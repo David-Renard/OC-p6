@@ -19,7 +19,7 @@ class TrickPicture
     #[ORM\Column(nullable: true)]
     private ?bool $main = null;
 
-    #[ORM\ManyToOne(inversedBy: 'pictures')]
+    #[ORM\ManyToOne(inversedBy: 'pictures', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Trick $trick = null;
 

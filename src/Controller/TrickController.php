@@ -4,10 +4,12 @@ namespace App\Controller;
 
 use App\Entity\Trick;
 use App\Entity\TrickComment;
+use App\Entity\TrickPicture;
 use App\Form\CommentFormType;
 use App\Form\TrickFormType;
 use App\Repository\TrickCommentRepository;
 use App\Repository\TrickRepository;
+use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -70,7 +72,7 @@ class TrickController extends AbstractController
 
     #[Route('/new', name: 'new_trick')]
     #[IsGranted('IS_AUTHENTICATED_REMEMBERED')]
-    public function new(Request $request): Response
+    public function new(Request $request, FileUploader $fileUploader, TrickRepository $trickRepository): Response
     {
         $trick = new Trick();
         $form = $this->createForm(TrickFormType::class, $trick);
@@ -84,6 +86,23 @@ class TrickController extends AbstractController
             // Set author
             $trick->setAuthor($this->getUser());
 
+            // Set pictures
+            $pictures = $form->get('attachment')->getData();
+            if ($pictures) {
+                foreach ($pictures as $pictureFile) {
+                    $pictureFilename = $fileUploader->upload($pictureFile);
+
+                    $picture = new TrickPicture();
+                    $picture->setName("Freestyle ".substr($pictureFilename, 0, strripos($pictureFilename, "-")));
+                    $picture->setMain(false);
+                    $picture->setUrl('/build/images/upload/trick_pictures/'.$pictureFilename);
+                    $picture->setTrick($trick);
+
+                    $this->manager->persist($picture);
+                    $this->manager->flush();
+                }
+            }
+
             $this->manager->persist($trick);
             $this->manager->flush();
 
@@ -94,7 +113,7 @@ class TrickController extends AbstractController
 
         return $this->render(
             'trick/add-trick.html.twig', [
-            'addTrickForm' => $form->createView(),
+            'form' => $form->createView(),
         ]);
     }
 
