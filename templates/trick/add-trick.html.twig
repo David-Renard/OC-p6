@@ -7,23 +7,34 @@
     <div class="row h3">
         <h1 class="h3">Ajoute une figure et quelques médias !</h1>
     </div>
-    {{ form_errors(addTrickForm) }}
-    {{ form_start(addTrickForm) }}
+    {{ form_errors(form) }}
+    {{ form_start(form) }}
     <div class="my-3 d-flex justify-content-around">
-        {{ form_row(addTrickForm.name) }}
+        {{ form_row(form.name) }}
     </div>
     <div class="my-3 d-flex justify-content-around">
-        {{ form_row(addTrickForm.description) }}
+        {{ form_row(form.description) }}
     </div>
     <div class="mt-3 d-flex justify-content-around">
-        {{ form_row(addTrickForm.category) }}
+        {{ form_row(form.category) }}
     </div>
     <div class="mt-3 d-flex justify-content-around">
-        {{ form_row(addTrickForm.attachment) }}
+        {{ form_row(form.attachment) }}
+    </div>
+    <div class="border border-primary">
+        <button type="button" class="add_item_link" data-collection-holder-class="videos">Ajouter une vidéo</button>
+        <ul class="videos"
+            data-index="{{ form.video|length > 0 ? form.video|last.vars.name + 1 : 0 }}"
+            data-prototype="{{ form_widget(form.video.vars.prototype)|e('html_attr') }}"
+        >
+            {% for video in form.video %}
+                <li>{{ form_row(video.url) }}</li>
+            {% endfor %}
+        </ul>
     </div>
     <div class="mt-3 d-none justify-content-around">
-        {{ form_row(addTrickForm.author) }}
+        {{ form_row(form.author) }}
     </div>
-    {{ form_end(addTrickForm) }}
+    {{ form_end(form) }}
 </div>
 {% endblock %}

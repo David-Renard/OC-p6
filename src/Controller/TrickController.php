@@ -72,7 +72,7 @@ class TrickController extends AbstractController
 
     #[Route('/new', name: 'new_trick')]
     #[IsGranted('IS_AUTHENTICATED_REMEMBERED')]
-    public function new(Request $request, FileUploader $fileUploader): Response
+    public function new(Request $request, FileUploader $fileUploader, TrickRepository $trickRepository): Response
     {
         $trick = new Trick();
         $form = $this->createForm(TrickFormType::class, $trick);
@@ -113,7 +113,7 @@ class TrickController extends AbstractController
 
         return $this->render(
             'trick/add-trick.html.twig', [
-            'addTrickForm' => $form->createView(),
+            'form' => $form->createView(),
         ]);
     }
 
