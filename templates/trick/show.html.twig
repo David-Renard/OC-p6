@@ -56,8 +56,8 @@
                 <img src="{{ asset(picture.url) }}" alt="{{ picture.name }}" class="detail-box-media mx-2 py-2 img-thumbnail shadow rounded-2">
             {% endfor %}
                 <div class="d-block">
-            {% for video in trick.getPictures %}
-                    <iframe  class="detail-box-media mx-2 py-2 img-thumbnail shadow rounded-2" src="https://www.youtube.com/embed/s7bgzDDZdyk" title="Is Zeb Powell The Most Creative Snowboarder In The World?" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            {% for video in trick.getVideo %}
+                    <iframe  class="detail-box-media mx-2 py-2 img-thumbnail shadow rounded-2" src="{{ video.url }}" title="Is Zeb Powell The Most Creative Snowboarder In The World?" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
                     <iframe  class="detail-box-media mx-2 py-2 img-thumbnail shadow rounded-2" src="https://www.youtube.com/embed/mlaJm6rUMdM" title="Quick &amp; Easy Snowboard Trick - Frontside Shifty" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
             {% endfor %}
