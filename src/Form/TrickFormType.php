@@ -70,7 +70,6 @@ class TrickFormType extends AbstractType
                                     'jpg',
                                     'png',
                                 ],
-                                'extensionsMessage' => 'Format {{ extensions }} uniquement',
                             ]),
                         ],
                     )

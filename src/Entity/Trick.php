@@ -177,6 +177,17 @@ class Trick
         return $mainPicture;
     }
 
+    public function setMainPicture(TrickPicture $picture): static
+    {
+        // reset main picture from this $picture if it exists trick before set this new one as main picture
+        if ($picture->getTrick()->getMainPicture() != null) {
+            $picture->getTrick()->getMainPicture()->setMain(false);
+        }
+
+        $picture->setMain(true);
+        return $this;
+    }
+
     /**
      * @return Collection<int, TrickVideo>
      */
