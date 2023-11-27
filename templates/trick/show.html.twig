@@ -4,21 +4,21 @@
 
 {% block body %}
     <div class="container text-center border border-primary rounded-2 my-4 p-2">
-        <div class="row">
+        <section class="row">
             <div class="col">
                 <div class="main-picture m-auto position-relative">
                     {# display main picture if there is one #}
                     {% if trick.getMainPicture() %}
-                        <img src="{{ asset(trick.getMainPicture().url) }}" class="img-thumbnail" alt="{{ trick.getMainPicture().name }}"/>
+                        <img src="{{ asset(trick.getMainPicture().url) }}" class="img-thumbnail h-500" alt="{{ trick.getMainPicture().name }}"/>
                         {# display default picture if there is no pictures #}
                     {% elseif trick.getPictures() is empty %}
                         <div class="position-relative">
-                            <img src="{{ asset('build/images/freestyle.jpeg') }}" class="img-thumbnail default_picture-picture" alt="image par défaut"/>
+                            <img src="{{ asset('build/images/freestyle.jpeg') }}" class="img-thumbnail h-500 default_picture-picture" alt="image par défaut"/>
                             <p class="position-absolute no-pictures-text bg-secondary-subtle rounded-2 w-75 m-auto opacity-75 text-primary h4 fw-bold">Il n'y a pas d'image sur ce trick, ajoutes-en une!</p>
                         </div>
                         {# display 1st picture ordered by id if there is no main picture #}
                     {% elseif trick.getMainPicture() is empty %}
-                        <img src="{{ asset(trick.getPictures()|first.url) }}" class="img-thumbnail" alt="{{ trick.getPictures()|first.name }}"/>
+                        <img src="{{ asset(trick.getPictures()|first.url) }}" class="img-thumbnail h-500" alt="{{ trick.getPictures()|first.name }}"/>
                     {% endif %}
                     {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                         <div class="action position-absolute top-0 end-0 p-1 m-3 bg-light rounded-2">
@@ -37,7 +37,7 @@
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Non</button>
-                                            <button type="button" class="btn btn-warning">Oui</button>
+                                            <a href="{{ path('delete_trick', {'slug': trick.slug}) }}" type="button" class="btn btn-warning">Oui</a>
                                         </div>
                                     </div>
                                 </div>
@@ -49,19 +49,19 @@
                     {{ trick.name }}
                 </h1>
             </div>
-        </div>
+        </section>
         {% if trick.getPictures is not empty or trick.getVideo is not empty %}
         <div class="row d-flex flex-wrap justify-content-center">
             {% for picture in trick.getPictures %}
                 <img src="{{ asset(picture.url) }}" alt="{{ picture.name }}" class="detail-box-media mx-2 py-2 img-thumbnail shadow rounded-2">
             {% endfor %}
-                <div class="d-block">
+            <div class="d-block">
             {% for video in trick.getVideo %}
-                    <iframe  class="detail-box-media mx-2 py-2 img-thumbnail shadow rounded-2" src="{{ video.url }}" title="Is Zeb Powell The Most Creative Snowboarder In The World?" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                <iframe  class="detail-box-media mx-2 py-2 img-thumbnail shadow rounded-2" src="{{ video.url }}" title="Is Zeb Powell The Most Creative Snowboarder In The World?" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
-                    <iframe  class="detail-box-media mx-2 py-2 img-thumbnail shadow rounded-2" src="https://www.youtube.com/embed/mlaJm6rUMdM" title="Quick &amp; Easy Snowboard Trick - Frontside Shifty" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                <iframe  class="detail-box-media mx-2 py-2 img-thumbnail shadow rounded-2" src="https://www.youtube.com/embed/mlaJm6rUMdM" title="Quick &amp; Easy Snowboard Trick - Frontside Shifty" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
             {% endfor %}
-                </div>
+            </div>
         </div>
         {% endif %}
         <div class="row">

@@ -8,10 +8,12 @@ use App\Entity\TrickPicture;
 use App\Form\CommentFormType;
 use App\Form\TrickFormType;
 use App\Repository\TrickCommentRepository;
+use App\Repository\TrickPictureRepository;
 use App\Repository\TrickRepository;
 use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -87,21 +89,7 @@ class TrickController extends AbstractController
             $trick->setAuthor($this->getUser());
 
             // Set pictures
-            $pictures = $form->get('attachment')->getData();
-            if ($pictures) {
-                foreach ($pictures as $pictureFile) {
-                    $pictureFilename = $fileUploader->upload($pictureFile);
-
-                    $picture = new TrickPicture();
-                    $picture->setName("Freestyle ".substr($pictureFilename, 0, strripos($pictureFilename, "-")));
-                    $picture->setMain(false);
-                    $picture->setUrl('/build/images/upload/trick_pictures/'.$pictureFilename);
-                    $picture->setTrick($trick);
-
-                    $this->manager->persist($picture);
-                    $this->manager->flush();
-                }
-            }
+            $this->uploadAndPersist('attachment', $form, $fileUploader, $trick);
 
             $this->manager->persist($trick);
             $this->manager->flush();
@@ -119,7 +107,7 @@ class TrickController extends AbstractController
 
     #[Route('/edit/{slug}', name: 'edit_trick')]
     #[IsGranted('IS_AUTHENTICATED_REMEMBERED')] // Same thing than $this->denyAccessUnlessGranted('ROLE_USER');
-    public function edit(Request $request, TrickRepository $trickRepository, string $slug): Response
+    public function edit(Request $request, TrickRepository $trickRepository, FileUploader $fileUploader, string $slug): Response
     {
         $trick = $trickRepository->findOneBy([
             'slug' => $slug,
@@ -139,6 +127,9 @@ class TrickController extends AbstractController
                 $trick->setAuthor($this->getUser());
             }
 
+            // Set pictures
+            $this->uploadAndPersist('attachment', $form, $fileUploader, $trick);
+
             $this->manager->flush();
 
             $this->addFlash('success', "La figure a bien été modifiée.");
@@ -153,6 +144,7 @@ class TrickController extends AbstractController
     }
 
     #[Route('delete/{slug}', name: 'delete_trick')]
+    #[IsGranted('IS_AUTHENTICATED_REMEMBERED')]
     public function delete(TrickRepository $trickRepository, string $slug): Response
     {
         $trick = $trickRepository->findOneBy(['slug' => $slug]);
@@ -162,5 +154,62 @@ class TrickController extends AbstractController
 
         $this->addFlash('success', "La figure a bien été supprimée.");
         return $this->redirectToRoute('homepage');
+    }
+
+    #[Route('/edit/{slug}/main/{id}', name: 'edit_main_picture', requirements: ['id' => '\d+'])]
+    #[IsGranted('IS_AUTHENTICATED_REMEMBERED')]
+    public function declareMainPicture(TrickRepository $trickRepository, TrickPictureRepository $pictureRepository, string $slug, int $id): Response
+    {
+        $trick = $trickRepository->findOneBy(['slug' => $slug]);
+        $picture = $pictureRepository->find($id);
+
+        $trick->setMainPicture($picture);
+        $this->manager->persist($trick);
+        $this->manager->flush();
+
+        $this->addFlash('success', "L'image principale de cette figure a bien été modifiée.");
+        return $this->redirectToRoute('show_trick', [
+                'slug' => $slug,
+                'id' => $id,
+            ]
+        );
+    }
+
+    #[Route('/edit/{slug}/delete/{id}', name: 'delete_picture', requirements: ['id' => '\d+'])]
+    #[IsGranted('IS_AUTHENTICATED_REMEMBERED')]
+    public function deletePicture(TrickPictureRepository $pictureRepository, string $slug, int $id): Response
+    {
+        $picture = $pictureRepository->find($id);
+        $picture->getTrick()->removePicture($picture);
+
+        $this->manager->remove($picture);
+        $this->manager->flush();
+
+        $this->addFlash('success', "Cette image a bien été supprimée.");
+        return $this->redirectToRoute('show_trick', [
+                'slug' => $slug,
+//                'id' => $id,
+            ]
+        );
+    }
+
+    private function uploadAndPersist(string $inputs, Form $form, FileUploader $fileUploader, Trick $trick): void
+    {
+        $array = $form->get($inputs)->getData();
+
+        if ($array != []) {
+            foreach ($array as $pictureFile) {
+                $pictureFilename = $fileUploader->upload($pictureFile);
+
+                $picture = new TrickPicture();
+                $picture->setName("Freestyle ".substr($pictureFilename, 0, strripos($pictureFilename, "-")));
+                $picture->setMain(false);
+                $picture->setUrl('/build/images/upload/trick_pictures/'.$pictureFilename);
+                $picture->setTrick($trick);
+
+                $this->manager->persist($picture);
+                $this->manager->flush();
+            }
+        }
     }
 }

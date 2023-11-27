@@ -9,7 +9,7 @@
             <div class="main-picture m-auto position-relative">
                 {# display main picture if there is one #}
                 {% if trick.getMainPicture() %}
-                    <img src="{{ asset(trick.getMainPicture().url) }}" class="img-thumbnail" alt="{{ trick.getMainPicture().name }}"/>
+                    <img src="{{ asset(trick.getMainPicture().url) }}" class="img-thumbnail h-500" alt="{{ trick.getMainPicture().name }}"/>
                 <div class="action position-absolute top-0 end-0 p-1 m-3 bg-light rounded-2">
                 {% else %}
                     <p class="h4 mb-4">Cette figure n'a pour le moment pas d'image principale, tu peux en ajouter une ici :</p>
@@ -63,8 +63,28 @@
                 <div class="mt-3 d-flex justify-content-around">
                     {{ form_row(editTrickForm.category) }}
                 </div>
+                {% if app.user != trick.author %}
                 <div class="mt-3 d-flex justify-content-around">
                     {{ form_row(editTrickForm.author) }}
+                </div>
+                {% else %}
+                <div class="mt-3 d-none justify-content-around">
+                    {{ form_row(editTrickForm.author) }}
+                </div>
+                {% endif %}
+                <div class="mt-3 d-flex justify-content-around">
+                    {{ form_row(editTrickForm.attachment) }}
+                </div>
+                <div class="my-3 ">
+                    <button type="button" class="add_item_link btn btn-primary m-auto" data-collection-holder-class="videos">Ajouter une vidéo</button>
+                    <ul class="videos list-videos m-auto"
+                        data-index="{{ editTrickForm.video|length > trick.video|length ? editTrickForm.video|last.vars.name + 1 : trick.video|length }}"
+                        data-prototype="{{ form_widget(editTrickForm.video.vars.prototype)|e('html_attr') }}"
+                    >
+                        {% for video in editTrickForm.video %}
+                            <li>{{ form_row(video.url) }}</li>
+                        {% endfor %}
+                    </ul>
                 </div>
                 <div class="d-flex m-auto align-items-baseline justify-content-center">
                     {{ form_end(editTrickForm) }}
@@ -74,21 +94,35 @@
         </div>
 
         {% if trick.getPictures is not empty or trick.getVideo is not empty %}
-            <div class="row d-flex flex-wrap justify-content-center">
+            <div class="row flex-wrap justify-content-center py-3">
                 {% for picture in trick.getPictures %}
-                    <img src="{{ asset(picture.url) }}" alt="{{ picture.name }}" class="detail-box-media mx-2 py-2 img-thumbnail shadow rounded-2">
-                    <div class="action position-absolute top-0 end-0 p-1 m-3 bg-light rounded-2">
-
+                <div class="detail-box my-3">
+                    <img src="{{ asset(picture.url) }}" alt="{{ picture.name }}" class="detail-box-media img-thumbnail shadow rounded-2">
+                    <div>
+                        <a href="{{ path('edit_main_picture', {'slug': trick.slug, 'id': picture.id}) }}" class="btn btn-primary me-1"><i class="bi bi-bookmark-plus" title="Image principale de {{ trick.name }}"></i></a>
+                        <a href="{{ path('delete_picture', {'slug': trick.slug, 'id': picture.id}) }}" class="btn btn-danger me-1"><i class="bi bi-trash3-fill" title="Supprimer {{ trick.name }}"></i></a>
+                        <a href="{{ path('delete_picture', {'slug': trick.slug}) }}" class="btn btn-danger me-1"><i class="bi bi-trash3-fill" title="Supprimer {{ trick.name }}"></i></a>
+                    </div>
+                </div>
+                {% endfor %}
+                {% for video in trick.getVideo %}
+                    <div class="detail-box my-3">
+                        {% for video in trick.getVideo %}
+                            <iframe  class="detail-box-media mx-2 py-2 img-thumbnail shadow rounded-2" src="{{ video.url }}" title="Is Zeb Powell The Most Creative Snowboarder In The World?" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                        {% endfor %}
+{#                        <iframe src="{{ video.url }}" class="detail-box-media mx-2 py-2 img-thumbnail shadow rounded-2" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>#}
+{#                        <div>#}
+{#                            <a href="{{ path('edit_main_picture', {'slug': trick.slug, 'id': picture.id}) }}" class="btn btn-primary me-1"><i class="bi bi-bookmark-plus" title="Image principale de {{ trick.name }}"></i></a>#}
+{#                            <a href="{{ path('delete_picture', {'slug': trick.slug, 'id': picture.id}) }}" class="btn btn-danger me-1"><i class="bi bi-trash3-fill" title="Supprimer {{ trick.name }}"></i></a>#}
+{#                        </div>#}
                     </div>
                 {% endfor %}
-                <div class="d-block">
-                    {% for video in trick.getVideo %}
-                        <iframe  class="detail-box-media mx-2 py-2 img-thumbnail shadow rounded-2" src="{{ video.url }}" title="Is Zeb Powell The Most Creative Snowboarder In The World?" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-                    {% endfor %}
-                </div>
-
             </div>
         {% endif %}
     </div>
 </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('embeded') }}
 {% endblock %}

@@ -16,9 +16,16 @@ class TrickVideo
 
     #[ORM\Column]
     #[Assert\NotBlank()]
+    #[Assert\Url(message: "L'url {{ value }} n'est pas une adresse valide.", normalizer: 'trim')]
+    #[Assert\Length(
+        min: 10,
+        minMessage: "L'url doit avoir au moins {{ limit }} caractères.",
+        max: 200,
+        maxMessage: "L'url doit avoir au plus {{ limit }} caractères.",
+    )]
     private ?string $url = null;
 
-    #[ORM\ManyToOne(inversedBy: 'video')]
+    #[ORM\ManyToOne(inversedBy: 'video', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Trick $trick = null;
 
