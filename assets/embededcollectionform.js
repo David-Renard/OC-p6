@@ -7,7 +7,7 @@ const addVideoFormDeleteLink = (item) => {
 
     removeFormButton.addEventListener('click', (e) => {
         e.preventDefault();
-        // remove the li for the video form
+    //     // remove the li for the video form
         item.remove();
     });
 }
@@ -47,6 +47,5 @@ const collectionHelper = () => {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log("salut");
     collectionHelper();
 });
