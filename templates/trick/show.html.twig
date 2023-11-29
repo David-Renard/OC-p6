@@ -7,63 +7,41 @@
         <section class="row">
             <div class="col">
                 <div class="main-picture m-auto position-relative">
-                    {# display main picture if there is one #}
-                    {% if trick.getMainPicture() %}
-                        <img src="{{ asset(trick.getMainPicture().url) }}" class="img-thumbnail h-500" alt="{{ trick.getMainPicture().name }}"/>
-                        {# display default picture if there is no pictures #}
-                    {% elseif trick.getPictures() is empty %}
-                        <div class="position-relative">
-                            <img src="{{ asset('build/images/freestyle.jpeg') }}" class="img-thumbnail h-500 default_picture-picture" alt="image par défaut"/>
-                            <p class="position-absolute no-pictures-text bg-secondary-subtle rounded-2 w-75 m-auto opacity-75 text-primary h4 fw-bold">Il n'y a pas d'image sur ce trick, ajoutes-en une!</p>
-                        </div>
-                        {# display 1st picture ordered by id if there is no main picture #}
-                    {% elseif trick.getMainPicture() is empty %}
-                        <img src="{{ asset(trick.getPictures()|first.url) }}" class="img-thumbnail h-500" alt="{{ trick.getPictures()|first.name }}"/>
-                    {% endif %}
+                    {% include 'layouts/_displayMainPicture.html.twig' %}
                     {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                         <div class="action position-absolute top-0 end-0 p-1 m-3 bg-light rounded-2">
-                            <a href="{{ path('edit_trick', {'slug' : trick.slug}) }}" class="btn btn-primary me-1"><i class="bi bi-pencil-fill" title="Modifier {{ trick.name }}"></i></a>
-                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ trick.id }}"><i class="bi bi-trash3-fill" title="Supprimer {{ trick.name }}"></i></button>
-                            {# modal window to delete the trick #}
-                            <div class="modal fade from-right" id="deleteModal{{ trick.id }}" tabindex="-1" aria-labelledby="deleteModal" aria-hidden="true" data-bs-backdrop="static">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="deleteModal">Supprimer {{ trick.name }}</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            Êtes-vous sûr de vouloir supprimer {{ trick.name }}?
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Non</button>
-                                            <a href="{{ path('delete_trick', {'slug': trick.slug}) }}" type="button" class="btn btn-warning">Oui</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            {% include 'layouts/_modal.html.twig' %}
                         </div>
                     {% endif %}
                 </div>
-                <h1 class="position-relative negative m-auto p-2 bg-secondary-subtle rounded-2 w-25 opacity-75 fw-bold h3 text-primary">
+                <h1 class="position-relative negative m-auto p-2 bg-secondary-subtle rounded-2 w-50 w-sm-25 opacity-75 fw-bold h3 text-primary">
                     {{ trick.name }}
                 </h1>
             </div>
         </section>
+        <section>
         {% if trick.getPictures is not empty or trick.getVideo is not empty %}
-        <div class="row d-flex flex-wrap justify-content-center">
-            {% for picture in trick.getPictures %}
-                <img src="{{ asset(picture.url) }}" alt="{{ picture.name }}" class="detail-box-media mx-2 py-2 img-thumbnail shadow rounded-2">
-            {% endfor %}
-            <div class="d-block">
-            {% for video in trick.getVideo %}
-                <iframe  class="detail-box-media mx-2 py-2 img-thumbnail shadow rounded-2" src="{{ video.url }}" title="Is Zeb Powell The Most Creative Snowboarder In The World?" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-
-                <iframe  class="detail-box-media mx-2 py-2 img-thumbnail shadow rounded-2" src="https://www.youtube.com/embed/mlaJm6rUMdM" title="Quick &amp; Easy Snowboard Trick - Frontside Shifty" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-            {% endfor %}
+            <button
+                    class="btn btn-primary mx-auto"
+                    type="button"
+                    id="seeMedia"
+            >
+                Voir les médias
+            </button>
+            <div class="row flex-wrap justify-content-center py-3" id="media">
+                {% for picture in trick.getPictures %}
+                    <div class="detail-box my-sm-3">
+                        <img src="{{ asset(picture.url) }}" alt="{{ picture.name }}" class="detail-box-media img-thumbnail shadow rounded-2">
+                    </div>
+                {% endfor %}
+                {% for video in trick.getVideo %}
+                    <div class="detail-box my-sm-3">
+                        <iframe  class="detail-box-media mx-2 py-2 img-thumbnail shadow rounded-2" src="{{ video.url }}" title="Is Zeb Powell The Most Creative Snowboarder In The World?" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    </div>
+                {% endfor %}
             </div>
-        </div>
         {% endif %}
+        </section>
         <div class="row">
             <div class="col-10 offset-1 my-3 py-2 m-auto">
                 {{ trick.description }}
@@ -72,10 +50,10 @@
         <div class="row">
             <div class="container">
                 <hr>
-                <div class="row m-auto my-5 gy-2 align-items-center">
-                    <div class="col mx-3 py-2 fst-italic border border-primary shadow">Créé le {{ trick.createdAt|date("d/m/Y \\à H\\hi") }}</div>
+                <div class="row flex-wrap m-auto my-5 gy-2 align-items-center">
+                    <div class="col mx-3 py-2 fst-italic border border-primary shadow">Créé le {{ trick.createdAt|date("d/m/Y \\à H\\hi", 'Europe/Paris') }}</div>
                     {% if trick.updatedAt != null %}
-                        <div class="col mx-3 fst-italic py-2 border border-primary shadow">Modifié le {{ trick.updatedAt|date("d/m/Y \\à H\\hi") }}</div>
+                        <div class="col mx-3 fst-italic py-2 border border-primary shadow">Modifié le {{ trick.updatedAt|date("d/m/Y \\à H\\hi", 'Europe/Paris') }}</div>
                     {% endif %}
                     <div class="col mx-3 py-2 border border-primary shadow">Par <span class="fw-bold">
                             <img src="{{ asset(trick.author.userPicture.url) }}" width="25" height="25"
@@ -104,18 +82,18 @@
                         {% if count > 0 %}
                         <div class="row py-3">
                             <div class="col-sm-10 offset-sm-1 text-light fw-bolder h5">
-                                Commentaires : {{ count }}
+                                {{ (count == 1) ? 'Commentaire' : 'Commentaires' }} : {{ count }}
                             </div>
                         </div>
                         {% else %}
-                            <div class="row py-3">
-                                <div class="col-sm-10 text-light offset-sm-1 fw-bolder h5">
-                                    Il n'y a pas encore de commentaire sur ce trick, sois le premier à en ajouter un!
-                                </div>
+                        <div class="row py-3">
+                            <div class="col-sm-10 text-light offset-sm-1 fw-bolder h5">
+                                Il n'y a pas encore de commentaire sur ce trick, sois le premier à en ajouter un!
                             </div>
+                        </div>
                         {% endif %}
                         <div class="row">
-                            <div class="col-sm-10 offset-sm-1 bg-light rounded-2 shadow">
+                            <div class="col-10 offset-1 bg-light rounded-2 shadow">
                                 {% if comments.data is defined %}
                                     {% for comment in comments.data %}
                                         {% include "layouts/_comment.html.twig" %}
@@ -131,4 +109,8 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('extendmedia') }}
 {% endblock %}

@@ -65,11 +65,7 @@ class TrickFormType extends AbstractType
                             new File([
                                 'maxSize' => '5Mi',
                                 'maxSizeMessage' => "Le fichier {{ file }} est trop grand ({{ size }}{{ suffix }}). {{ limit }}{{ suffix }} maximum autorisé.",
-                                'extensions' => [
-                                    'jpeg',
-                                    'jpg',
-                                    'png',
-                                ],
+                                'mimeTypes' => ['images/*'],
                             ]),
                         ],
                     )

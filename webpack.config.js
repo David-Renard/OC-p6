@@ -34,6 +34,7 @@ Encore
      */
     .addEntry('app', './assets/app.js')
     .addEntry('embeded', './assets/embededcollectionform.js')
+    .addEntry('extendmedia', './assets/extendmedia.js')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()

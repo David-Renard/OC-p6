@@ -1,8 +1,8 @@
 <div class="shadow border border-primary rounded-2 my-3">
-    <div class="p-3">Par <img src="{{ asset(comment.user.userPicture.url) }}" width="25" height="25"
+    <div class="p-1">Par <img src="{{ asset(comment.user.userPicture.url) }}" alt="avatar de {{ comment.user.username }}" width="25" height="25"
                               class="rounded-circle shadow border border-primary"/>
         <span class="fw-bold ms-1">{{ comment.user.username }}</span>,
-        <span class="fst-italic">le {{ comment.createdAt|date("d/m/Y \\à H\\hi") }}</span>
+        <span class="fst-italic">le {{ comment.createdAt|date("d/m/Y \\à H\\hi", 'Europe/Paris') }}</span>
     </div>
-    <div class="p-2 bg-light-subtle">{{ comment.content }}</div>
+    <div class="p-1 bg-light-subtle">{{ comment.content }}</div>
 </div>

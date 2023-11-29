@@ -104,7 +104,7 @@ footer {
 }
 
 .register {
-    height: 73vh;
+    min-height: 73vh;
 }
 
 .main-picture {
@@ -150,6 +150,10 @@ footer {
     width: 100%;
     object-fit: cover;
     object-position: center top;
+}
+
+.w-sm-25 {
+    width: 25%!important;
 }
 
 @media screen and (width <= 991px) {
@@ -214,7 +218,15 @@ footer {
         width: 100%;
     }
 
-    .videos.list-videos {
-        list-style: none;
+    .main-picture {
+        width: 90vw;
+    }
+
+    .no-pictures-text {
+        bottom: 20px;
+    }
+
+    .w-sm-25 {
+        width: 50%!important;
     }
 }
