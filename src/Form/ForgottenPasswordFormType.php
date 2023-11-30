@@ -16,17 +16,21 @@ class ForgottenPasswordFormType extends AbstractType
     {
         $builder
             ->add(
-                'email', EmailType::class, [
-                'label'       => "Email",
-                'constraints' => [
-                    new Email(message: "Ceci n'est pas une adresse mail valide."),
-                    ]
-                ])
+                'email', EmailType::class,
+                [
+                    'label'       => "Email",
+                    'constraints' =>
+                        [
+                            new Email(message: "Ceci n'est pas une adresse mail valide."),
+                        ]
+                ]
+            )
             ->add(
-                'forgottenPassword', SubmitType::class, [
-                'label' => 'Réinitialiser mon mot de passe'
-            ]
-        );
+                'forgottenPassword', SubmitType::class,
+                [
+                    'label' => 'Réinitialiser mon mot de passe'
+                ]
+            );
     }
 
     public function configureOptions(OptionsResolver $resolver): void

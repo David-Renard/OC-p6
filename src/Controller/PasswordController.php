@@ -21,8 +21,10 @@ class PasswordController extends AbstractController
 {
 
 
-    public function __construct(private readonly EntityManagerInterface $manager) {
+    public function __construct(private readonly EntityManagerInterface $manager)
+    {
     }
+
 
     #[Route('/forgot-password', name: 'app_forgot_password')]
     public function resetPassword(Request $request, UserRepository $userRepository, SendMail $mail): Response
@@ -40,13 +42,13 @@ class PasswordController extends AbstractController
             $user = $userRepository->findOneByIdentifier($identifier);
 
             // Let's see if this user is an instance of User::class to send an email
-            if (!($user instanceof User)) {
+            if ($user instanceof User == false) {
                 $this->addFlash('error', "Aucun compte avec cette adresse mail n'existe sur SnowTricks, veuillez réessayer :");
             } elseif (!$user->isVerified()) {
                 $this->addFlash('error', "Vous devez valider votre compte avant de pouvoir réaliser cette action.");
             }
 
-            if ($user->isVerified()) {
+            if ($user->isVerified() == true) {
                 // Create a token
                 $token  = bin2hex(random_bytes(32));
                 $status = "waiting";
@@ -69,9 +71,9 @@ class PasswordController extends AbstractController
                     'Réinitialisation - mot de passe SnowTricks',
                     'reset-password',
                     [
-                        'expiration_date' => new \DateTime('+3 days'),
-                        'user'            => $user,
-                        'token'           => $token,
+                                'user'            => $user,
+                                'token'           => $token,
+                                'expiration_date' => new \DateTime('+3 days'),
                     ]
                 );
 
@@ -95,8 +97,7 @@ class PasswordController extends AbstractController
         UserPasswordHasherInterface $userPasswordHasher,
         TokenService $tokenGroup,
         string $tokenString,
-    ): Response
-    {
+    ): Response {
         if (!$tokenGroup->isAwaiting($tokenString)) {
             $this->addFlash('error', "Le token a déjà été utilisé, vous pouvez refaire une demande de changement de mot de passe.");
 
@@ -116,7 +117,7 @@ class PasswordController extends AbstractController
             $identifier = $form->get('email')->getData();
             $user       = $userRepository->findOneByIdentifier($identifier);
 
-            if ($tokenGroup->isValid($tokenString, $user, $type)) {
+            if ($tokenGroup->isValid($tokenString, $user, $type) == true) {
                 $user->setPassword(
                     $userPasswordHasher->hashPassword(
                         $user,
@@ -137,9 +138,11 @@ class PasswordController extends AbstractController
 
             return $this->redirectToRoute("app_forgot_password");
         }
-        return $this->render('password/reset.html.twig', [
-            'resetPasswordForm' => $form->createView(),
-            'user'              => $user,
-        ]);
+        return $this->render('password/reset.html.twig',
+            [
+                'resetPasswordForm' => $form->createView(),
+                'user'              => $user,
+            ]
+        );
     }
 }

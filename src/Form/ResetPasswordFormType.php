@@ -17,17 +17,21 @@ class ResetPasswordFormType extends AbstractType
     {
         $builder
             ->add(
-                'email', EmailType::class, [
-                'attr' => ['value' => ""]
-            ])
+                'email', EmailType::class,
+                [
+                    'attr' => ['value' => ""]
+                ]
+            )
             ->add(
-                'plainPassword', RepeatedType::class, [
-                'type'            => PasswordType::class,
-                'invalid_message' => "La confirmation du mot de passe ne correspond pas.",
-                'first_options'   => ["label" => "Mot de passe"],
-                'second_options'  => ["label" => "Confirmer le mot de passe"],
-                'attr'            => ['autocomplete' => 'new-password'],
-            ])
+                'plainPassword', RepeatedType::class,
+                [
+                    'type'            => PasswordType::class,
+                    'invalid_message' => "La confirmation du mot de passe ne correspond pas.",
+                    'first_options'   => ["label" => "Mot de passe"],
+                    'second_options'  => ["label" => "Confirmer le mot de passe"],
+                    'attr'            => ['autocomplete' => 'new-password'],
+                ]
+            )
             ->add(
                 'resetPassword', SubmitType::class, [
                 'label' => 'Réinitialiser mon mot de passe'

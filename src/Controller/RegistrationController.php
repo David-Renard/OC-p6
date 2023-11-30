@@ -18,9 +18,12 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class RegistrationController extends AbstractController
 {
+
+
     public function __construct(private readonly EntityManagerInterface $manager)
     {
     }
+
 
     #[Route('/register', name: 'app_register')]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, SendMail $mail): Response
@@ -75,8 +78,8 @@ class RegistrationController extends AbstractController
                 'confirmation-email',
                 [
                     'expiration_date' => new \DateTime('+3 days'),
-                    'user'        => $user,
-                    'token'       => $token,
+                    'user'            => $user,
+                    'token'           => $token,
                 ]
             );
 
@@ -85,10 +88,12 @@ class RegistrationController extends AbstractController
             return $this->redirectToRoute('homepage');
         }
 
-        return $this->render('registration/register.html.twig', [
-            'registrationForm' => $form->createView(),
-        ]);
+        return $this->render('registration/register.html.twig',
+            [
+                'registrationForm' => $form->createView(),
+            ]);
     }
+
 
     #[Route('/verify-user/{tokenString}', name: 'verify_user')]
     public function verifyUser(

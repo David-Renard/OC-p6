@@ -23,65 +23,86 @@ class TrickFormType extends AbstractType
     {
         $builder
             ->add(
-                'name', TextType::class, [
-                'label' => 'Nom de la figure',
-                'attr'  => [
-                    'class' => 'form-label-extended'
+                'name', TextType::class,
+                [
+                    'label' => 'Nom de la figure',
+                    'attr'  =>
+                        [
+                            'class' => 'form-label-extended'
+                        ]
                 ]
-            ]
             )
             ->add(
-                'description', TextareaType::class, [
-                'attr' => [
-                    'rows' => 5,
-                    'cols' => 70,
-                ],
-            ]
-            )
-            ->add(
-                'category', EntityType::class, [
-                'class'        => TrickCategory::class,
-                'label'        => 'Catégorie',
-                'choice_label' => 'name',
-                'expanded'     => false,
-                'multiple'     => false,
-            ]
-            )
-            ->add(
-                'author', CheckboxType::class, [
-                'label'    => "M'attribuer cette figure",
-                'mapped'   => false,
-                'required' => false,
-            ]
-            )
-            ->add('attachment', FileType::class, [
-                'mapped' => false,
-                'required' => false,
-                'multiple' => true,
-                'label' => "Ajouter une ou plusieurs image(s)",
-                'constraints' => [
-                    new All([
-                        'constraints' =>
-                            new File([
-                                'maxSize' => '5Mi',
-                                'maxSizeMessage' => "Le fichier {{ file }} est trop grand ({{ size }}{{ suffix }}). {{ limit }}{{ suffix }} maximum autorisé.",
-                                'mimeTypes' => ['images/*'],
-                            ]),
+                'description', TextareaType::class,
+                [
+                    'attr' =>
+                        [
+                            'rows' => 5,
+                            'cols' => 70,
                         ],
-                    )
-                ],
-            ])
-            ->add('video', CollectionType::class, [
-                'entry_type' => VideoFormType::class,
-                'label' => false,
-                'allow_add'  => true,
-                'allow_delete' => true,
-                'by_reference' => false,
-            ])
+                ]
+            )
             ->add(
-                'submit', SubmitType::class, [
-                'label' => "Valider"
-            ]
+                'category', EntityType::class,
+                [
+                    'class'        => TrickCategory::class,
+                    'label'        => 'Catégorie',
+                    'choice_label' => 'name',
+                    'expanded'     => false,
+                    'multiple'     => false,
+                ]
+            )
+            ->add(
+                'author', CheckboxType::class,
+                [
+                    'label'    => "M'attribuer cette figure",
+                    'mapped'   => false,
+                    'required' => false,
+                ]
+            )
+            ->add('attachment', FileType::class,
+                [
+                    'mapped' => false,
+                    'required' => false,
+                    'multiple' => true,
+                    'label' => "Ajouter une ou plusieurs image(s)",
+                    'constraints' =>
+                        [
+                            new All(
+                                [
+                                'constraints' =>
+                                    new File(
+                                        [
+                                            'maxSize' => '5Mi',
+                                            'maxSizeMessage' => "Le fichier {{ file }} est trop grand ({{ size }}{{ suffix }}). {{ limit }}{{ suffix }} maximum autorisé.",
+                                            'extensions' =>
+                                                [
+                                                    'jpeg',
+                                                    'jpg',
+                                                    'png',
+                                                ],
+                                            'extensionsMessage' => "Seuls les fichiers 'jpeg', 'jpg' et 'png' sont autorisés.",
+                                        ]
+                                    ),
+                                ],
+                            )
+                        ],
+                ]
+            )
+            ->add('video', CollectionType::class,
+                [
+                    'entry_type' => VideoFormType::class,
+                    'label' => false,
+                    'allow_add'  => true,
+                    'allow_delete' => true,
+                    'by_reference' => false,
+                ]
+            )
+            ->add(
+                'submit', SubmitType::class,
+                [
+                    'label' => "Valider"
+                ]
             )
         ;
     }

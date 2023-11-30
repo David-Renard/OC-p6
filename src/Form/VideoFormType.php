@@ -13,17 +13,20 @@ class VideoFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('url', UrlType::class, [
-                'label' => false,
-                'attr' => ['class' => 'mt-3']
-            ])
-        ;
+            ->add('url', UrlType::class,
+                [
+                    'label' => false,
+                    'attr' => ['class' => 'mt-3']
+                ]
+            );
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults([
+        $resolver->setDefaults(
+            [
             'data_class' => TrickVideo::class,
-        ]);
+            ]
+        );
     }
 }
