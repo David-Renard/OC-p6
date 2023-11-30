@@ -40,6 +40,10 @@ class TrickController extends AbstractController
         $trick = $trickRepository->findOneBy([
            'slug' => $slug,
         ]);
+        if ($trick == []) {
+            $this->addFlash('error', "Cette figure n'existe pas.");
+            return $this->redirectToRoute('homepage');
+        }
         $count = count($trick->getComments());
 
         $comments = $trickCommentRepository->findCommentsPaginated($slug, $page);
@@ -110,6 +114,11 @@ class TrickController extends AbstractController
             'slug' => $slug,
         ]);
 
+        if ($trick == []) {
+            $this->addFlash('error', "Cette figure n'existe pas.");
+            return $this->redirectToRoute('homepage');
+        }
+
         $form = $this->createForm(TrickFormType::class, $trick);
         $form->handleRequest($request);
 
@@ -145,6 +154,10 @@ class TrickController extends AbstractController
     public function delete(TrickRepository $trickRepository, string $slug): Response
     {
         $trick = $trickRepository->findOneBy(['slug' => $slug]);
+        if ($trick == []) {
+            $this->addFlash('error', "Cette figure n'existe pas.");
+            return $this->redirectToRoute('homepage');
+        }
 
         $this->manager->remove($trick);
         $this->manager->flush();
