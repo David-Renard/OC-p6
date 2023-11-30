@@ -22,33 +22,36 @@ class RegistrationFormType extends AbstractType
                 'email', EmailType::class
             )
             ->add(
-                'username', TextType::class, [
-                'label' => "Nom d'utilisateur",
-            ]
+                'username', TextType::class,
+                [
+                    'label' => "Nom d'utilisateur",
+                ]
             )
             ->add(
-                'agreeTerms', CheckboxType::class, [
+                'agreeTerms', CheckboxType::class,
+                [
                 'label'       => "J'accepte les conditions d'utilisation",
                 'mapped'      => false,
-                'constraints' => [
-                    new IsTrue(
-                        [
-                        'message' => "Vous devez accepter les conditions.",
-                    ]
-                    ),
-                ],
-            ]
+                'constraints' =>
+                    [
+                        new IsTrue(
+                            [
+                            'message' => "Vous devez accepter les conditions.",
+                            ]),
+                    ],
+                ]
             )
             ->add(
-                'plainPassword', RepeatedType::class, [
-                // Instead of being set onto the object directly,
-                // This is read and encoded in the controller
-                'type'            => PasswordType::class,
-                'invalid_message' => "La confirmation du mot de passe ne correspond pas.",
-                'first_options'   => ["label" => "Mot de passe"],
-                'second_options'  => ["label" => "Confirmer le mot de passe"],
-                'attr'            => ['autocomplete' => 'new-password'],
-            ]
+                'plainPassword', RepeatedType::class,
+                [
+                    // Instead of being set onto the object directly,
+                    // This is read and encoded in the controller
+                    'type'            => PasswordType::class,
+                    'invalid_message' => "La confirmation du mot de passe ne correspond pas.",
+                    'first_options'   => ["label" => "Mot de passe"],
+                    'second_options'  => ["label" => "Confirmer le mot de passe"],
+                    'attr'            => ['autocomplete' => 'new-password'],
+                ]
         );
     }
 

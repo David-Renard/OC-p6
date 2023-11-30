@@ -13,7 +13,7 @@ class SendMail
 
     public function send(
         string $from,
-        string $to,
+        string $sendTo,
         string $subject,
         string $template,
         array  $context,
@@ -21,7 +21,7 @@ class SendMail
     {
         $email = (new TemplatedEmail())
             ->from($from)
-            ->to($to)
+            ->to($sendTo)
             ->subject($subject)
             ->htmlTemplate("email/$template.html.twig")
             ->context($context);

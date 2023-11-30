@@ -14,22 +14,29 @@ class CommentFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('content', TextareaType::class, [
-                'attr' => [
+            ->add('content', TextareaType::class,
+                [
+                'attr' =>
+                    [
                     'rows'  => 3,
                     'cols'  => 70,
                     'class' => 'form-control border border-primary-subtle'
-                ],
-                'label_attr' => [
-                    'class' => 'd-none',
-                ],
-            ])
-            ->add('submit', SubmitType::class, [
-                'label' => "Ajouter un commentaire",
-                'attr'  => [
-                    'class' => 'p-3 btn btn-primary'
+                    ],
+                'label_attr' =>
+                    [
+                        'class' => 'd-none',
+                    ],
                 ]
-            ])
+            )
+            ->add('submit', SubmitType::class,
+                [
+                    'label' => "Ajouter un commentaire",
+                    'attr'  =>
+                        [
+                            'class' => 'p-3 btn btn-primary'
+                        ]
+                ]
+            )
         ;
     }
 
