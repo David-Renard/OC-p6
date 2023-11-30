@@ -133,7 +133,7 @@ footer {
 
 .detail-box {
     width: 300px;
-    height: 250px;
+    height: 270px;
 }
 
 .form-label-extended {
@@ -228,5 +228,9 @@ footer {
 
     .w-sm-25 {
         width: 50%!important;
+    }
+
+    .videos.list-videos {
+        width: 100%;
     }
 }

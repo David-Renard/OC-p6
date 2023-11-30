@@ -5,7 +5,7 @@
 {% elseif trick.getPictures() is empty %}
     <div class="position-relative">
         <img src="{{ asset('build/images/freestyle.jpeg') }}" class="img-thumbnail h-500 default_picture-picture" alt="image par défaut"/>
-        <p class="position-absolute no-pictures-text bg-secondary-subtle rounded-2 w-75 m-auto opacity-75 text-primary h4 fw-bold">Il n'y a pas d'image sur ce trick, ajoutes-en une!</p>
+        <p class="position-absolute no-pictures-text bg-secondary-subtle rounded-2 w-75 m-auto opacity-75 text-primary h5 fw-bold">Il n'y a pas d'image sur ce trick, ajoutes-en une!</p>
     </div>
 {# display 1st picture ordered by id if there is no main picture #}
 {% elseif trick.getMainPicture() is empty %}

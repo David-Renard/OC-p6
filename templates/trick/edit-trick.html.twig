@@ -18,10 +18,10 @@
         </div>
     </div>
 
-    <div class="container text-center text-primary bg-secondary-subtle rounded-2 pt-4">
+    <div class="container text-center text-primary bg-secondary-subtle rounded-2 pt-4 pb-2">
         <div class="row">
-            <h1 class="h3">Ici, tu peux modifier cette figure</h1>
-            <h2 class="h5">(nom, description, catégorie, médias...)</h2>
+            <h1 class="h4">Ici, tu peux modifier cette figure</h1>
+            <h2 class="h6">(nom, description, catégorie, médias...)</h2>
         </div>
         <div class="row xs-vw-90 my-3">
             <div class="col-10 offset-1 col-sm-8 offset-sm-2 mb-3 border border-primary">
@@ -50,7 +50,7 @@
                 </div>
                 <div class="my-3">
                     <button type="button" class="add_item_link btn btn-primary m-auto" data-collection-holder-class="videos">Ajouter une vidéo</button>
-                    <ul class="videos list-videos m-auto"
+                    <ul class="videos list-videos m-auto px-0"
                         data-index="{{ editTrickForm.video|length > 0 ? editTrickForm.video|last.vars.name + 1 : 0 }}"
                         data-prototype="{{ form_widget(editTrickForm.video.vars.prototype)|e('html_attr') }}"
                     >
@@ -67,25 +67,42 @@
         </div>
 
         {% if trick.getPictures is not empty or trick.getVideo is not empty %}
-            <div class="row flex-wrap justify-content-center py-3">
+            <button
+                class="btn btn-primary mx-auto mb-3"
+                type="button"
+                id="seeMedia"
+            >
+                Voir les médias
+            </button>
+            <div class="row flex-wrap justify-content-center py-1" id="media">
                 {% for picture in trick.getPictures %}
-                <div class="detail-box my-3">
+                <div class="detail-box mb-2">
                     <img src="{{ asset(picture.url) }}" alt="{{ picture.name }}" class="detail-box-media img-thumbnail shadow rounded-2">
                     <div>
                     {% if picture.main == false %}
-                        <a href="{{ path('media_edit_main_picture', {'slug': trick.slug, 'id': picture.id}) }}" class="btn btn-primary me-1"><i class="bi bi-bookmark-plus" title="Définir en tant qu'image principale de {{ trick.name }}"></i></a>
+                        <a href="{{ path('media_edit_main_picture', {'slug': trick.slug, 'id': picture.id}) }}" class="btn btn-primary me-1">
+                            <i class="bi bi-bookmark-plus" title="Définir en tant qu'image principale de {{ trick.name }}"></i>
+                        </a>
                     {% else %}
-                        <a href="{{ path('media_edit_main_picture', {'slug': trick.slug, 'id': picture.id}) }}" class="btn btn-primary me-1 disabled"><i class="bi bi-clipboard-check" title="Image principale de {{ trick.name }}"></i></a>
+                        <a href="{{ path('media_edit_main_picture', {'slug': trick.slug, 'id': picture.id}) }}" class="btn btn-primary me-1 disabled">
+                            <i class="bi bi-clipboard-check" title="Image principale de {{ trick.name }}"></i>
+                        </a>
                     {% endif %}
-                        <a href="{{ path('media_delete_picture', {'slug': trick.slug, 'id': picture.id}) }}" class="btn btn-danger me-1"><i class="bi bi-trash3-fill" title="Supprimer cette image"></i></a>
+                        <a href="{{ path('media_delete_picture', {'slug': trick.slug, 'id': picture.id}) }}" class="btn btn-danger me-1">
+                            <i class="bi bi-trash3-fill" title="Supprimer cette image"></i>
+                        </a>
                     </div>
                 </div>
                 {% endfor %}
                 {% for video in trick.getVideo %}
-                <div class="detail-box my-3">
-                    <iframe  class="detail-box-media mx-2 py-2 img-thumbnail shadow rounded-2" src="{{ video.url }}" title="Is Zeb Powell The Most Creative Snowboarder In The World?" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                <div class="detail-box mb-2 justify-content-center">
+                    <iframe  class="detail-box-media d-block img-thumbnail shadow rounded-2" src="{{ video.url }}"
+                             frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen>
+                    </iframe>
                     <div>
-                        <a href="{{ path('media_delete_video', {'slug': trick.slug, 'id': video.id}) }}" class="btn btn-danger me-1"><i class="bi bi-trash3-fill" title="Supprimer {{ trick.name }}"></i></a>
+                        <a href="{{ path('media_delete_video', {'slug': trick.slug, 'id': video.id}) }}" class="btn btn-danger me-1">
+                            <i class="bi bi-trash3-fill" title="Supprimer {{ trick.name }}"></i>
+                        </a>
                     </div>
                 </div>
                 {% endfor %}
@@ -97,4 +114,5 @@
 
 {% block javascripts %}
     {{ encore_entry_script_tags('embeded') }}
+    {{ encore_entry_script_tags('extendmedia') }}
 {% endblock %}

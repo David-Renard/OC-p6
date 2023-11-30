@@ -30,13 +30,15 @@
             </button>
             <div class="row flex-wrap justify-content-center py-3" id="media">
                 {% for picture in trick.getPictures %}
-                    <div class="detail-box my-sm-3">
+                    <div class="detail-box my-3">
                         <img src="{{ asset(picture.url) }}" alt="{{ picture.name }}" class="detail-box-media img-thumbnail shadow rounded-2">
                     </div>
                 {% endfor %}
                 {% for video in trick.getVideo %}
-                    <div class="detail-box my-sm-3">
-                        <iframe  class="detail-box-media mx-2 py-2 img-thumbnail shadow rounded-2" src="{{ video.url }}" title="Is Zeb Powell The Most Creative Snowboarder In The World?" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    <div class="detail-box my-3">
+                        <iframe  class="detail-box-media img-thumbnail shadow rounded-2" src="{{ video.url }}"
+                                 frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen>
+                        </iframe>
                     </div>
                 {% endfor %}
             </div>
