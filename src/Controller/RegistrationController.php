@@ -121,11 +121,11 @@ class RegistrationController extends AbstractController
                 $this->addFlash('success', "Votre compte a bien été vérifié, vous êtes désormais totalement inscrit.");
 
                 return $this->redirectToRoute("homepage");
-            } else {
-                $this->addFlash('error', "Le compte a déjà été vérifié ou un problème se pose dans la vérification.");
-
-                return $this->redirectToRoute("app_register");
             }
+
+            $this->addFlash('error', "Le compte a déjà été vérifié ou un problème se pose dans la vérification.");
+
+            return $this->redirectToRoute("app_register");
         }
         // If token isn't valid, redirect to registration page
         $this->addFlash('error', "Un problème est survenu dans la vérification du token.");

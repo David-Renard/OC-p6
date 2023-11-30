@@ -21,9 +21,9 @@ class SecurityController extends AbstractController
         #[CurrentUser] ?User $user,
     ): Response
     {
-         if ($user) {
-             return $this->redirectToRoute('homepage');
-         }
+        if ($user) {
+            return $this->redirectToRoute('homepage');
+        }
 
         // Get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();

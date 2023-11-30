@@ -19,7 +19,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class PasswordController extends AbstractController
 {
-    public function __construct(private EntityManagerInterface $manager) {
+
+
+    public function __construct(private readonly EntityManagerInterface $manager) {
     }
 
     #[Route('/forgot-password', name: 'app_forgot_password')]
@@ -30,7 +32,6 @@ class PasswordController extends AbstractController
             return $this->redirectToRoute('homepage');
         }
 
-        // Problème ici, ça fonctionne quand je ne mets pas une adresse mail mais du text mais je n'ai plus l'user (login + mdp) avec 'data_class' => User::class dans le resolver du formType
         $form = $this->createForm(ForgottenPasswordFormType::class);
         $form->handleRequest($request);
 
@@ -43,7 +44,9 @@ class PasswordController extends AbstractController
                 $this->addFlash('error', "Aucun compte avec cette adresse mail n'existe sur SnowTricks, veuillez réessayer :");
             } elseif (!$user->isVerified()) {
                 $this->addFlash('error', "Vous devez valider votre compte avant de pouvoir réaliser cette action.");
-            } else {
+            }
+
+            if ($user->isVerified()) {
                 // Create a token
                 $token  = bin2hex(random_bytes(32));
                 $status = "waiting";
@@ -59,7 +62,7 @@ class PasswordController extends AbstractController
                 $this->manager->persist($accessToken);
                 $this->manager->flush();
 
-                // Send a email
+                // Send a email!
                 $mail->send(
                     'support@snowtricks.com',
                     $identifier,
@@ -83,7 +86,6 @@ class PasswordController extends AbstractController
         ]);
 
     }
-
 
     #[Route('/reset-password/{tokenString}', name: 'reset_password')]
     public function newPassword(
