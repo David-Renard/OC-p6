@@ -35,7 +35,7 @@ class TrickController extends AbstractController
     }
 
     #[Route('/show/{slug}/{page}', name: 'show_trick', requirements: ['page' => '\d+'])]
-    public function showOne(Request $request, TrickCommentRepository $trickCommentRepository, TrickRepository $trickRepository, string $slug, ?int $page = 1): Response
+    public function showOne(Request $request, TrickCommentRepository $commentRepository, TrickRepository $trickRepository, string $slug, ?int $page = 1): Response
     {
         $trick = $trickRepository->findOneBy([
            'slug' => $slug,
@@ -46,7 +46,7 @@ class TrickController extends AbstractController
         }
         $count = count($trick->getComments());
 
-        $comments = $trickCommentRepository->findCommentsPaginated($slug, $page);
+        $comments = $commentRepository->findCommentsPaginated($slug, $page);
 
         $comment = new TrickComment();
         $form = $this->createForm(CommentFormType::class, $comment);
@@ -106,6 +106,15 @@ class TrickController extends AbstractController
         ]);
     }
 
+    /**
+     * Edit the trick with this $slug (the medias of this trick are deleted elsewhere in MediaController)
+     *
+     * @param Request $request
+     * @param TrickRepository $trickRepository
+     * @param FileUploader $fileUploader
+     * @param string $slug
+     * @return Response
+     */
     #[Route('/edit/{slug}', name: 'edit_trick')]
     #[IsGranted('IS_AUTHENTICATED_REMEMBERED')] // Same thing than $this->denyAccessUnlessGranted('ROLE_USER');
     public function edit(Request $request, TrickRepository $trickRepository, FileUploader $fileUploader, string $slug): Response
