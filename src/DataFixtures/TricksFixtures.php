@@ -21,8 +21,8 @@ class TricksFixtures extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager): void
     {
-        $listTricksName =
-            [
+        $listTricksName
+            = [
                 "Switch Rodéo 720 Japan",
                 "Switch Cork 540 Tail Grab",
                 "Misty 900 Mute",
@@ -49,7 +49,7 @@ class TricksFixtures extends Fixture implements DependentFixtureInterface
         for ($countPicture = 0; $countPicture < 33; $countPicture++) {
             $picture = new TrickPicture();
             $main = false;
-            if ($countPicture<count($listTricksName)) {
+            if ($countPicture < count($listTricksName)) {
                 $main = true;
             }
 
@@ -70,8 +70,8 @@ class TricksFixtures extends Fixture implements DependentFixtureInterface
         }
 
         // Fixture comments
-        $loremDescription =
-            [
+        $loremDescription
+            = [
                 "Pellentesque rutrum nunc vel ligula eleifend, in bibendum dolor gravida.",
                 "Suspendisse dignissim nisl at dolor varius ornare.",
                 "Nullam dignissim odio ut eros vehicula hendrerit.",

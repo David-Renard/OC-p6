@@ -19,6 +19,7 @@ class MediaController extends AbstractController
 
     public function __construct(private readonly EntityManagerInterface $manager)
     {
+
     }
 
     #[Route('/main/{id}', name: 'edit_main_picture', requirements: ['id' => '\d+'])]

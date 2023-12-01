@@ -16,25 +16,12 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class TokenRepository extends ServiceEntityRepository
 {
+
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Token::class);
     }
-
-//    /**
-//     * @return TokenService[] Returns an array of TokenService objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('t')
-//            ->andWhere('t.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('t.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
 
     public function findOneByValue($value): ?Token
     {

@@ -16,6 +16,8 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class TrickRepository extends ServiceEntityRepository
 {
+
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Trick::class);
@@ -32,18 +34,6 @@ class TrickRepository extends ServiceEntityRepository
             ->setParameter('value', $value)
             ->getQuery()
         ;
-//        dd($query->getResult());
         return $query->getResult();
     }
-
-
-//    public function findOneBySomeField($value): ?Trick
-//    {
-//        return $this->createQueryBuilder('t')
-//            ->andWhere('t.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
 }

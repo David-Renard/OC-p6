@@ -12,14 +12,17 @@ use Doctrine\Migrations\AbstractMigration;
  */
 final class Version20231110145916 extends AbstractMigration
 {
+
+
     public function getDescription(): string
     {
         return '';
+
     }
 
     public function up(Schema $schema): void
     {
-        // this up() migration is auto-generated, please modify it to your needs
+        // This up() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE token DROP CONSTRAINT fk_5f37a13b4da1e751');
         $this->addSql('DROP INDEX idx_5f37a13b4da1e751');
         $this->addSql('ALTER TABLE token RENAME COLUMN requested_by_id TO user_info_id');
@@ -29,7 +32,7 @@ final class Version20231110145916 extends AbstractMigration
 
     public function down(Schema $schema): void
     {
-        // this down() migration is auto-generated, please modify it to your needs
+        // This down() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE SCHEMA public');
         $this->addSql('ALTER TABLE token DROP CONSTRAINT FK_5F37A13B586DFF2');
         $this->addSql('DROP INDEX IDX_5F37A13B586DFF2');

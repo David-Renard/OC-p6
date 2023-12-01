@@ -13,6 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[UniqueEntity('name', message: "Une figure avec ce nom existe déjà.")]
 class Trick
 {
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -61,6 +62,7 @@ class Trick
     #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'tricks')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $author = null;
+
 
     public function __construct()
     {
@@ -175,6 +177,7 @@ class Trick
             }
         }
         return $mainPicture;
+
     }
 
     public function setMainPicture(TrickPicture $picture): static
@@ -250,7 +253,7 @@ class Trick
 
     public function removeComment(TrickComment $comment): static
     {
-        if ($this->comments->removeElement($comment)) {
+        if ($this->comments->removeElement($comment) == true) {
             // set the owning side to null (unless already changed)
             if ($comment->getTrick() === $this) {
                 $comment->setTrick(null);

@@ -44,9 +44,7 @@ class TrickController extends AbstractController
     #[Route('/show/{slug}/{page}', name: 'show_trick', requirements: ['page' => '\d+'])]
     public function showOne(Request $request, TrickCommentRepository $commentRepository, TrickRepository $trickRepository, string $slug, ?int $page = 1): Response
     {
-        $trick = $trickRepository->findOneBy([
-           'slug' => $slug,
-        ]);
+        $trick = $trickRepository->findOneBy(['slug' => $slug,]);
         if ($trick == []) {
             $this->addFlash('error', "Cette figure n'existe pas.");
             return $this->redirectToRoute('homepage');
@@ -78,9 +76,9 @@ class TrickController extends AbstractController
         return $this->render('trick/show.html.twig',
             [
                 'trick'       => $trick,
-                'commentForm' => $form->createView(),
-                'comments'    => $comments,
                 'count'       => $count,
+                'comments'    => $comments,
+                'commentForm' => $form->createView(),
             ]);
     }
 
@@ -133,10 +131,7 @@ class TrickController extends AbstractController
     // Same thing than $this->denyAccessUnlessGranted('ROLE_USER');
     public function edit(Request $request, TrickRepository $trickRepository, FileUploader $fileUploader, string $slug): Response
     {
-        $trick = $trickRepository->findOneBy(
-            [
-                'slug' => $slug,
-            ]);
+        $trick = $trickRepository->findOneBy(['slug' => $slug,]);
 
         if ($trick == []) {
             $this->addFlash('error', "Cette figure n'existe pas.");
