@@ -62,10 +62,10 @@ class TrickFormType extends AbstractType
             )
             ->add('attachment', FileType::class,
                 [
-                    'mapped' => false,
-                    'required' => false,
-                    'multiple' => true,
-                    'label' => "Ajouter une ou plusieurs image(s)",
+                    'label'       => "Ajouter une ou plusieurs image(s)",
+                    'mapped'      => false,
+                    'required'    => false,
+                    'multiple'    => true,
                     'constraints' =>
                         [
                             new All(
@@ -91,9 +91,9 @@ class TrickFormType extends AbstractType
             )
             ->add('video', CollectionType::class,
                 [
-                    'entry_type' => VideoFormType::class,
-                    'label' => false,
-                    'allow_add'  => true,
+                    'label'        => false,
+                    'allow_add'    => true,
+                    'entry_type'   => VideoFormType::class,
                     'allow_delete' => true,
                     'by_reference' => false,
                 ]
@@ -111,7 +111,7 @@ class TrickFormType extends AbstractType
     {
         $resolver->setDefaults(
             [
-            'data_class' => Trick::class,
+                'data_class' => Trick::class,
             ]
         );
     }

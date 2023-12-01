@@ -17,6 +17,7 @@ use Symfony\Component\Validator\Constraints\Email;
 #[UniqueEntity('email',message: "Un compte avec cette adresse mail existe déjà.")]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -53,10 +54,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $username = null;
 
     #[Assert\NotBlank(message: "Veuillez saisir un mot de passe.")]
-    #[Assert\PasswordStrength([
-        "minScore" => Assert\PasswordStrength::STRENGTH_WEAK,
-        "message"  => "Votre mot de passe est trop simple. Pour votre sécurité, changez-le."
-    ])]
+    #[Assert\PasswordStrength(
+        [
+            "minScore" => Assert\PasswordStrength::STRENGTH_WEAK,
+            "message"  => "Votre mot de passe est trop simple. Pour votre sécurité, changez-le."
+        ]
+    )]
     #[Assert\Length(
         min: 6,
         minMessage: "Votre mot de passe doit avoir au moins {{ limit }} caractères.",
@@ -77,6 +80,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getPlainPassword(): ?string
     {
         return $this->plainPassword;
+
+
     }
 
     /**
@@ -85,10 +90,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPlainPassword(?string $plainPassword): void
     {
         $this->plainPassword = $plainPassword;
+
+
     }
+
 
     public function __construct()
     {
+
+
         $this->tricks = new ArrayCollection();
         $this->comments = new ArrayCollection();
     }
@@ -96,11 +106,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getId(): ?int
     {
         return $this->id;
+
+
     }
 
     public function getEmail(): ?string
     {
         return $this->email;
+
+
     }
 
     public function setEmail(string $email): static
@@ -108,6 +122,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->email = $email;
 
         return $this;
+
+
     }
 
     /**
@@ -118,6 +134,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getUserIdentifier(): string
     {
         return (string) $this->email;
+
+
     }
 
     /**
@@ -126,10 +144,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
+        // Guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
+
+
     }
 
     public function setRoles(array $roles): static
@@ -137,6 +157,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->roles = $roles;
 
         return $this;
+
+
     }
 
     /**
@@ -145,6 +167,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getPassword(): string
     {
         return $this->password;
+
+
     }
 
     public function setPassword(string $password): static
@@ -152,6 +176,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->password = $password;
 
         return $this;
+
+
     }
 
     /**
@@ -161,6 +187,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
          $this->plainPassword = null;
+
+
     }
 
     /**
@@ -169,6 +197,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getTricks(): Collection
     {
         return $this->tricks;
+
+
     }
 
     public function addTrick(Trick $trick): static
@@ -179,6 +209,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return $this;
+
+
     }
 
     public function removeTrick(Trick $trick): static
@@ -191,6 +223,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return $this;
+
+
     }
 
     /**
@@ -199,6 +233,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getComments(): Collection
     {
         return $this->comments;
+
+
     }
 
     public function addComment(TrickComment $comment): static
@@ -209,23 +245,29 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return $this;
+
+
     }
 
     public function removeComment(TrickComment $comment): static
     {
         if ($this->comments->removeElement($comment)) {
-            // set the owning side to null (unless already changed)
+            // Set the owning side to null (unless already changed)
             if ($comment->getUser() === $this) {
                 $comment->setUser(null);
             }
         }
 
         return $this;
+
+
     }
 
     public function getUsername(): ?string
     {
         return $this->username;
+
+
     }
 
     public function setUsername(string $username): static
@@ -233,11 +275,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->username = $username;
 
         return $this;
+
+
     }
 
     public function isVerified(): bool
     {
         return $this->isVerified;
+
+
     }
 
     public function setIsVerified(bool $isVerified): static
@@ -245,11 +291,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->isVerified = $isVerified;
 
         return $this;
+
+
     }
 
     public function getUserPicture(): ?UserPicture
     {
         return $this->userPicture;
+
+
     }
 
     public function setUserPicture(?UserPicture $userPicture): static
@@ -257,5 +307,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->userPicture = $userPicture;
 
         return $this;
+
+
     }
 }

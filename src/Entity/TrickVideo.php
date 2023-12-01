@@ -9,6 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: TrickVideoRepository::class)]
 class TrickVideo
 {
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -32,6 +33,8 @@ class TrickVideo
     public function getId(): ?int
     {
         return $this->id;
+
+
     }
 
     public function getUrl(): ?string

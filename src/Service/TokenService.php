@@ -7,9 +7,11 @@ use App\Repository\TokenRepository;
 
 class TokenService
 {
-    public function __construct(
-        private TokenRepository $tokenRepository,
-    ) {
+
+
+    public function __construct(private TokenRepository $tokenRepository)
+    {
+
     }
 
     private function isCheck(?User $user, string $accessToken): bool

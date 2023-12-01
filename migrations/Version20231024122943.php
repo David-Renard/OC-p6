@@ -12,14 +12,17 @@ use Doctrine\Migrations\AbstractMigration;
  */
 final class Version20231024122943 extends AbstractMigration
 {
+
+
     public function getDescription(): string
     {
         return '';
+
     }
 
     public function up(Schema $schema): void
     {
-        // this up() migration is auto-generated, please modify it to your needs
+        // This up() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE trick ALTER category_id SET NOT NULL');
         $this->addSql('ALTER TABLE trick ALTER author_id SET NOT NULL');
         $this->addSql('ALTER TABLE trick_comment ALTER trick_id SET NOT NULL');
@@ -30,7 +33,7 @@ final class Version20231024122943 extends AbstractMigration
 
     public function down(Schema $schema): void
     {
-        // this down() migration is auto-generated, please modify it to your needs
+        // This down() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE SCHEMA public');
         $this->addSql('ALTER TABLE trick_comment ALTER trick_id DROP NOT NULL');
         $this->addSql('ALTER TABLE trick_comment ALTER comment_author_id DROP NOT NULL');

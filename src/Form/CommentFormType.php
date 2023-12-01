@@ -18,9 +18,9 @@ class CommentFormType extends AbstractType
                 [
                 'attr' =>
                     [
-                    'rows'  => 3,
-                    'cols'  => 70,
-                    'class' => 'form-control border border-primary-subtle'
+                        'rows'  => 3,
+                        'cols'  => 70,
+                        'class' => 'form-control border border-primary-subtle'
                     ],
                 'label_attr' =>
                     [
@@ -42,8 +42,10 @@ class CommentFormType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults([
-            'data_class' => TrickComment::class,
-        ]);
+        $resolver->setDefaults(
+            [
+                'data_class' => TrickComment::class,
+            ]
+        );
     }
 }

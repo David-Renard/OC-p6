@@ -23,6 +23,7 @@ class PasswordController extends AbstractController
 
     public function __construct(private readonly EntityManagerInterface $manager)
     {
+
     }
 
 
@@ -44,11 +45,11 @@ class PasswordController extends AbstractController
             // Let's see if this user is an instance of User::class to send an email
             if ($user instanceof User == false) {
                 $this->addFlash('error', "Aucun compte avec cette adresse mail n'existe sur SnowTricks, veuillez réessayer :");
-            } elseif (!$user->isVerified()) {
+            } else if ($user->isVerified() === false) {
                 $this->addFlash('error', "Vous devez valider votre compte avant de pouvoir réaliser cette action.");
             }
 
-            if ($user->isVerified() == true) {
+            if ($user->isVerified() === true) {
                 // Create a token
                 $token  = bin2hex(random_bytes(32));
                 $status = "waiting";
@@ -98,7 +99,7 @@ class PasswordController extends AbstractController
         TokenService $tokenGroup,
         string $tokenString,
     ): Response {
-        if (!$tokenGroup->isAwaiting($tokenString)) {
+        if ($tokenGroup->isAwaiting($tokenString) === false) {
             $this->addFlash('error', "Le token a déjà été utilisé, vous pouvez refaire une demande de changement de mot de passe.");
 
             return $this->redirectToRoute("app_forgot_password");

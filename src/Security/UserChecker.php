@@ -11,19 +11,19 @@ class UserChecker implements UserCheckerInterface
 {
     public function checkPreAuth(UserInterface $user): void
     {
-        if (!$user instanceof User) {
+        if ($user instanceof User === false) {
             return;
         }
 
-        if (!$user->isVerified()) {
-            // the message passed to this exception is meant to be displayed to the user
+        if ($user->isVerified() === false) {
+            // The message passed to this exception is meant to be displayed to the user
             throw new CustomUserMessageAccountStatusException("Vous n'avez pas encore validé l'inscription via l'email.");
         }
     }
 
     public function checkPostAuth(UserInterface $user): void
     {
-        if (!$user instanceof User) {
+        if ($user instanceof User === false) {
             return;
         }
     }

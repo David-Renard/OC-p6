@@ -12,14 +12,17 @@ use Doctrine\Migrations\AbstractMigration;
  */
 final class Version20231018091652 extends AbstractMigration
 {
+
+
     public function getDescription(): string
     {
         return '';
+
     }
 
     public function up(Schema $schema): void
     {
-        // this up() migration is auto-generated, please modify it to your needs
+        // This up() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE trick ADD category_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE trick ADD author_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE trick ADD CONSTRAINT FK_D8F0A91E12469DE2 FOREIGN KEY (category_id) REFERENCES trick_category (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
@@ -45,7 +48,7 @@ final class Version20231018091652 extends AbstractMigration
 
     public function down(Schema $schema): void
     {
-        // this down() migration is auto-generated, please modify it to your needs
+        // This down() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE SCHEMA public');
         $this->addSql('ALTER TABLE trick_video DROP CONSTRAINT FK_B7E8DA93B281BE2E');
         $this->addSql('DROP INDEX IDX_B7E8DA93B281BE2E');

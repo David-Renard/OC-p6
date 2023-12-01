@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: TokenRepository::class)]
 class Token
 {
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -32,6 +33,7 @@ class Token
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
+
     }
 
     public function getId(): ?int

@@ -12,14 +12,17 @@ use Doctrine\Migrations\AbstractMigration;
  */
 final class Version20231110140421 extends AbstractMigration
 {
+
+
     public function getDescription(): string
     {
         return '';
+
     }
 
     public function up(Schema $schema): void
     {
-        // this up() migration is auto-generated, please modify it to your needs
+        // This up() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE SEQUENCE token_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE TABLE token (id INT NOT NULL, requested_by_id INT NOT NULL, value VARCHAR(255) NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_5F37A13B4DA1E751 ON token (requested_by_id)');
@@ -28,7 +31,7 @@ final class Version20231110140421 extends AbstractMigration
 
     public function down(Schema $schema): void
     {
-        // this down() migration is auto-generated, please modify it to your needs
+        // This down() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE SCHEMA public');
         $this->addSql('DROP SEQUENCE token_id_seq CASCADE');
         $this->addSql('ALTER TABLE token DROP CONSTRAINT FK_5F37A13B4DA1E751');

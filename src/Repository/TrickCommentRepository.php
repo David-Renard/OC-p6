@@ -17,27 +17,13 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class TrickCommentRepository extends ServiceEntityRepository
 {
+
     private const LIMIT = 5;
 
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, TrickComment::class);
     }
-
-//    /**
-//     * @return TrickComment[] Returns an array of TrickComment objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('t')
-//            ->andWhere('t.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('t.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
 
 
     public function findCommentsPaginated(string $slug, int $page): array
@@ -58,24 +44,14 @@ class TrickCommentRepository extends ServiceEntityRepository
             return $comments;
         }
 
-        // set nbPages
+        // Set nbPages
         $pages = ceil($paginator->count() / self::LIMIT);
 
-        // set comments array
+        // Set comments array
         $comments['data']  = $data;
         $comments['pages'] = $pages;
         $comments['page']  = $page;
 
         return $comments;
     }
-
-//    public function findOneBySomeField($value): ?TrickComment
-//    {
-//        return $this->createQueryBuilder('t')
-//            ->andWhere('t.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
 }

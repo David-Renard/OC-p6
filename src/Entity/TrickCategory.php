@@ -12,6 +12,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 #[UniqueEntity('name', message: "Cette catégorie existe déjà.")]
 class TrickCategory
 {
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -26,6 +27,8 @@ class TrickCategory
     public function __construct()
     {
         $this->tricks = new ArrayCollection();
+
+
     }
 
     public function getId(): ?int
@@ -66,7 +69,7 @@ class TrickCategory
     public function removeTrick(Trick $trick): static
     {
         if ($this->tricks->removeElement($trick)) {
-            // set the owning side to null (unless already changed)
+            // Set the owning side to null (unless already changed)
             if ($trick->getCategory() === $this) {
                 $trick->setCategory(null);
             }

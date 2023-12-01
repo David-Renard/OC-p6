@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: UserPictureRepository::class)]
 class UserPicture
 {
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -58,12 +59,12 @@ class UserPicture
 
     public function setUserInfo(?User $userInfo): static
     {
-        // unset the owning side of the relation if necessary
+        // Unset the owning side of the relation if necessary
         if ($userInfo === null && $this->userInfo !== null) {
             $this->userInfo->setUserPicture(null);
         }
 
-        // set the owning side of the relation if necessary
+        // Set the owning side of the relation if necessary
         if ($userInfo !== null && $userInfo->getUserPicture() !== $this) {
             $userInfo->setUserPicture($this);
         }

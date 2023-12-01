@@ -12,14 +12,17 @@ use Doctrine\Migrations\AbstractMigration;
  */
 final class Version20231031155104 extends AbstractMigration
 {
+
+
     public function getDescription(): string
     {
         return '';
+
     }
 
     public function up(Schema $schema): void
     {
-        // this up() migration is auto-generated, please modify it to your needs
+        // This up() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE trick_comment DROP CONSTRAINT fk_f7292b341f0b124d');
         $this->addSql('DROP INDEX idx_f7292b341f0b124d');
         $this->addSql('ALTER TABLE trick_comment RENAME COLUMN comment_author_id TO user_id');
@@ -39,7 +42,7 @@ final class Version20231031155104 extends AbstractMigration
 
     public function down(Schema $schema): void
     {
-        // this down() migration is auto-generated, please modify it to your needs
+        // This down() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE SCHEMA public');
         $this->addSql('ALTER TABLE trick_comment DROP CONSTRAINT FK_F7292B34A76ED395');
         $this->addSql('DROP INDEX IDX_F7292B34A76ED395');
