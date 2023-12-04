@@ -18,14 +18,14 @@ class FileUploader
     {
     }
 
-    public function upload(UploadedFile $file): string
+    public function upload(UploadedFile $file, String $folder = '/trick_pictures'): string
     {
         $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-        $safeFilename     = $this->slugger->slug($originalFilename);
+        $safeFilename     = substr($this->slugger->slug($originalFilename),5);
         $filename         = $safeFilename.'-'.uniqid().'.'.$file->guessExtension();
 
         try {
-            $file->move($this->getTargetDirectory(), $filename);
+            $file->move($this->getTargetDirectory().$folder, $filename);
         } catch (FileException $e) {
 
         }
