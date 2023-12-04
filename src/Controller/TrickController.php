@@ -102,6 +102,21 @@ class TrickController extends AbstractController
             // Set pictures
             $fileUploader->uploadAndPersist('attachment', $form, $this->manager, $trick);
 
+            // Set videos
+            $videos = $form->get('video')->getData();
+            foreach ($videos as $video) {
+                if ((strripos($video->getUrl(), 'https://www.youtube.com') === false) && (strripos($video->getUrl(), 'https://www.dailymotion.com') === false)) {
+                    $this->addFlash('error', "Les vidéos ajoutées doivent provenir de youtube ou dailymotion.");
+
+                    return $this->render(
+                        'trick/add-trick.html.twig',
+                        [
+                            'form' => $form->createView(),
+                        ]);
+                }
+                $trick->addVideo($video);
+            }
+
             $this->manager->persist($trick);
             $this->manager->flush();
 
@@ -154,6 +169,22 @@ class TrickController extends AbstractController
 
             // Set pictures
             $fileUploader->uploadAndPersist('attachment', $form, $this->manager, $trick);
+
+            // Set videos
+            $videos = $form->get('video')->getData();
+            foreach ($videos as $video) {
+                if ((strripos($video->getUrl(), 'https://www.youtube.') === false) && (strripos($video->getUrl(), 'https://www.dailymotion.com') === false)) {
+                    $this->addFlash('error', "Les vidéos ajoutées doivent provenir de youtube ou dailymotion.");
+
+                    return $this->render(
+                        'trick/edit-trick.html.twig',
+                        [
+                            'editTrickForm' => $form->createView(),
+                            'trick'         => $trick,
+                        ]);
+                }
+                $trick->addVideo($video);
+            }
 
             $this->manager->flush();
 

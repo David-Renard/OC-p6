@@ -45,6 +45,8 @@ class MediaController extends AbstractController
         $picture = $pictureRepository->find($id);
         $picture->getTrick()->removePicture($picture);
 
+//        unlink($picture->getUrl());
+
         $this->manager->remove($picture);
         $this->manager->flush();
 
