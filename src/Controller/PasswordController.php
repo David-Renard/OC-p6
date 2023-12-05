@@ -43,10 +43,12 @@ class PasswordController extends AbstractController
             $user = $userRepository->findOneByIdentifier($identifier);
 
             // Let's see if this user is an instance of User::class to send an email
-            if ($user instanceof User == false) {
+            if ($user instanceof User === false) {
                 $this->addFlash('error', "Aucun compte avec cette adresse mail n'existe sur SnowTricks, veuillez réessayer :");
+                return $this->redirectToRoute('app_forgot_password');
             } else if ($user->isVerified() === false) {
                 $this->addFlash('error', "Vous devez valider votre compte avant de pouvoir réaliser cette action.");
+                return $this->redirectToRoute('homepage');
             }
 
             if ($user->isVerified() === true) {
