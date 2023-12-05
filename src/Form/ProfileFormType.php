@@ -10,6 +10,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class ProfileFormType extends AbstractType
 {
@@ -18,8 +20,17 @@ class ProfileFormType extends AbstractType
         $builder
             ->add('username', TextType::class,
                 [
-                    'label'    => "Nouveau nom d'utilisateur",
-                    'required' => false,
+                    'label'       => "Nouveau nom d'utilisateur",
+                    'required'    => false,
+                    'constraints' =>
+                        [
+                            new Length(
+                                min: 6,
+                                minMessage: "Votre nom d'utilisateur doit avoir au moins {{ limit }} caractères.",
+                                max: 50,
+                                maxMessage: "Votre nom d'utilisateur doit avoir au plus {{ limit }} caractères.",
+                            ),
+                        ]
                 ]
             )
             ->add('userPicture', FileType::class,
