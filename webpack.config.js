@@ -26,6 +26,30 @@ Encore
          // only copy files matching this pattern
          //pattern: /\.(png|jpg|jpeg)$/
     })
+    .copyFiles({
+    from: './assets/images/avatar',
+
+    // optional target path, relative to the output dir
+    to: './img/upload/avatar/[path][name].[ext]',
+
+    // if versioning is enabled, add the file hash too
+    //to: 'images/[path][name].[hash:8].[ext]',
+
+    // only copy files matching this pattern
+    //pattern: /\.(png|jpg|jpeg)$/
+    })
+    .copyFiles({
+        from: './assets/images/trick_pictures',
+
+        // optional target path, relative to the output dir
+        to: './img/upload/trick_pictures/[path][name].[ext]',
+
+        // if versioning is enabled, add the file hash too
+        //to: 'images/[path][name].[hash:8].[ext]',
+
+        // only copy files matching this pattern
+        //pattern: /\.(png|jpg|jpeg)$/
+    })
     /*
      * ENTRY CONFIG
      *
