@@ -59,10 +59,10 @@ class UsersFixtures extends Fixture
             $randomAvatar = random_int(0, 33);
             $avatar->setName("avatar ".$randomAvatar);
             if ($randomAvatar === 33) {
-                $avatar->setUrl("/build/images/default-user-icon.jpg");
+                $avatar->setUrl("default-user-icon.jpg");
             } else {
                 $avatarNb = $randomAvatar + 1;
-                $avatar->setUrl("/build/images/trick".$avatarNb.".jpg");
+                $avatar->setUrl($avatarNb.".jpg");
             }
 
             // Fixtures User

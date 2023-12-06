@@ -55,7 +55,7 @@ Création des pages :
 5. Create the **_snowtricks_** database by running :
 > symfony console doctrine:database:create
 6. Make the migration by running :
-> symfony console make:migration
+`symfony console make:migration`
 
 and then :
 > symfony console doctrine:migrations:migrate
@@ -70,3 +70,4 @@ and register or use a registered user :
 - and password : Luc156-Dup
 
 _In this project, there is no administration part._
+

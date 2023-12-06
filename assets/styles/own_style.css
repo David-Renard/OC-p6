@@ -175,7 +175,7 @@ footer {
 
     .homepage-img-img {
         width: auto;
-        top: 7vh;
+        top: 5vh;
     }
 
     .position-text-50 {
@@ -231,5 +231,15 @@ footer {
 
     .videos.list-videos {
         width: 100%;
+    }
+}
+
+@media screen and (width <= 991px) and (width >= 767px) {
+    .register {
+        min-height: 79vh;
+    }
+
+    .main-picture {
+        width: 80vw;
     }
 }

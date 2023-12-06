@@ -3,13 +3,13 @@
         <div class="content-card-images m-auto mt-1 shadow border-black">
             {# display main picture if there is one #}
             {% if trick.getMainPicture() %}
-                <img src="{{ asset(trick.getMainPicture().url) }}" class="card-images-top" alt="{{ trick.getMainPicture().name }}"/>
+                <img src="{{ '/img/upload/trick_pictures/' ~ trick.getMainPicture().url }}" class="card-images-top" alt="{{ trick.getMainPicture().name }}"/>
             {# display default picture if there is no pictures #}
             {% elseif trick.getPictures() is empty %}
-                <img src="{{ asset('build/images/freestyle.jpeg') }}" class="card-images-top default-picture-picture" alt="image par défaut"/>
+                <img src="{{ '/img/upload/trick_pictures/freestyle.jpeg' }}" class="card-images-top default-picture-picture" alt="image par défaut"/>
             {# display 1st picture ordered by id if there is no main picture #}
             {% elseif trick.getMainPicture() is empty %}
-                <img src="{{ asset(trick.getPictures()|first.url) }}" class="card-images-top" alt="{{ trick.getPictures()|first.name }}"/>
+                <img src="{{ '/img/upload/trick_pictures/' ~ trick.getPictures()|first.url }}" class="card-images-top" alt="{{ trick.getPictures()|first.name }}"/>
             {% endif %}
         </div>
 

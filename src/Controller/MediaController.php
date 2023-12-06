@@ -42,10 +42,10 @@ class MediaController extends AbstractController
     #[Route('/delete-pic/{id}', name: 'delete_picture', requirements: ['id' => '\d+'])]
     public function deletePicture(TrickPictureRepository $pictureRepository, string $slug, int $id): Response
     {
+        $trickPicturesDir = $this->getParameter('upload_directory')."trick_pictures/";
         $picture = $pictureRepository->find($id);
+        unlink($trickPicturesDir.$picture->getUrl());
         $picture->getTrick()->removePicture($picture);
-
-//        unlink($picture->getUrl());
 
         $this->manager->remove($picture);
         $this->manager->flush();

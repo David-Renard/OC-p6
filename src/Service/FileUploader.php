@@ -14,18 +14,23 @@ class FileUploader
 {
 
 
-    public function __construct(public string $targetDirectory, public SluggerInterface $slugger)
+    public function __construct(public string $uploadDirectory, public SluggerInterface $slugger)
     {
     }
 
-    public function upload(UploadedFile $file, String $folder = '/trick_pictures'): string
+    public function getUploadDirectory(): string
+    {
+        return $this->uploadDirectory;
+    }
+
+    public function upload(UploadedFile $file, String $folder = 'trick_pictures'): string
     {
         $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-        $safeFilename     = substr($this->slugger->slug($originalFilename),5);
+        $safeFilename     = substr($this->slugger->slug($originalFilename),0,5);
         $filename         = $safeFilename.'-'.uniqid().'.'.$file->guessExtension();
 
         try {
-            $file->move($this->getTargetDirectory().$folder, $filename);
+            $file->move($this->getUploadDirectory().$folder, $filename);
         } catch (FileException $e) {
 
         }
@@ -33,28 +38,23 @@ class FileUploader
         return $filename;
     }
 
-    public function getTargetDirectory(): string
-    {
-        return $this->targetDirectory;
-    }
-
-    public function uploadAndPersist(string $inputs, FormInterface $form, EntityManagerInterface $manager, Trick $trick): void
+    public function uploadAndPersist(string $inputs, FormInterface $form, EntityManagerInterface $manager, Trick $trick, string $folder = 'trick_pictures'): void
     {
         $array = $form->get($inputs)->getData();
 
         if ($array != []) {
             foreach ($array as $file) {
-                $fileName = $this->upload($file);
+                $fileName = $this->upload($file, $folder);
 
                 $fileToUpload = new TrickPicture();
                 $fileToUpload->setName("Freestyle ".substr($fileName, 0, strripos($fileName, "-")));
                 $fileToUpload->setMain(false);
-                $fileToUpload->setUrl('/build/images/upload/trick_pictures/'.$fileName);
+                $fileToUpload->setUrl($fileName);
                 $fileToUpload->setTrick($trick);
 
                 $manager->persist($fileToUpload);
-                $manager->flush();
             }
+            $manager->flush();
         }
     }
 }
