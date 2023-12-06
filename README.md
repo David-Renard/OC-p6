@@ -56,14 +56,10 @@ Création des pages :
 
 
     DATABASE_URL="postgresql://postgres:root@127.0.0.1:5432/testsnowtricks?serverVersion=15&charset=utf8"
-3. Create the **_snowtricks_** database by running :
+3. Create the database by running :
 
 
     symfony console doctrine:database:create
-                                    6. Make the migration by running :
-                                    
-                                    
-                                        symfony console make:migration
 and then :
 
     symfony console doctrine:migrations:migrate

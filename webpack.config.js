@@ -14,35 +14,25 @@ Encore
     // only needed for CDN's or subdirectory deploy
     //.setManifestKeyPrefix('build/')
 
+    // copy avatar pictures from original fixtures into the public directory
     .copyFiles({
-         from: './assets/images',
+        from: './assets/images/avatar',
 
-         // optional target path, relative to the output dir
-         to: 'images/[path][name].[ext]',
-
-         // if versioning is enabled, add the file hash too
-         //to: 'images/[path][name].[hash:8].[ext]',
-
-         // only copy files matching this pattern
-         //pattern: /\.(png|jpg|jpeg)$/
+        to: '../img/upload/avatar/[path][name].[ext]',
     })
-    .copyFiles({
-    from: './assets/images/avatar',
-
-    // optional target path, relative to the output dir
-    to: './img/upload/avatar/[path][name].[ext]',
-
-    // if versioning is enabled, add the file hash too
-    //to: 'images/[path][name].[hash:8].[ext]',
-
-    // only copy files matching this pattern
-    //pattern: /\.(png|jpg|jpeg)$/
-    })
+    // copy trick_pictures from original fixtures into the public directory
     .copyFiles({
         from: './assets/images/trick_pictures',
 
+        to: '../img/upload/trick_pictures/[path][name].[ext]',
+    })
+
+    // copy main assets images into the public directory
+    .copyFiles({
+        from: './assets/images',
+
         // optional target path, relative to the output dir
-        to: './img/upload/trick_pictures/[path][name].[ext]',
+        to: 'images/[path][name].[ext]',
 
         // if versioning is enabled, add the file hash too
         //to: 'images/[path][name].[hash:8].[ext]',
@@ -96,21 +86,21 @@ Encore
 
     // enables Sass/SCSS support
     .enableSassLoader()
-    //added when compiling with sass
-    Encore.enableSassLoader()
+//added when compiling with sass
+Encore.enableSassLoader()
 
-    // uncomment if you use TypeScript
-    //.enableTypeScriptLoader()
+// uncomment if you use TypeScript
+//.enableTypeScriptLoader()
 
-    // uncomment if you use React
-    //.enableReactPreset()
+// uncomment if you use React
+//.enableReactPreset()
 
-    // uncomment to get integrity="..." attributes on your script & link tags
-    // requires WebpackEncoreBundle 1.4 or higher
-    //.enableIntegrityHashes(Encore.isProduction())
+// uncomment to get integrity="..." attributes on your script & link tags
+// requires WebpackEncoreBundle 1.4 or higher
+//.enableIntegrityHashes(Encore.isProduction())
 
-    // uncomment if you're having problems with a jQuery plugin
-    //.autoProvidejQuery()
+// uncomment if you're having problems with a jQuery plugin
+//.autoProvidejQuery()
 ;
 
 module.exports = Encore.getWebpackConfig();
