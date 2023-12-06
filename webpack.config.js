@@ -20,6 +20,7 @@ Encore
 
         to: '../img/upload/avatar/[path][name].[ext]',
     })
+
     // copy trick_pictures from original fixtures into the public directory
     .copyFiles({
         from: './assets/images/trick_pictures',
@@ -86,21 +87,21 @@ Encore
 
     // enables Sass/SCSS support
     .enableSassLoader()
-//added when compiling with sass
-Encore.enableSassLoader()
+    //added when compiling with sass
+    Encore.enableSassLoader()
 
-// uncomment if you use TypeScript
-//.enableTypeScriptLoader()
+    // uncomment if you use TypeScript
+    //.enableTypeScriptLoader()
 
-// uncomment if you use React
-//.enableReactPreset()
+    // uncomment if you use React
+    //.enableReactPreset()
 
-// uncomment to get integrity="..." attributes on your script & link tags
-// requires WebpackEncoreBundle 1.4 or higher
-//.enableIntegrityHashes(Encore.isProduction())
+    // uncomment to get integrity="..." attributes on your script & link tags
+    // requires WebpackEncoreBundle 1.4 or higher
+    //.enableIntegrityHashes(Encore.isProduction())
 
-// uncomment if you're having problems with a jQuery plugin
-//.autoProvidejQuery()
+    // uncomment if you're having problems with a jQuery plugin
+    //.autoProvidejQuery()
 ;
 
 module.exports = Encore.getWebpackConfig();
