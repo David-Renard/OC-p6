@@ -6,6 +6,7 @@ use App\Entity\Trick;
 use App\Entity\TrickCategory;
 use App\Entity\TrickComment;
 use App\Entity\TrickPicture;
+use App\Entity\TrickVideo;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -23,26 +24,17 @@ class TricksFixtures extends Fixture implements DependentFixtureInterface
     {
         $listTricksName
             = [
-                "Switch Rodéo 720 Japan",
-                "Switch Cork 540 Tail Grab",
-                "Misty 900 Mute",
-                "Switch Misty 1080 Mute",
-                "Switch 360 Stalefish",
-                "Switch Cork 1080 Mute",
-                "Cork 180 Seat Belt",
-                "Switch Rodéo 180 Indy",
-                "Switch Cork 180 Seat Belt",
-                "Cork 720 Indy",
-                "Switch 720 Japan",
-                "720 Stalefish",
-                "1080 Seat Belt",
-                "Switch 900 Indy",
-                "Switch 900 Mute",
-                "Misty 720 Tail Grab",
-                "900 Stalefish",
-                "Switch Cork 540 Mute",
-                "Misty 180 Sad",
-            ];
+            "Switch Rodéo 720 Japan",
+            "Switch Cork 540 Tail Grab",
+            "Misty 900 Mute",
+            "Switch Misty 1080 Mute",
+            "Switch 360 Stalefish",
+            "Switch Cork 1080 Mute",
+            "Cork 180 Seat Belt",
+            "Switch Rodéo 180 Indy",
+            "Switch Cork 180 Seat Belt",
+            "Cork 720 Indy",
+        ];
         // Fixture trickPicture
         $mainPictures = [];
         $additionalPictures = [];
@@ -55,7 +47,7 @@ class TricksFixtures extends Fixture implements DependentFixtureInterface
 
             $numPic = $countPicture + 1;
 
-            $url = "/build/images/trick".$numPic.".jpg";
+            $url = $numPic.".jpg";
             $name = "freestyle trick".$numPic;
             $picture->setMain($main);
             $picture->setName($name);
@@ -176,6 +168,7 @@ class TricksFixtures extends Fixture implements DependentFixtureInterface
         $manager->flush();
 
         // Fixture tricks
+        $tricksList = [];
         for ($i = 0; $i < count($listTricksName); $i++) {
             $trick = new Trick();
             $randomAuthor = random_int(1,10);
@@ -188,7 +181,7 @@ class TricksFixtures extends Fixture implements DependentFixtureInterface
             $trick->setDescription($loremDescription[random_int(0,64)].$loremDescription[random_int(0,64)].$loremDescription[random_int(0,64)]);
             $trick->setAuthor($this->getReference('user-'.$randomAuthor));
             foreach ($categories as $category) {
-                if (stristr($listTricksName[$i],$category->getName()) != false) {
+                if (stristr($listTricksName[$i],$category->getName()) !== false) {
                     $trick->setCategory($category);
                 }
             }
@@ -196,18 +189,43 @@ class TricksFixtures extends Fixture implements DependentFixtureInterface
 
             $randomNbPictures = rand(0,5);
             for ($j = 0; $j < $randomNbPictures; $j++) {
-                if (empty($additionalPictures) == false) {
+                if (empty($additionalPictures) === false) {
                     $trick->addPicture(array_pop($additionalPictures));
                 }
             }
 
             $randomNbComment = rand(0,15);
             for ($j = 0; $j < $randomNbComment; $j++) {
-                if (empty($listComment) == false) {
+                if (empty($listComment) === false) {
                     $trick->addComment(array_pop($listComment));
                 }
             }
+            $tricksList[] = $trick;
+
             $manager->persist($trick);
+        }
+        $manager->flush();
+
+        // Fixtures videos
+        $listVideos =
+            [
+                "https://www.youtube.com/embed/aINlzgrOovI",
+                "https://www.youtube.com/embed/kI2G81QRfyk",
+                "https://www.youtube.com/embed/8KotvBY28Mo",
+                "https://www.youtube.com/embed/T92n4e5bEpE",
+                "https://www.dailymotion.com/embed/video/xggf1u",
+                "https://www.dailymotion.com/embed/video/xnii6r",
+                "https://www.dailymotion.com/embed/video/x8gerr2",
+                "https://www.dailymotion.com/embed/video/x19aigu",
+            ];
+        foreach ($listVideos as $videoArray) {
+            $video = new TrickVideo();
+            $video->setUrl($videoArray);
+
+            $randomTrick = rand(0, count($tricksList) - 1);
+            $video->setTrick($tricksList[$randomTrick]);
+
+            $manager->persist($video);
         }
         $manager->flush();
     }

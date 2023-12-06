@@ -77,7 +77,7 @@
             <div class="row flex-wrap justify-content-center py-1" id="media">
                 {% for picture in trick.getPictures %}
                 <div class="detail-box mb-2">
-                    <img src="{{ asset(picture.url) }}" alt="{{ picture.name }}" class="detail-box-media img-thumbnail shadow rounded-2">
+                    <img src="{{ '/img/upload/trick_pictures/' ~ picture.url }}" alt="{{ picture.name }}" class="detail-box-media img-thumbnail shadow rounded-2">
                     <div>
                     {% if picture.main == false %}
                         <a href="{{ path('media_edit_main_picture', {'slug': trick.slug, 'id': picture.id}) }}" class="btn btn-primary me-1">

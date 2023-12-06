@@ -31,7 +31,7 @@
             <div class="row flex-wrap justify-content-center py-3" id="media">
                 {% for picture in trick.getPictures %}
                     <div class="detail-box my-3">
-                        <img src="{{ asset(picture.url) }}" alt="{{ picture.name }}" class="detail-box-media img-thumbnail shadow rounded-2">
+                        <img src="{{ '/img/upload/trick_pictures/' ~ picture.url }}" alt="{{ picture.name }}" class="detail-box-media img-thumbnail shadow rounded-2">
                     </div>
                 {% endfor %}
                 {% for video in trick.getVideo %}
@@ -58,7 +58,7 @@
                         <div class="col mx-3 fst-italic py-2 border border-primary shadow">Modifié le {{ trick.updatedAt|date("d/m/Y \\à H\\hi", 'Europe/Paris') }}</div>
                     {% endif %}
                     <div class="col mx-3 py-2 border border-primary shadow">Par <span class="fw-bold">
-                            <img src="{{ asset(trick.author.userPicture.url) }}" width="25" height="25"
+                            <img src="{{ '/img/upload/avatar/' ~ trick.author.userPicture.url }}" width="25" height="25"
                                  class="rounded-circle shadow border border-primary" alt="{{ trick.author.userPicture.name }}">
                             {{ trick.author.username }}</span>
                     </div>
@@ -67,10 +67,10 @@
                 {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                 <hr>
                 <div class="row">
-                    <div class="col col-sm-8 offset-sm-2">
+                    <div class="col col-lg-8 offset-lg-2">
                         {{ form_errors(commentForm) }}
                         {{ form_start(commentForm) }}
-                        <div class="my-3 d-flex flex-column flex-sm-row justify-content-around align-items-center">
+                        <div class="my-3 d-flex flex-column flex-lg-row justify-content-around align-items-center">
                             {{ form_row(commentForm.content) }}
                             {{ form_row(commentForm.submit) }}
                         </div>

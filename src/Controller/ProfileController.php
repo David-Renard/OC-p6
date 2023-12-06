@@ -45,7 +45,7 @@ class ProfileController extends AbstractController
                 $avatarFile = $this->fileUploader->upload($avatarFile,'/avatar');
 
                 $avatar = new UserPicture();
-                $avatar->setUrl('/build/images/upload/avatar/'.$avatarFile);
+                $avatar->setUrl($avatarFile);
                 $avatar->setName('avatar'.$this->getUser()->getUsername());
                 $avatar->setUserInfo($this->getUser());
 
