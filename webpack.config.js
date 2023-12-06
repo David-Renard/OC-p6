@@ -14,35 +14,26 @@ Encore
     // only needed for CDN's or subdirectory deploy
     //.setManifestKeyPrefix('build/')
 
+    // copy avatar pictures from original fixtures into the public directory
     .copyFiles({
-         from: './assets/images',
+        from: './assets/images/avatar',
 
-         // optional target path, relative to the output dir
-         to: 'images/[path][name].[ext]',
-
-         // if versioning is enabled, add the file hash too
-         //to: 'images/[path][name].[hash:8].[ext]',
-
-         // only copy files matching this pattern
-         //pattern: /\.(png|jpg|jpeg)$/
+        to: '../img/upload/avatar/[path][name].[ext]',
     })
-    .copyFiles({
-    from: './assets/images/avatar',
 
-    // optional target path, relative to the output dir
-    to: './img/upload/avatar/[path][name].[ext]',
-
-    // if versioning is enabled, add the file hash too
-    //to: 'images/[path][name].[hash:8].[ext]',
-
-    // only copy files matching this pattern
-    //pattern: /\.(png|jpg|jpeg)$/
-    })
+    // copy trick_pictures from original fixtures into the public directory
     .copyFiles({
         from: './assets/images/trick_pictures',
 
+        to: '../img/upload/trick_pictures/[path][name].[ext]',
+    })
+
+    // copy main assets images into the public directory
+    .copyFiles({
+        from: './assets/images',
+
         // optional target path, relative to the output dir
-        to: './img/upload/trick_pictures/[path][name].[ext]',
+        to: 'images/[path][name].[ext]',
 
         // if versioning is enabled, add the file hash too
         //to: 'images/[path][name].[hash:8].[ext]',
