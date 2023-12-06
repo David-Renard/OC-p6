@@ -36,34 +36,51 @@ Création des pages :
 * la page de mot de passe oublié;
 * la page de modification de mot de passe.
 
+
+   
+``
 ## Installation
 ### Prerequisites
 > Language : PHP ^8.2.9, Symfony ^6.3.4
 
 > Database : Postgres ^15.0
 
-> WebServer
+> You also need a WebServer
 
-> Composer
+> Install Composer
 
-> Npm
+> Install Npm
 
 1. Clone the repository (https://github.com/David-Renard/OC-p6.git).
-2. Install composer
-3. Install npm
-4. Edit your own .env file into an .env.local file
-5. Create the **_snowtricks_** database by running :
-> symfony console doctrine:database:create
-6. Make the migration by running :
-`symfony console make:migration`
+2. Edit your own .env file into an .env.local file and in doctrine section you can type in :
 
+
+    DATABASE_URL="postgresql://postgres:root@127.0.0.1:5432/testsnowtricks?serverVersion=15&charset=utf8"
+3. Create the **_snowtricks_** database by running :
+
+
+    symfony console doctrine:database:create
+                                    6. Make the migration by running :
+                                    
+                                    
+                                        symfony console make:migration
 and then :
-> symfony console doctrine:migrations:migrate
-7. Load fixtures by running :
-> symfony console doctrine:fixtures:load
-8. Your project should now be ready !
-9. You can use project after running :
-> symfony serve -d
+
+    symfony console doctrine:migrations:migrate
+4. Load fixtures by running :
+
+
+    symfony console doctrine:fixtures:load
+
+5. Build everything you need to have by typing in :
+
+
+    npm run build
+6. Your project should now be ready !
+7. You can use project after running :
+
+
+    symfony serve -d
 
 and register or use a registered user :
 - with email : lucydupuy@yahoo.fr
