@@ -51,32 +51,36 @@ Création des pages :
 
 > Install Npm
 
+> A send maile service like Mailer
+
 1. Clone the repository (https://github.com/David-Renard/OC-p6.git).
-2. Edit your own .env file into an .env.local file and in doctrine section you can type in :
+2. Edit your own .env file into an .env.local file and in **doctrine** section you can type in :
 
+`DATABASE_URL="postgresql://postgres:root@127.0.0.1:5432/testsnowtricks?serverVersion=15&charset=utf8"`
 
-    DATABASE_URL="postgresql://postgres:root@127.0.0.1:5432/testsnowtricks?serverVersion=15&charset=utf8"
-3. Create the database by running :
+*_where **testsnowtricks** is the name of the database you will create._*
 
+3. Still in this .env.local file you can add your ``MAILER_DSN`` address.
 
-    symfony console doctrine:database:create
-and then :
+4. Create the database by running :
 
-    symfony console doctrine:migrations:migrate
-4. Load fixtures by running :
+`symfony console doctrine:database:create`
 
+5. and then you can migrate :
 
-    symfony console doctrine:fixtures:load
+`symfony console doctrine:migrations:migrate`
+6. Load fixtures by running :
 
-5. Build everything you need to have by typing in :
+`symfony console doctrine:fixtures:load`
 
+7. Build everything you need to have by typing in :
 
-    npm run build
-6. Your project should now be ready !
-7. You can use project after running :
+`npm run build`
 
+8. Your project should now be ready !
+9. You can use project after running :
 
-    symfony serve -d
+`symfony serve -d`
 
 and register or use a registered user :
 - with email : lucydupuy@yahoo.fr

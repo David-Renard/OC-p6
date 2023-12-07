@@ -47,7 +47,7 @@ class RegistrationController extends AbstractController
             );
             // Assign default picture to this user
             $userPicture = new UserPicture();
-            $userPicture->setUrl("/build/images/default-user-icon.jpg");
+            $userPicture->setUrl("default-user-icon.jpg");
             $userPicture->setName("default avatar");
             $user->setUserPicture($userPicture);
 
