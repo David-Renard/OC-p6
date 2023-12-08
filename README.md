@@ -19,22 +19,22 @@ marques de snowboard grâce au traffic que le contenu aura généré.
 Pour ce projet, nous allons nous concentrer sur la création technique du site pour Jimmy.
 
 ### Besoins
-Implémenter les fonctionnalités : 
-  * un annuaire des figures de snowboard;
-  * la gestion des figures (création, modification, consultation);
-  * un espace de discussion commun à toutes les figures.
+Implémenter les fonctionnalités :
+*   un annuaire des figures de snowboard;
+*   la gestion des figures (création, modification, consultation);
+*   un espace de discussion commun à toutes les figures.
 
 Création des pages :
-  * la page d'accueil où figure la liste des figures;
-  * la page de création d'une nouvelle figure;
-  * la page de modification d'une figure;
-  * la page de présentation d'une figure.
+*   la page d'accueil où figure la liste des figures;
+*   la page de création d'une nouvelle figure;
+*   la page de modification d'une figure;
+*   la page de présentation d'une figure.
 
 
-  * la page d'inscription;
-  * la page de connexion;
-  * la page de mot de passe oublié;
-  * la page de modification de mot de passe.
+*   la page d'inscription;
+*   la page de connexion;
+*   la page de mot de passe oublié;
+*   la page de modification de mot de passe.
 
 
 ## Installation
@@ -51,37 +51,37 @@ Création des pages :
 
 > A send maile service like Mailer
 
- 1. Clone the repository (https://github.com/David-Renard/OC-p6.git).
- 2. Edit your own .env file into an .env.local file and in **doctrine** section you can type in :
+1.  Clone the repository (https://github.com/David-Renard/OC-p6.git).
+2.  Edit your own .env file into an .env.local file and in **doctrine** section you can type in :
 
 `DATABASE_URL="postgresql://postgres:root@127.0.0.1:5432/testsnowtricks?serverVersion=15&charset=utf8"`
 
 *_where **testsnowtricks** is the name of the database you will create._*
 
- 3. Still in this .env.local file you can add your ``MAILER_DSN`` address.
+3.  Still in this .env.local file you can add your ``MAILER_DSN`` address.
 
- 4. Create the database by running :
+4.  Create the database by running :
 
 `symfony console doctrine:database:create`
 
- 5. and then you can migrate :
+5.  and then you can migrate :
 
 `symfony console doctrine:migrations:migrate`
- 6. Load fixtures by running :
+6.  Load fixtures by running :
 
 `symfony console doctrine:fixtures:load`
 
- 7. Build everything you need to have by typing in :
+7.  Build everything you need to have by typing in :
 
 `npm run build`
 
- 8. Your project should now be ready !
- 9. You can use project after running :
+8.  Your project should now be ready !
+9.  You can use project after running :
 
 `symfony serve -d`
 
 and register or use a registered user :
-  - with email : lucydupuy@yahoo.fr
-  - and password : Luc156-Dup
+-   with email : lucydupuy@yahoo.fr
+-   and password : Luc156-Dup
 
 _In this project, there is no administration part._
